@@ -172,7 +172,7 @@ def main(args):
     # need to keep track of an array of models, they now exist on different gpus
     output_df_ls = []
     if device == 'cuda':
-        for i in len(gpu_ids):
+        for i in range(len(gpu_ids)):
             model, alphabet, data_loader, batches = get_model(args.model_name, input_dfs[i], gpu_ids[i])
             output_df_ls.append(get_PLLR(model, alphabet, data_loader, batches, gpu_ids[i]))
         # then we need to concatenate the output_df_ls
