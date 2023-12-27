@@ -145,11 +145,12 @@ def main(args):
 
         # Remove the temporary 'string_length' column
         input_df = input_df.drop('string_length', axis=1)
-        print(input_df)
-        raise Error
+
         # Split the dataframe into smaller dataframes
         input_dfs = np.array_split(input_df, len(gpu_ids))
 
+        print(input_dfs)
+        raise Error
         # Create a list to store the new fasta file names
         fasta_file_names = []
 
