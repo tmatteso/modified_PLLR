@@ -149,8 +149,6 @@ def main(args):
         # Split the dataframe into smaller dataframes
         input_dfs = np.array_split(input_df, len(gpu_ids))
 
-        print(input_dfs)
-        raise Error
         # Create a list to store the new fasta file names
         fasta_file_names = []
 
@@ -159,7 +157,8 @@ def main(args):
             fasta_data = '>' + df['name'] + '\n' + df['sequence'] + '\n'
 
             # Generate a new fasta file name
-            fasta_file_name = 'input_{}.fasta'.format(i)
+            orig_name  = args.input_fasta_file.split(".")[0]
+            fasta_file_name = f'{orig_name}_{i}.fasta'
 
             # Save the fasta data to a file
             with open(fasta_file_name, 'w') as file:
@@ -168,6 +167,8 @@ def main(args):
             # Append the fasta file name to the list
             fasta_file_names.append(fasta_file_name)
     input_dfs = fasta_file_names
+    print(input_dfs)
+    raise Error
     print('Loading the model ({})...'.format(args.model_name))
     # need to keep track of an array of models, they now exist on different gpus
     output_df_ls = []
