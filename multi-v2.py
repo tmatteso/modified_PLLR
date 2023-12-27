@@ -100,7 +100,7 @@ def main(args):
     print('Using {}.'.format('GPU' if device == 'cuda' else 'CPU (this may be much slower)'))
 
     # read the dataframe 
-    input_df = pd.read_csv(args.input_csv_file)
+    input_df = pd.read_csv(args.input_fasta_file)
     # detect multiple GPUs
     if device == 'cuda': # this will override cuda and now be [0, 1,2, 3 ...]
         gpu_ids = list(range(torch.cuda.device_count()))
