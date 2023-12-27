@@ -157,8 +157,6 @@ def main(args):
             fasta_data = '>' + df['name'] + '\n' + df['sequence'] + '\n'
 
             # Generate a new fasta file name
-            print(args.input_fasta_file.split("."))
-            raise Error
             orig_name  = args.input_fasta_file.split(".")[0]
             fasta_file_name = f'{orig_name}_{i}.fasta'
 
