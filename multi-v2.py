@@ -132,11 +132,12 @@ def main(args):
     if device == 'cuda': # this will override cuda and now be [0, 1,2, 3 ...]
         gpu_ids = list(range(torch.cuda.device_count()))
         print('Available GPU IDs:', gpu_ids)
+        input_df = read_fasta_file(args.input_fasta_file)
         # Shuffle the dataframe rows
         input_df = input_df.sample(frac=1, random_state=42)
 
         # Sort the dataframe by the length of the string column in ascending order
-        input_df['string_length'] = input_df['string_column'].apply(len)
+        input_df['string_length'] = input_df['sequence'].apply(len)
         input_df = input_df.sort_values('string_length')
 
         # Shuffle the dataframe rows again to distribute strings of all lengths
@@ -144,7 +145,8 @@ def main(args):
 
         # Remove the temporary 'string_length' column
         input_df = input_df.drop('string_length', axis=1)
-
+        print(input_df)
+        raise Error
         # Split the dataframe into smaller dataframes
         input_dfs = np.array_split(input_df, len(gpu_ids))
 
