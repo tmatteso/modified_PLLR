@@ -167,8 +167,7 @@ def main(args):
             # Append the fasta file name to the list
             fasta_file_names.append(fasta_file_name)
     input_dfs = fasta_file_names
-    print(input_dfs)
-    raise Error
+
     print('Loading the model ({})...'.format(args.model_name))
     # need to keep track of an array of models, they now exist on different gpus
     output_df_ls = []
