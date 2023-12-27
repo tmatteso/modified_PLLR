@@ -87,7 +87,36 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id):
     # Create the DataFrame
     df = pd.DataFrame({'mut_seq': all_strs, 'esm_score': all_PLLRs,})
     return df
-    
+
+def read_fasta_file(file_path):
+        """
+        Read a fasta file and return a dataframe with columns for name and sequence.
+        
+        Parameters:
+        file_path (str): Path to the fasta file.
+        
+        Returns:
+        pandas.DataFrame: Dataframe with columns for name and sequence.
+        """
+        names, sequences = [], []
+        with open(file_path, 'r') as file:
+            name = None
+            sequence = ''
+            for line in file:
+                line = line.strip()
+                if line.startswith('>'):
+                    if name is not None:
+                        names.append(name)
+                        sequences.append(sequence)
+                    name = line[1:]
+                    sequence = ''
+                else:
+                    sequence += line
+            if name is not None:
+                names.append(name)
+                sequences.append(sequence)
+        df = pd.DataFrame({'name': names, 'sequence': sequences})
+        return df 
 
 def main(args):
     """
@@ -99,8 +128,6 @@ def main(args):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     print('Using {}.'.format('GPU' if device == 'cuda' else 'CPU (this may be much slower)'))
 
-    # read the dataframe 
-    input_df = pd.read_csv(args.input_fasta_file)
     # detect multiple GPUs
     if device == 'cuda': # this will override cuda and now be [0, 1,2, 3 ...]
         gpu_ids = list(range(torch.cuda.device_count()))
@@ -117,10 +144,27 @@ def main(args):
 
         # Remove the temporary 'string_length' column
         input_df = input_df.drop('string_length', axis=1)
-        
+
         # Split the dataframe into smaller dataframes
         input_dfs = np.array_split(input_df, len(gpu_ids))
 
+        # Create a list to store the new fasta file names
+        fasta_file_names = []
+
+        for i, df in enumerate(input_dfs):
+            # Convert the DataFrame to fasta format
+            fasta_data = '>' + df['name'] + '\n' + df['sequence'] + '\n'
+
+            # Generate a new fasta file name
+            fasta_file_name = 'input_{}.fasta'.format(i)
+
+            # Save the fasta data to a file
+            with open(fasta_file_name, 'w') as file:
+                file.write(''.join(fasta_data))
+
+            # Append the fasta file name to the list
+            fasta_file_names.append(fasta_file_name)
+    input_dfs = fasta_file_names
     print('Loading the model ({})...'.format(args.model_name))
     # need to keep track of an array of models, they now exist on different gpus
     output_df_ls = []
@@ -135,7 +179,7 @@ def main(args):
         print('Done.')
             
     else:
-        model, alphabet, data_loader, batches = get_model(args.model_name, input_df, device)
+        model, alphabet, data_loader, batches = get_model(args.model_name, args.input_fasta_file, device)
         output_df = get_PLLR(model, alphabet, data_loader, batches, device)
         print('Saving results...')
         output_df.to_csv(args.output_csv_file, index=False)
