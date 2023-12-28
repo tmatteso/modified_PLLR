@@ -15,7 +15,7 @@ def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_leng
     model = model.to(device_id)
     model.eval()
     # start big and go down, with a binary search.
-    toks_per_batch = 1000000
+    toks_per_batch = 62500 # this seems optimal for T4 GPUs
     forward = False
     # 1 mil -> 500,000 -> 250,000 -> 125,000 -> 62,500 -> 31,250 -> 15,625 -> 7,812 -> 3,906. Should stop here for most gpus
     print(f"Attempting to find maximum batch size for model on device {device_id}")
@@ -62,7 +62,6 @@ def get_model(model_name, fasta, device_id):
 # right now this only works for multi missense, not indels
 def get_PLLR(model, alphabet, data_loader, batches, device_id):
     # let's remake the df mut_seq, esm_score
-
     all_PLLRs, all_strs = [], []
     with torch.no_grad():
         for batch_idx, (labels, strs, toks) in enumerate(data_loader):
@@ -125,7 +124,7 @@ def read_fasta_file(file_path):
 
 def worker_function(model_name, fasta, device):
     model, alphabet, data_loader, batches = get_model(model_name, fasta, device)
-    output_df = get_PLLR(model, alphabet, data_loader, batches)
+    output_df = get_PLLR(model, alphabet, data_loader, batches, device) 
     return output_df
 
 def main(args):
