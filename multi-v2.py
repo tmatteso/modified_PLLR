@@ -123,9 +123,13 @@ def read_fasta_file(file_path):
         return df 
 
 def worker_function(model_name, fasta, device):
-    model, alphabet, data_loader, batches = get_model(model_name, fasta, device)
-    output_df = get_PLLR(model, alphabet, data_loader, batches, device) 
-    return output_df
+    try:
+        model, alphabet, data_loader, batches = get_model(model_name, fasta, device)
+        output_df = get_PLLR(model, alphabet, data_loader, batches, device) 
+        return output_df
+    except Exception as e:
+        print(f"Error in worker function: {e}")
+        raise 
 
 def main(args):
     """
