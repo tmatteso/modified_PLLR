@@ -94,11 +94,17 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
                 result = {"label": label}
                 truncate_len = min(1022, len(strs[i]))
                 result["PLLRs"] = PLLRs[i]
+                # Call clone on tensors to ensure tensors are not views into a larger representation
+                # See https://github.com/pytorch/pytorch/issues/1995
                 result["mean_representations"] = {
                             layer: t[i, 1 : truncate_len + 1].mean(0).clone()
                             for layer, t in representations.items()
                 }
-
+                torch.save(
+                    result,
+                    args.output_file,
+                )
+            del out # dump these out of gpu memory
             # now you have all PLLRs for this batch, collect them
             all_PLLRs.append(PLLRs)
             all_strs += strs
