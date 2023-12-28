@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import torch
 from esm import Alphabet, FastaBatchedDataset, ProteinBertModel, pretrained, MSATransformer
+import multiprocessing
 
 
 def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_length):
@@ -17,6 +18,7 @@ def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_leng
     toks_per_batch = 1000000
     forward = False
     # 1 mil -> 500,000 -> 250,000 -> 125,000 -> 62,500 -> 31,250 -> 15,625 -> 7,812 -> 3,906. Should stop here for most gpus
+    print(f"Attempting to find maximum batch size for model on device {device_id}")
     while not forward:
         batches = dataset.get_batch_indices(toks_per_batch, extra_toks_per_seq=1)
         data_loader = torch.utils.data.DataLoader(
@@ -28,7 +30,7 @@ def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_leng
             for batch_idx, (labels, strs, toks) in enumerate(data_loader):
                 if batch_idx >= len(batches) - 5:
                     # This is one of the last 5 batches
-                    if torch.cuda.is_available() and not args.nogpu:
+                    if torch.cuda.is_available():
                         toks = toks.to(device=f"cuda:{device_id}", non_blocking=True)
                     try: # attempt the forward pass
                         out = model(toks, repr_layers=[33], return_contacts=False)
@@ -39,7 +41,7 @@ def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_leng
         forward = True
     else:
         toks_per_batch /= 2
-    print(f"Maximum batch size for this model is {toks_per_batch}")
+    print(f"Maximum batch size for model on device {device_id} is {toks_per_batch}")
     print(f"Read {fasta} with {len(dataset)} sequences")
     return model, data_loader, batches
         
@@ -65,7 +67,7 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id):
                 f"Processing {batch_idx + 1} of {len(batches)} batches ({toks.size(0)} sequences)"
             )
             # gotta mod this
-            if torch.cuda.is_available() and not args.nogpu:
+            if torch.cuda.is_available():
                 toks = toks.to(device=f"cuda:{device_id}", non_blocking=True)
             # get the logits
             out = model(toks, repr_layers=[33], return_contacts=False)
@@ -118,6 +120,19 @@ def read_fasta_file(file_path):
         df = pd.DataFrame({'name': names, 'sequence': sequences})
         return df 
 
+
+def worker_function(model_name, fasta, device):
+    model, alphabet, data_loader, batches = get_model(model_name, fasta, device)
+    output_df = get_PLLR(model, alphabet, data_loader, batches)
+    return output_df
+
+def parallel_processing(worker_function, process_args):
+    with multiprocessing.Pool(len(process_args)) as pool:
+        # each process needs different inputs
+        results = pool.starmap(worker_function, process_args)
+    return results
+
+# args.model_name, input_dfs[i], gpu_ids[i]
 def main(args):
     """
     Execute the main script logic.
@@ -172,14 +187,25 @@ def main(args):
     # need to keep track of an array of models, they now exist on different gpus
     output_df_ls = []
     if device == 'cuda':
-        for i in range(len(gpu_ids)):
-            model, alphabet, data_loader, batches = get_model(args.model_name, input_dfs[i], gpu_ids[i])
-            output_df_ls.append(get_PLLR(model, alphabet, data_loader, batches, gpu_ids[i]))
-        # then we need to concatenate the output_df_ls
+        process_args = [ (args.model_name, f'{orig_name}_{i}.fasta', i) for i in range(len(gpu_ids)) ]
+        parallel_processing(worker_function, process_args)
+        # Concatenate the output dataframes
         output_df = pd.concat(output_df_ls)
         print('Saving results...')
         output_df.to_csv(args.output_csv_file, index=False)
         print('Done.')
+
+
+        # for i in range(len(gpu_ids)):
+        #     model, alphabet, data_loader, batches = get_model(args.model_name, input_dfs[i], gpu_ids[i])
+        #     output_df = get_PLLR(model, alphabet, data_loader, batches, gpu_ids[i])
+        #     # wait for all processes to complete
+        #     output_df_ls.append(output_df)
+        # # then we need to concatenate the output_df_ls
+        # output_df = pd.concat(output_df_ls)
+        # print('Saving results...')
+        # output_df.to_csv(args.output_csv_file, index=False)
+        # print('Done.')
             
     else:
         model, alphabet, data_loader, batches = get_model(args.model_name, args.input_fasta_file, device)
