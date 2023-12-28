@@ -120,19 +120,6 @@ def read_fasta_file(file_path):
         df = pd.DataFrame({'name': names, 'sequence': sequences})
         return df 
 
-
-def worker_function(model_name, fasta, device):
-    model, alphabet, data_loader, batches = get_model(model_name, fasta, device)
-    output_df = get_PLLR(model, alphabet, data_loader, batches)
-    return output_df
-
-def parallel_processing(worker_function, process_args):
-    with multiprocessing.Pool(len(process_args)) as pool:
-        # each process needs different inputs
-        results = pool.starmap(worker_function, process_args)
-    return results
-
-# args.model_name, input_dfs[i], gpu_ids[i]
 def main(args):
     """
     Execute the main script logic.
@@ -185,12 +172,23 @@ def main(args):
 
     print('Loading the model ({})...'.format(args.model_name))
     # need to keep track of an array of models, they now exist on different gpus
-    output_df_ls = []
-    if device == 'cuda':
+    if device == 'cuda' and __name__ == '__main__':
+        # this code must be inside the __name__ == '__main__' to protect it from running unintentionally during the import phase
+        def worker_function(model_name, fasta, device):
+            model, alphabet, data_loader, batches = get_model(model_name, fasta, device)
+            output_df = get_PLLR(model, alphabet, data_loader, batches)
+            return output_df
+        
+        def parallel_processing(worker_function, process_args):
+            with multiprocessing.Pool(len(process_args)) as pool:
+                # each process needs different inputs
+                results = pool.starmap(worker_function, process_args)
+            return results
+        
+        multiprocessing.set_start_method('spawn')
         process_args = [ (args.model_name, f'{orig_name}_{i}.fasta', i) for i in range(len(gpu_ids)) ]
-        parallel_processing(worker_function, process_args)
-        # Concatenate the output dataframes
-        output_df = pd.concat(output_df_ls)
+        results = parallel_processing(worker_function, process_args)
+        output_df = pd.concat(results, ignore_index=True)
         print('Saving results...')
         output_df.to_csv(args.output_csv_file, index=False)
         print('Done.')
