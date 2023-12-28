@@ -20,6 +20,7 @@ def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_leng
     # 1 mil -> 500,000 -> 250,000 -> 125,000 -> 62,500 -> 31,250 -> 15,625 -> 7,812 -> 3,906. Should stop here for most gpus
     print(f"Attempting to find maximum batch size for model on device {device_id}")
     while not forward:
+        print(f"Trying batch size: {toks_per_batch} on {device_id}")
         batches = dataset.get_batch_indices(toks_per_batch, extra_toks_per_seq=1)
         data_loader = torch.utils.data.DataLoader(
             dataset, collate_fn=alphabet.get_batch_converter(truncation_seq_length), batch_sampler=batches
