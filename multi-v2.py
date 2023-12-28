@@ -50,13 +50,10 @@ def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_leng
         
 
 
-def get_model(model_name, fasta, device_id): 
+def get_model(model, alphabet, fasta, device_id): 
     truncation_seq_length = 1022 # this is the max length of the sequence, longer will be truncated prior to forward pass
-    model, alphabet = pretrained.load_model_and_alphabet(model_name)
     # put model on device and detect max batch size
     model, data_loader, batches = detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_length)
-    # use torch compile to maximize performance
-    model = torch.compile(model, dynamic=True, mode="max-autotune" )
     return model, alphabet, data_loader, batches
 
 # right now this only works for multi missense, not indels
@@ -122,9 +119,9 @@ def read_fasta_file(file_path):
         df = pd.DataFrame({'name': names, 'sequence': sequences})
         return df 
 
-def worker_function(model_name, fasta, device):
+def worker_function(model, alphabet, fasta, device):
     try:
-        model, alphabet, data_loader, batches = get_model(model_name, fasta, device)
+        model, alphabet, data_loader, batches = get_model(model, alphabet, fasta, device)
         output_df = get_PLLR(model, alphabet, data_loader, batches, device) 
         return output_df
     except Exception as e:
@@ -191,8 +188,11 @@ def main(args):
                 results = pool.starmap(worker_function, process_args)
             return results
         
+        model, alphabet = pretrained.load_model_and_alphabet(args.model_name,)
+        # use torch compile to maximize performance
+        model = torch.compile(model, dynamic=True, mode="max-autotune" )
         multiprocessing.set_start_method('spawn')
-        process_args = [ (args.model_name, f'{orig_name}_{i}.fasta', i) for i in range(len(gpu_ids)) ]
+        process_args = [ (model, alphabet, f'{orig_name}_{i}.fasta', i) for i in range(len(gpu_ids)) ]
         results = parallel_processing(worker_function, process_args)
         output_df = pd.concat(results, ignore_index=True)
         print('Saving results...')
