@@ -37,12 +37,13 @@ def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_leng
                         out = model(toks, repr_layers=[33], return_contacts=False)
                         forward_arr.append(True)
                     except RuntimeError as e:
-                        print(f"Batch {batch_idx} failed on device {device_id} with error: {e}")
+                        print(f"Batch {batch_idx} failed on device {device_id}")
                         forward_arr.append(False)
-    if all(forward_arr) == True:
-        forward = True
-    else:
-        toks_per_batch = toks_per_batch // 2
+                        break
+        if all(forward_arr) == True:
+            forward = True
+        else:
+            toks_per_batch = toks_per_batch // 2
     print(f"Maximum batch size for model on device {device_id} is {toks_per_batch}")
     print(f"Read {fasta} with {len(dataset)} sequences")
     return model, data_loader, batches
