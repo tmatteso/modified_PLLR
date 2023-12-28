@@ -61,7 +61,7 @@ def get_model(model_name, fasta, device_id):
     return model, alphabet, data_loader, batches
 
 # right now this only works for multi missense, not indels
-def get_PLLR(model, alphabet, data_loader, batches, device_id):
+def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
     # let's remake the df mut_seq, esm_score
     all_PLLRs, all_strs = [], []
     with torch.no_grad():
@@ -138,10 +138,10 @@ def read_fasta_file(file_path):
         df = pd.DataFrame({'name': names, 'sequence': sequences})
         return df 
 
-def worker_function(model_name, fasta, device):
+def worker_function(model_name, fasta, device, args):
     try:
         model, alphabet, data_loader, batches = get_model(model_name, fasta, device)
-        output_df = get_PLLR(model, alphabet, data_loader, batches, device) 
+        output_df = get_PLLR(model, alphabet, data_loader, batches, device, args) 
         return output_df
     except Exception as e:
         print(f"Error in worker function: {e}")
@@ -208,7 +208,7 @@ def main(args):
             return results
         
         multiprocessing.set_start_method('spawn')
-        process_args = [ (args.model_name, f'{orig_name}_{i}.fasta', i) for i in range(len(gpu_ids)) ]
+        process_args = [ (args.model_name, f'{orig_name}_{i}.fasta', i, args) for i in range(len(gpu_ids)) ]
         results = parallel_processing(worker_function, process_args)
         # output_df = pd.concat(results, ignore_index=True)
         # print('Saving results...')
