@@ -7,6 +7,7 @@ import numpy as np
 import torch
 from esm import Alphabet, FastaBatchedDataset, ProteinBertModel, pretrained, MSATransformer
 import multiprocessing
+import pathlib
 
 
 def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_length):
@@ -66,13 +67,13 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id):
     with torch.no_grad():
         for batch_idx, (labels, strs, toks) in enumerate(data_loader):
             print(
-                f"Processing {batch_idx + 1} of {len(batches)} batches ({toks.size(0)} sequences)"
+                f"Processing {batch_idx + 1} of {len(batches)} batches ({toks.size(0)} sequences) on device {device_id}"
             )
             # gotta mod this
             if torch.cuda.is_available():
                 toks = toks.to(device=f"cuda:{device_id}", non_blocking=True)
             # get the logits
-            out = model(toks, repr_layers=[33], return_contacts=False)
+            out = model(toks, repr_layers=[21, 33], return_contacts=False)
             logits = out["logits"]
             s = torch.log_softmax(logits,dim=-1).cpu().numpy()
             s = s[0][1:-1,:]
@@ -83,6 +84,21 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id):
                 idx=[alphabet.tok_to_idx[i] for i in seq]
                 PLLR = np.sum(np.diag(s[:,idx]))
                 PLLRs[j] = PLLR
+            # For now, I want it to collect the representations too
+            representations = {
+                layer: t.to(device="cpu") for layer, t in out["representations"].items()
+            }
+            for i, label in enumerate(labels):
+                args.output_file = args.output_dir / f"{label}.pt"
+                args.output_file.parent.mkdir(parents=True, exist_ok=True)
+                result = {"label": label}
+                truncate_len = min(1022, len(strs[i]))
+                result["PLLRs"] = PLLRs[i]
+                result["mean_representations"] = {
+                            layer: t[i, 1 : truncate_len + 1].mean(0).clone()
+                            for layer, t in representations.items()
+                }
+
             # now you have all PLLRs for this batch, collect them
             all_PLLRs.append(PLLRs)
             all_strs += strs
@@ -194,10 +210,10 @@ def main(args):
         multiprocessing.set_start_method('spawn')
         process_args = [ (args.model_name, f'{orig_name}_{i}.fasta', i) for i in range(len(gpu_ids)) ]
         results = parallel_processing(worker_function, process_args)
-        output_df = pd.concat(results, ignore_index=True)
-        print('Saving results...')
-        output_df.to_csv(args.output_csv_file, index=False)
-        print('Done.')
+        # output_df = pd.concat(results, ignore_index=True)
+        # print('Saving results...')
+        # output_df.to_csv(args.output_csv_file, index=False)
+        # print('Done.')
 
 
         # for i in range(len(gpu_ids)):
@@ -214,9 +230,9 @@ def main(args):
     else:
         model, alphabet, data_loader, batches = get_model(args.model_name, args.input_fasta_file, device)
         output_df = get_PLLR(model, alphabet, data_loader, batches, device)
-        print('Saving results...')
-        output_df.to_csv(args.output_csv_file, index=False)
-        print('Done.')
+        # print('Saving results...')
+        # output_df.to_csv(args.output_csv_file, index=False)
+        # print('Done.')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -224,7 +240,8 @@ if __name__ == '__main__':
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     
     parser.add_argument('--input-fasta-file', dest='input_fasta_file', required=True, metavar='/path/to/input_mutations.fasta', help='Path to the input CSV file with the protein mutations to calculate ESM scores for.')
-    parser.add_argument('--output-csv-file', dest='output_csv_file', required=True, metavar='./esm_multi_residue_effect_scores.csv', help='Path to save the output CSV file.')
+    #parser.add_argument('--output-csv-file', dest='output_csv_file', required=True, metavar='./esm_multi_residue_effect_scores.csv', help='Path to save the output CSV file.')
+    parser.add_argument('--output_dir', type=pathlib.Path, help="output directory for extracted representations",) 
     parser.add_argument('--model-name', dest='model_name', default='esm1b_t33_650M_UR50S', metavar='esm1b_t33_650M_UR50S', help='Name of the ESM model to use. See list of options here: https://github.com/facebookresearch/esm#available')
 
     args = parser.parse_args()
