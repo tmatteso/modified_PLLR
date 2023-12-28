@@ -120,6 +120,11 @@ def read_fasta_file(file_path):
         df = pd.DataFrame({'name': names, 'sequence': sequences})
         return df 
 
+def worker_function(model_name, fasta, device):
+    model, alphabet, data_loader, batches = get_model(model_name, fasta, device)
+    output_df = get_PLLR(model, alphabet, data_loader, batches)
+    return output_df
+
 def main(args):
     """
     Execute the main script logic.
@@ -173,12 +178,7 @@ def main(args):
     print('Loading the model ({})...'.format(args.model_name))
     # need to keep track of an array of models, they now exist on different gpus
     if device == 'cuda' and __name__ == '__main__':
-        # this code must be inside the __name__ == '__main__' to protect it from running unintentionally during the import phase
-        def worker_function(model_name, fasta, device):
-            model, alphabet, data_loader, batches = get_model(model_name, fasta, device)
-            output_df = get_PLLR(model, alphabet, data_loader, batches)
-            return output_df
-        
+        # this code must be inside the __name__ == '__main__' to protect it from running unintentionally during the import phase        
         def parallel_processing(worker_function, process_args):
             with multiprocessing.Pool(len(process_args)) as pool:
                 # each process needs different inputs
