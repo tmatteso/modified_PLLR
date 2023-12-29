@@ -53,6 +53,9 @@ def read_from_pt(fasta, dir_loc):
         # get PLLRS
         new_rows["esm_score"].append(dic["PLLRs"])
     new_df = pd.DataFrame(new_rows)
+    print(new_df)
+    print(df)
+    raise error
     #print("ids collected", len(new_df.index))
     assert len(df.index) == len(new_df.index), f"Not all ids captured: {len(new_df.index)} < {len(df.index)}"
     # merge on ids
