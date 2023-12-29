@@ -73,7 +73,7 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
             if torch.cuda.is_available():
                 toks = toks.to(device=f"cuda:{device_id}", non_blocking=True)
             # get the logits
-            out = model(toks, repr_layers=[21, 33], return_contacts=False)
+            out = model(toks, repr_layers=[33], return_contacts=False)
             logits = out["logits"]
             s = torch.log_softmax(logits,dim=-1).cpu().numpy()
             s = s[0][1:-1,:]
