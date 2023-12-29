@@ -13,6 +13,7 @@ import time
 def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_length):
     # push the model to device
     model = model.to(device_id)
+    model.eval()
     #print(model)
     param_size = 0
     for param in model.parameters():
