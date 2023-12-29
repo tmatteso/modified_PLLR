@@ -9,20 +9,13 @@ def main(args):
     # load in my results
     extract_csv = pd.read_csv(args.extract_csv)[["mut_seq", "esm_score"]] 
     
-    # Set mut_seq as index for faster lookup
-    nadav_csv.set_index("mut_seq", inplace=True)
-    extract_csv.set_index("mut_seq", inplace=True)
+    # Join the two dataframes on the mut_seq column
+    merged_df = nadav_csv.merge(extract_csv, on="mut_seq")
     
-    # Check consistency using vectorized operations
-    is_consistent = np.isclose(nadav_csv["esm_score"], extract_csv["esm_score"], atol=0.001)
-    is_consistent = pd.Series(is_consistent, index=nadav_csv.index)  # Convert numpy array to pandas Series
-    failed_index = is_consistent[~is_consistent].index
-    print(failed_index)
-    raise error
-    if len(failed_index) == 0:
-        print("All rows are consistent.")
-    else:
-        print(f"Rows {', '.join(map(str, failed_index))} failed the consistency check.")
+    # Print the new dataframe
+    print(merged_df)
+    
+    
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
