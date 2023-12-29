@@ -38,7 +38,7 @@ def read_from_pt(fasta, dir_loc):
     # needs the input fasta too to get the sequence back
     df = read_fasta_file(fasta)
     # add the gene and mutant columns
-    df["gene"] = df["name"].apply(lambda x: x.split("_")[:2])
+    df["gene"] = df["name"].apply(lambda x: "_".join(x.split("_")[:2]))
     df["mutant"] = df["name"].apply(lambda x: x.split("_")[2])
     # get the pt files
     files = glob.glob(f"{dir_loc}/*.pt")
