@@ -3,7 +3,7 @@ import numpy as np
 import argparse
 
 
-def main():
+def main(args):
     # load in Nadav's modified results
     nadav_csv = pd.read_csv(args.nadav_csv)[["mut_seq", "esm_score"]]
     # load in my results
