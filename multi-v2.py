@@ -235,7 +235,7 @@ def main(args):
             
     else:
         model, alphabet, data_loader, batches = get_model(args.model_name, args.input_fasta_file, device)
-        output_df = get_PLLR(model, alphabet, data_loader, batches, device)
+        output_df = get_PLLR(model, alphabet, data_loader, batches, device, args)
         # print('Saving results...')
         # output_df.to_csv(args.output_csv_file, index=False)
         # print('Done.')
