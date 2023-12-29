@@ -30,6 +30,8 @@ def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_leng
             # this dataloader will give me the smallest strings first. I want the biggest to cause OOM ASAP
             forward_arr = []
             for batch_idx, (labels, strs, toks) in enumerate(data_loader):
+                print("oh hi yo")
+                time.sleep(20)
                 if batch_idx >= len(batches) - 5:
                     # This is one of the last 5 batches
                     if torch.cuda.is_available():
