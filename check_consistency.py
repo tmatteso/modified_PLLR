@@ -15,6 +15,7 @@ def main(args):
     
     # Check consistency using vectorized operations
     is_consistent = np.isclose(nadav_csv["esm_score"], extract_csv["esm_score"], atol=0.001)
+    is_consistent = pd.Series(is_consistent, index=nadav_csv.index)  # Convert numpy array to pandas Series
     print(is_consistent)
     failed_index = is_consistent[~is_consistent].index
     
