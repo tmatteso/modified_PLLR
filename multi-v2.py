@@ -109,8 +109,8 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
             all_PLLRs.append(PLLRs)
             all_strs += strs
 
-    all_PLLRs, all_strs = np.vstack(all_PLLRs), np.array(all_strs)
-    print(all_PLLRs)
+    all_PLLRs, all_strs = np.concatenate(all_PLLRs), np.array(all_strs)
+    print(all_PLLRs.shape)
     print(all_strs.shape)
     # Create the DataFrame
     df = pd.DataFrame({'mut_seq': all_strs, 'esm_score': all_PLLRs,})
