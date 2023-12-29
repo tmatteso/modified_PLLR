@@ -27,8 +27,8 @@ if __name__ == '__main__':
         description='covert bulk fasta extraction format to nadav script format',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     
-    parser.add_argument('--nadav-csv', dest='input_fasta_file', required=True, metavar='/path/to/input_mutations.fasta', help='Path to the input CSV file with the protein mutations to calculate ESM scores for.')
-    parser.add_argument('--extract-csv', dest='output_csv_file', required=True, metavar='./esm_multi_residue_effect_scores.csv', help='Path to save the output CSV file.')
+    parser.add_argument('--nadav-csv', required=True, metavar='/path/to/input_mutations.fasta', help='Path to the input CSV file with the protein mutations to calculate ESM scores for.')
+    parser.add_argument('--extract-csv', required=True, metavar='./esm_multi_residue_effect_scores.csv', help='Path to save the output CSV file.')
     args = parser.parse_args()
 
     main(args)
