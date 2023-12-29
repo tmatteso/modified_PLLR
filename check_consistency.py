@@ -67,11 +67,8 @@ def main(args):
     extract_csv = pd.read_csv(args.extract_csv)[["mut_seq", "esm_score"]] 
     # I need to account for the other results type and see any discrepancies
     pt_PLLRs = read_from_pt(args.extract_fasta, args.extract_pt)
-    print(pt_PLLRs)
     # Join the two dataframes on the mut_seq column
     merged_df = nadav_csv.merge(extract_csv, on="mut_seq")
-    print(merged_df)
-    raise Error
     # join with the other results
     merged_df = merged_df.merge(pt_PLLRs, on="mut_seq")
     # Print the new dataframe
