@@ -8,7 +8,7 @@ import torch
 from esm import Alphabet, FastaBatchedDataset, ProteinBertModel, pretrained, MSATransformer
 import multiprocessing
 import pathlib
-
+import time
 
 def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_length):
     dataset = FastaBatchedDataset.from_file(fasta)
@@ -36,7 +36,9 @@ def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_leng
                         toks = toks.to(device=f"cuda:{device_id}", non_blocking=True)
                     print(toks.shape)
                     try: # attempt the forward pass
+                        time.sleep(20)
                         out = model(toks, repr_layers=[33], return_contacts=False)
+                        
                         forward_arr.append(True)
                     except RuntimeError as e:
                         print(f"Batch {batch_idx} failed on device {device_id}")
