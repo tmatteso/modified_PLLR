@@ -72,16 +72,16 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
             # gotta mod this
             if torch.cuda.is_available():
                 toks = toks.to(device=f"cuda:{device_id}", non_blocking=True)
-
-             # For now, I want it to collect the representations too
-            representations = {
-                layer: t.to(device="cpu") for layer, t in out["representations"].items()
-            }
             # get the logits
             out = model(toks, repr_layers=[33], return_contacts=False)
             logits = out["logits"]
             s = torch.log_softmax(logits,dim=-1).cpu().numpy()
             s = s[0][1:-1,:]
+            # For now, I want it to collect the representations too
+            representations = {
+                layer: t.to(device="cpu") for layer, t in out["representations"].items()
+            }
+
             # so now we need all the seqs for the batch
             PLLRs = np.zeros(len(strs))
             for j in range(len(strs)): #this worked
