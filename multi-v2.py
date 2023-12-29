@@ -15,6 +15,8 @@ def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_leng
     # push the model to device
     model = model.to(device_id)
     model.eval()
+    print("oh hi yo")
+    time.sleep(20)
     # start big and go down, with a binary search.
     toks_per_batch = 62500 # this seems optimal for T4 GPUs
     forward = False
