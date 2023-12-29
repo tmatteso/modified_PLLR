@@ -235,10 +235,12 @@ def main(args):
         multiprocessing.set_start_method('spawn')
         process_args = [ (args.model_name, f'{orig_name}_{i}.fasta', i, args) for i in range(len(gpu_ids)) ]
         results = parallel_processing(worker_function, process_args)
-        # output_df = pd.concat(results, ignore_index=True)
-        # print('Saving results...')
-        # output_df.to_csv(args.output_csv_file, index=False)
-        # print('Done.')
+        # output the strings with their PLLRs for comparison
+        output_df = pd.concat(results, ignore_index=True)
+        print('Saving results...')
+        output_name = args.input_fasta_file.split("/")[-1].split(".")[0]
+        output_df.to_csv(f"{output_name}_output.csv", index=False)
+        print('Done.')
 
 
         # for i in range(len(gpu_ids)):
