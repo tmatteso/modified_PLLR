@@ -72,6 +72,11 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
             # gotta mod this
             if torch.cuda.is_available():
                 toks = toks.to(device=f"cuda:{device_id}", non_blocking=True)
+
+             # For now, I want it to collect the representations too
+            representations = {
+                layer: t.to(device="cpu") for layer, t in out["representations"].items()
+            }
             # get the logits
             out = model(toks, repr_layers=[33], return_contacts=False)
             logits = out["logits"]
@@ -84,26 +89,38 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
                 idx=[alphabet.tok_to_idx[i] for i in seq]
                 PLLR = np.sum(np.diag(s[:,idx]))
                 PLLRs[j] = PLLR
-            # For now, I want it to collect the representations too
-            representations = {
-                layer: t.to(device="cpu") for layer, t in out["representations"].items()
-            }
-            for i, label in enumerate(labels):
-                args.output_file = args.output_dir / f"{label}.pt"
+                args.output_file = args.output_dir / f"{labels[j]}.pt"
                 args.output_file.parent.mkdir(parents=True, exist_ok=True)
-                result = {"label": label}
-                truncate_len = min(1022, len(strs[i]))
-                result["PLLRs"] = PLLRs[i]
+                result = {"label": labels[j]}
+                truncate_len = min(1022, len(strs[j]))
+                result["PLLRs"] = PLLRs[j]
                 # Call clone on tensors to ensure tensors are not views into a larger representation
                 # See https://github.com/pytorch/pytorch/issues/1995
                 result["mean_representations"] = {
-                            layer: t[i, 1 : truncate_len + 1].mean(0).clone()
+                            layer: t[j, 1 : truncate_len + 1].mean(0).clone()
                             for layer, t in representations.items()
                 }
                 torch.save(
                     result,
                     args.output_file,
                 )
+
+            # for i, label in enumerate(labels):
+            #     args.output_file = args.output_dir / f"{label}.pt"
+            #     args.output_file.parent.mkdir(parents=True, exist_ok=True)
+            #     result = {"label": label}
+            #     truncate_len = min(1022, len(strs[i]))
+            #     result["PLLRs"] = PLLRs[i]
+            #     # Call clone on tensors to ensure tensors are not views into a larger representation
+            #     # See https://github.com/pytorch/pytorch/issues/1995
+            #     result["mean_representations"] = {
+            #                 layer: t[i, 1 : truncate_len + 1].mean(0).clone()
+            #                 for layer, t in representations.items()
+            #     }
+            #     torch.save(
+            #         result,
+            #         args.output_file,
+            #     )
             del out # dump these out of gpu memory
             # now you have all PLLRs for this batch, collect them
             all_PLLRs.append(PLLRs)
