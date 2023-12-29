@@ -34,6 +34,7 @@ def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_leng
                     # This is one of the last 5 batches
                     if torch.cuda.is_available():
                         toks = toks.to(device=f"cuda:{device_id}", non_blocking=True)
+                    print(toks.shape)
                     try: # attempt the forward pass
                         out = model(toks, repr_layers=[33], return_contacts=False)
                         forward_arr.append(True)
