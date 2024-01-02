@@ -98,11 +98,6 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
                 toks = toks.to(device=f"cuda:{device_id}", non_blocking=True)
             # get the logits
             out = model(toks, repr_layers=[33], return_contacts=False)
-            logits = out["logits"]
-            print(logits.shape)
-            raise Error
-            s = torch.log_softmax(logits,dim=-1).cpu().numpy()
-            s = s[0][1:-1,:]
             # For now, I want it to collect the representations too
             representations = {
                 layer: t.to(device="cpu") for layer, t in out["representations"].items()
@@ -113,9 +108,16 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
             # we need to redo the validation
 
             for j in range(len(strs)): #this worked
+                #[number of sequences, length of sequences, number of layers]
+                logits = out["logits"][j]
+                print(logits.shape)
+                s = torch.log_softmax(logits,dim=-1).cpu().numpy()
+                s = s[0][1:-1,:]
                 seq = strs[j]
                 idx=[alphabet.tok_to_idx[i] for i in seq]
                 PLLR = np.sum(np.diag(s[:,idx]))
+                print(PLLR)
+                raise Error
                 PLLRs[j] = PLLR
                 args.output_file = args.output_dir / f"{labels[j]}.pt"
                 args.output_file.parent.mkdir(parents=True, exist_ok=True)
