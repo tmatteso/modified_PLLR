@@ -65,10 +65,6 @@ def main(args):
     nadav_csv = pd.read_csv(args.nadav_csv)[["mut_seq", "esm_score"]]
     # load in my results
     extract_csv = pd.read_csv(args.extract_csv)[["mut_seq", "esm_score"]] 
-    another_extract_csv = pd.read_csv(args.another_extract_csv)[["mut_seq", "esm_score"]] 
-    merged_df = another_extract_csv.merge(extract_csv, on="mut_seq")
-    print(merged_df[np.isclose(merged_df["esm_score_y"], -303.32242, atol=0.0001)])
-    raise Error
     # I need to account for the other results type and see any discrepancies
     pt_PLLRs = read_from_pt(args.extract_fasta, args.extract_pt)
     # Join the two dataframes on the mut_seq column
@@ -89,7 +85,6 @@ if __name__ == '__main__':
     
     parser.add_argument('--nadav-csv', required=True,)
     parser.add_argument('--extract-csv', required=True,)
-    parser.add_argument('--another-extract-csv', required=True,)
     parser.add_argument('--extract-fasta', required=True,)
     parser.add_argument('--extract-pt', required=True,)
     args = parser.parse_args()
