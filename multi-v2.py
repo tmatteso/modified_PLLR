@@ -109,9 +109,11 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
 
             for j in range(len(strs)): #this worked
                 #[number of sequences, length of sequences, number of layers]
-                logits = out["logits"][j]
+                logits = out["logits"][j, :, :]
                 print(logits.shape)
                 s = torch.log_softmax(logits,dim=-1).cpu().numpy()
+                print(s.shape)
+                raise Error
                 s = s[0][1:-1,:]
                 seq = strs[j]
                 idx=[alphabet.tok_to_idx[i] for i in seq]
