@@ -70,10 +70,10 @@ def main(args):
     pt_PLLRs = read_from_pt(args.extract_fasta, args.extract_pt)
     # Join the two dataframes on the mut_seq column
     merged_df = nadav_csv.merge(extract_csv, on="mut_seq")
-    print(merged_df[np.isclose(merged_df["esm_score_y"], -303.32242, atol=0.0001)])
-    raise Error
     # join with the other results
     merged_df = merged_df.merge(pt_PLLRs, on="mut_seq")
+    print(merged_df[np.isclose(merged_df["esm_score_y"], -303.32242, atol=0.0001)])
+    raise Error
     # Print the new dataframe
     print(merged_df)
 
