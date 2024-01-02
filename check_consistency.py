@@ -71,7 +71,7 @@ def main(args):
     merged_df = nadav_csv.merge(extract_csv, on="mut_seq")
     # join with the other results
     merged_df = merged_df.merge(pt_PLLRs, on="mut_seq")
-    print(merged_df[np.isclose(merged_df["esm_score_y"], -303.32242, atol=0.0001)])
+    print(merged_df[np.isclose(merged_df["esm_score_y"], merged_df["esm_score_x"], atol=0.0001)])
     #raise Error
     # Print the new dataframe
     print(merged_df)
