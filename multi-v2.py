@@ -24,8 +24,8 @@ def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_leng
 
     size_all_mb = (param_size + buffer_size) / 1024**2
     print('model size: {:.3f}MB'.format(size_all_mb))
-    print("oh hi yo")
-    time.sleep(20)
+    # print("oh hi yo")
+    # time.sleep(20)
     model.eval()
     dataset = FastaBatchedDataset.from_file(fasta)
     # start big and go down, with a binary search.
@@ -43,15 +43,15 @@ def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_leng
             # this dataloader will give me the smallest strings first. I want the biggest to cause OOM ASAP
             forward_arr = []
             for batch_idx, (labels, strs, toks) in enumerate(data_loader):
-                print("oh hi yo")
-                time.sleep(20)
+                # print("oh hi yo")
+                # time.sleep(20)
                 if batch_idx >= len(batches) - 5:
                     # This is one of the last 5 batches
                     if torch.cuda.is_available():
                         toks = toks.to(device=f"cuda:{device_id}", non_blocking=True)
-                    print(toks.shape)
+                    # print(toks.shape)
                     try: # attempt the forward pass
-                        time.sleep(20)
+                        # time.sleep(20)
                         out = model(toks, repr_layers=[33], return_contacts=False)
                         
                         forward_arr.append(True)
@@ -145,8 +145,8 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
             all_strs += strs
 
     all_PLLRs, all_strs = np.concatenate(all_PLLRs), np.array(all_strs)
-    print(all_PLLRs.shape)
-    print(all_strs.shape)
+    # print(all_PLLRs.shape)
+    print(all_strs[:3])
     # Create the DataFrame
     df = pd.DataFrame({'mut_seq': all_strs, 'esm_score': all_PLLRs,})
     return df
