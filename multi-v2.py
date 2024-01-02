@@ -118,6 +118,7 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
                 # logits = logits[0]
                 # logits = logits.unsqueeze(0)
                 # s = torch.log_softmax(logits,dim=-1).cpu().numpy()
+                print(s.shape)
                 s = s[j][1:-1,:]
                 seq = strs[j]
                 idx=[alphabet.tok_to_idx[i] for i in seq]
