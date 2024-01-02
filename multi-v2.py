@@ -99,7 +99,10 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
             #logits = logits[0]
             #logits = logits.unsqueeze(0)
             s = torch.log_softmax(logits,dim=-1).cpu().numpy()
-            s = s[0][1:-1,:]
+            #s = s[0][1:-1,:] # this is definitely wrong. Just based on the shapes. You are only choosing the logit output of the first input.
+            # the way you compute logits only works for the first sequence in the batch and is wrong for all other sequences
+            # the dataloader, sting i/o, and alphabet are blameless.
+
             # For now, I want it to collect the representations too
             representations = {
                 layer: t.to(device="cpu") for layer, t in out["representations"].items()
@@ -115,7 +118,7 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
                 # logits = logits[0]
                 # logits = logits.unsqueeze(0)
                 # s = torch.log_softmax(logits,dim=-1).cpu().numpy()
-                # s = s[0][1:-1,:]
+                s = s[j][1:-1,:]
                 seq = strs[j]
                 idx=[alphabet.tok_to_idx[i] for i in seq]
                 PLLR = np.sum(np.diag(s[:,idx]))
