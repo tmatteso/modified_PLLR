@@ -99,6 +99,8 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
             # get the logits
             out = model(toks, repr_layers=[33], return_contacts=False)
             logits = out["logits"]
+            print(logits.shape)
+            raise Error
             s = torch.log_softmax(logits,dim=-1).cpu().numpy()
             s = s[0][1:-1,:]
             # For now, I want it to collect the representations too
@@ -108,6 +110,8 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
 
             # so now we need all the seqs for the batch
             PLLRs = np.zeros(len(strs))
+            # we need to redo the validation
+
             for j in range(len(strs)): #this worked
                 seq = strs[j]
                 idx=[alphabet.tok_to_idx[i] for i in seq]
