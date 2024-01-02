@@ -11,6 +11,9 @@ import pathlib
 import time
 
 def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_length):
+    # would be nice to have a device map for quick reference: torch.cuda.get_device_name(device_id)
+    # build some simple map st T4 -> 62500, V100 -> 125000, etc.
+
     # push the model to device
     model = model.to(device_id)
     model.eval()
@@ -87,6 +90,10 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
             print(
                 f"Processing {batch_idx + 1} of {len(batches)} batches ({toks.size(0)} sequences) on device {device_id}"
             )
+            first_three = strs[:3]
+            for s in first_three:
+                print(s, ''.join(str(ord(c)) for c in s))
+            raise Error
             # gotta mod this
             if torch.cuda.is_available():
                 toks = toks.to(device=f"cuda:{device_id}", non_blocking=True)
