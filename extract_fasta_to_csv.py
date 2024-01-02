@@ -16,7 +16,7 @@ def read_fasta_file(file_path):
             name = None
             sequence = ''
             for line in file:
-                line = line.strip()
+                #line = line.strip()
                 if line.startswith('>'):
                     if name is not None:
                         names.append(name)
@@ -28,9 +28,6 @@ def read_fasta_file(file_path):
             if name is not None:
                 names.append(name)
                 sequences.append(sequence)
-                print(name)
-                print(sequence)
-                raise Error
         df = pd.DataFrame({'name': names, 'sequence': sequences})
         return df 
 def main(args):
