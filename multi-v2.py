@@ -119,6 +119,13 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
                 seq = strs[j]
                 idx=[alphabet.tok_to_idx[i] for i in seq]
                 PLLR = np.sum(np.diag(s[:,idx]))
+                if j == 1:
+                    print(f"labels: {labels[j]}")
+                    print(f"toks: {toks[j]}")
+                    print(f"idx: {idx}")
+                    print(f"seq: {seq}")
+                    print(f"PLLR: {PLLR}")
+
                 PLLRs[j] = PLLR
                 args.output_file = args.output_dir / f"{labels[j]}.pt"
                 args.output_file.parent.mkdir(parents=True, exist_ok=True)
