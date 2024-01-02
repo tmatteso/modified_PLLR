@@ -65,6 +65,8 @@ def main(args):
     nadav_csv = pd.read_csv(args.nadav_csv)[["mut_seq", "esm_score"]]
     # load in my results
     extract_csv = pd.read_csv(args.extract_csv)[["mut_seq", "esm_score"]] 
+    print(extract_csv[extract_csv["esm_score"] == -303.32242])
+    raise error
     # I need to account for the other results type and see any discrepancies
     pt_PLLRs = read_from_pt(args.extract_fasta, args.extract_pt)
     # Join the two dataframes on the mut_seq column
