@@ -119,7 +119,7 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
                 seq = strs[j]
                 idx=[alphabet.tok_to_idx[i] for i in seq]
                 PLLR = np.sum(np.diag(s[:,idx]))
-                if j == 1:
+                if j == 0:
                     print(f"labels: {labels[j]}")
                     print(f"toks: {toks[j]}")
                     print(f"idx: {idx}")
