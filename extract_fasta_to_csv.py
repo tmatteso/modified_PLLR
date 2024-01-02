@@ -16,7 +16,8 @@ def read_fasta_file(file_path):
             name = None
             sequence = ''
             for line in file:
-                #line = line.strip()
+                # maybe there's an extra space?
+                line = line.strip()
                 if line.startswith('>'):
                     if name is not None:
                         names.append(name)
