@@ -95,6 +95,11 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
                 toks = toks.to(device=f"cuda:{device_id}", non_blocking=True)
             # get the logits
             out = model(toks, repr_layers=[33], return_contacts=False)
+            logits = out["logits"] # this first one is fine. it fails after. We observed this behavior before
+            #logits = logits[0]
+            #logits = logits.unsqueeze(0)
+            s = torch.log_softmax(logits,dim=-1).cpu().numpy()
+            s = s[0][1:-1,:]
             # For now, I want it to collect the representations too
             representations = {
                 layer: t.to(device="cpu") for layer, t in out["representations"].items()
@@ -106,11 +111,11 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
 
             for j in range(len(strs)): #this worked
                 #[number of sequences, length of sequences, number of layers]
-                logits = out["logits"]
-                logits = logits[0]
-                logits = logits.unsqueeze(0)
-                s = torch.log_softmax(logits,dim=-1).cpu().numpy()
-                s = s[0][1:-1,:]
+                # logits = out["logits"] # this first one is fine. it fails after. We observed this behavior before
+                # logits = logits[0]
+                # logits = logits.unsqueeze(0)
+                # s = torch.log_softmax(logits,dim=-1).cpu().numpy()
+                # s = s[0][1:-1,:]
                 seq = strs[j]
                 idx=[alphabet.tok_to_idx[i] for i in seq]
                 PLLR = np.sum(np.diag(s[:,idx]))
