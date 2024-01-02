@@ -21,9 +21,9 @@ def read_fasta_file(file_path):
                     if name is not None:
                         names.append(name)
                         sequences.append(sequence)
-                    print(name)
-                    print(sequence)
-                    raise Error
+                        print(name)
+                        print(sequence)
+                        raise Error
                     name = line[1:]
                     sequence = ''
                 else:
