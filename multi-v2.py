@@ -32,7 +32,7 @@ def detect_max_batch_size(model, fasta, alphabet, device_id, truncation_seq_leng
     model.eval()
     dataset = FastaBatchedDataset.from_file(fasta)
     # start big and go down, with a binary search.
-    toks_per_batch = 62500 # this seems optimal for T4 GPUs
+    toks_per_batch = 125000 #62500 # this seems optimal for T4 GPUs
     forward = False
     # 1 mil -> 500,000 -> 250,000 -> 125,000 -> 62,500 -> 31,250 -> 15,625 -> 7,812 -> 3,906. Should stop here for most gpus
     print(f"Attempting to find maximum batch size for model on device {device_id}")
