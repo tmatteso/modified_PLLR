@@ -94,7 +94,7 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
             if torch.cuda.is_available():
                 toks = toks.to(device=f"cuda:{device_id}", non_blocking=True)
             # get the logits
-            out = model(toks, repr_layers=[33], return_contacts=False)
+            out = model(toks, repr_layers=[21, 33], return_contacts=False)
             logits = out["logits"] # this first one is fine. it fails after. We observed this behavior before
             #logits = logits[0]
             #logits = logits.unsqueeze(0)
@@ -164,7 +164,7 @@ def get_PLLR(model, alphabet, data_loader, batches, device_id, args):
 
     all_PLLRs, all_strs = np.concatenate(all_PLLRs), np.array(all_strs)
     # print(all_PLLRs.shape)
-    print(all_strs[:3])
+    #print(all_strs[:3])
     # Create the DataFrame
     df = pd.DataFrame({'mut_seq': all_strs, 'esm_score': all_PLLRs,})
     return df
