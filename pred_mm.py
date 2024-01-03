@@ -366,8 +366,9 @@ def from_ids_make_df(assay, full, LLRs):
         ids.append(f"{row['gene']}_{row['mutant']}")
     print(assay, len(ids))
     new_rows = {"gene":[], "mutant":[], "PLLR":[], "layer_33":[], "layer_21":[]}
+    possible_locations = ["0", "1", "2_to_6"]
     for id in ids:
-        for j in range(7):
+        for j in possible_locations: #range(7):
             if os.path.isfile(f"sm_pred_mm_{j}/{id}.pt"):# and id not in seen:
                 print(f"sm_pred_mm_{j}/{id}.pt")
                 raise error
@@ -502,7 +503,7 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
     # all_records.to_csv("MM_Assay_splits.csv")
 
 def main():
-    query_string =  'ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
+    query_string =  '../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
     print(1)
     intersect_set, full = read_in_PG(query_string)
         # desired assays:
@@ -520,7 +521,7 @@ def main():
                "CAPSD_AAV2S_Sinai_substitutions_2021.csv"
     ]
     print(2)
-    LLR_string, WT_PLLR_string = "WT_for_MM_assays.csv", "WT_for_MM_assays_extra/*.pt"
+    LLR_string, WT_PLLR_string = "../WT_for_MM_assays.csv", "../WT_for_MM_assays_extra/*.pt"
     WT_dict, LLRS, WT_PLLRS = get_LLR_and_WT_PLLR(intersect_set, full, LLR_string, WT_PLLR_string)
     print(3)
     eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS)
