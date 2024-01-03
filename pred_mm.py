@@ -369,8 +369,8 @@ def from_ids_make_df(assay, full, LLRs):
     possible_locations = ["0", "1", "2_to_6"]
     for id in ids:
         for j in possible_locations: #range(7):
-            if os.path.isfile(f"sm_pred_mm_{j}/{id}.pt"):# and id not in seen:
-                print(f"sm_pred_mm_{j}/{id}.pt")
+            if os.path.isfile(f"../sm_pred_mm_{j}/{id}.pt"):# and id not in seen:
+                print(f"../sm_pred_mm_{j}/{id}.pt")
                 raise error
                 # read the file
                 dic = torch.load(f"sm_pred_mm_{j}/{id}.pt")
