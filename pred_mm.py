@@ -326,7 +326,6 @@ def get_all_heatmaps(WT_dict, assay, sm, WT_PLLRS, pred_ls):
         scores_matrix1, aa_to_idx, positions, min = prep_heatmap(WT_dict[assay], sm, pred)
         make_heatmap(scores_matrix1, positions, aa_to_idx, pred, assay, min)
     print("heatmaps done")
-    raise Error
     # use true DMS
     # scores_matrix1, aa_to_idx, positions, min = prep_heatmap(WT_dict[assay], sm, "DMS_score")
     # make_heatmap(scores_matrix1, positions, aa_to_idx, "DMS score", assay, min)
@@ -497,14 +496,14 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
     #Convert the list of records into a DataFrame
     all_records = pd.DataFrame(records)
     print(all_records)
-    # all_records.to_csv("MM_Assay_splits.csv")
+    all_records.to_csv("MM_Assay_splits.csv")
 
 def main():
     query_string =  '../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
     print(1)
     intersect_set, full = read_in_PG(query_string)
         # desired assays:
-    desired = [
+    desired = intersect_set #[
                 # "Q8WTC7_9CNID_Somermeyer_2022.csv",
                 # "H3JQU7_ENTQU_Poelwijk_2019.csv",
                 # "Q6WV13_9MAXI_Somermeyer_2022.csv",
@@ -515,10 +514,10 @@ def main():
              #"RASK_HUMAN_Weng_2022_abundance.csv", 
                #"AMFR_HUMAN_Rocklin_2023_4G3O.csv",
                # "HIS7_YEAST_Pokusaeva_2019.csv" , 
-               "CAPSD_AAV2S_Sinai_substitutions_2021.csv"
-    ]
+    #           "CAPSD_AAV2S_Sinai_substitutions_2021.csv"
+    #]
     print(2)
-    LLR_string, WT_PLLR_string = "../WT_for_MM_assays.csv", "../WT_for_MM_assays_extra/*.pt"
+    LLR_string, WT_PLLR_string = "../WT_for_MM_assays.csv", "../WT_for_MM_assays_redux/*.pt"#WT_for_MM_assays_extra/*.pt"
     WT_dict, LLRS, WT_PLLRS = get_LLR_and_WT_PLLR(intersect_set, full, LLR_string, WT_PLLR_string)
     print(3)
     eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS)
