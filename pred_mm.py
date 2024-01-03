@@ -370,10 +370,8 @@ def from_ids_make_df(assay, full, LLRs):
     for id in ids:
         for j in possible_locations: #range(7):
             if os.path.isfile(f"../sm_pred_mm_{j}/{id}.pt"):# and id not in seen:
-                print(f"../sm_pred_mm_{j}/{id}.pt")
-                raise error
                 # read the file
-                dic = torch.load(f"sm_pred_mm_{j}/{id}.pt")
+                dic = torch.load(f"../sm_pred_mm_{j}/{id}.pt")
                 # break label on "_"
                 broken_label = dic["label"].split("_")
                 new_rows["gene"].append("_".join(broken_label[:2]))
