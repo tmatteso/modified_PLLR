@@ -519,6 +519,8 @@ def plot_all_results(results_path):
     # Group the data by assay and dist_from_WT
     grouped = all_assays.groupby(['assay', 'dist_from_WT', 'eval_size'])
     for (assay, dist_from_WT, eval_size), group_data in grouped:
+        print(assay, dist_from_WT, eval_size)
+        raise Error
         results_bargraph(group_data,
                          f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}', 
                          f"SM_pred_{assay}_{dist_from_WT}.png")
