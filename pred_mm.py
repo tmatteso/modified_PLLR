@@ -542,9 +542,9 @@ def plot_all_results(results_path):
         print(dist_from_WT[0])
         print(len(group_data.assay.unique()))
         print(sum(group_data.eval_size.unique()))
-        if 15 > dist_from_WT[0] > 3:
+        if 15 > dist_from_WT[0] > 2:
             print(group_data.assay.unique())
-            print(group_data)
+            #print(group_data)
 
         results_bargraph(group_data,
                     f'Distance from WT: {dist_from_WT[0]}',
