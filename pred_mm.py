@@ -522,10 +522,14 @@ def plot_all_results(results_path):
     #     results_bargraph(group_data,
     #                      f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}', 
     #                      f"SM_pred_{assay}_{dist_from_WT}.png")
+    # Filter rows where the entry for column "assay" has multiple possible entries for column "eval_size"
+    filtered_assays = all_assays.groupby('assay').filter(lambda x: len(x['eval_size'].unique()) > 1)
     
-    print(len(all_assays.assay.unique()))
-    print(len(all_assays.eval_size.unique()))
-    print(all_assays[["assay", "eval_size"]].drop_duplicates().head(200))
+    print(len(filtered_assays.assay.unique()))
+    print(len(filtered_assays.eval_size.unique()))
+    print(filtered_assays[["assay", "eval_size"]].drop_duplicates())
+
+    
     #print(all_assays[all_assays.assay == "RBP1_HUMAN_Rocklin_2023_2KWH.csv"])
     # now we make one for each distance from wildtype
     #grouped = all_assays.groupby(['dist_from_WT'])
