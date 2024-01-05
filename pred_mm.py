@@ -532,8 +532,9 @@ def plot_all_results(results_path):
 
     for (dist_from_WT), group_data in grouped:
         print(group_data)
-        print(group_data.assay.unique())
-        print(group_data.eval_size.unique())
+        print(len(group_data.assay.unique()))
+        print(len(group_data.eval_size.unique()))
+        raise Error
         # Filter rows where the entry for column "assay" has multiple possible entries for column "eval_size"
         filtered_assays = group_data.groupby('assay').filter(lambda x: len(x['eval_size'].unique()) > 1)
         
