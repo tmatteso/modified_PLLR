@@ -571,7 +571,7 @@ if __name__ == "__main__":
     parser.add_argument('--wt-pllr-dir',default= "../WT_for_MM_assays_redux/*.pt",  
                         required=False, type=pathlib.Path, help="WT PLLR file location.",) 
     parser.add_argument('--graphs-only', action='store_true', # if graphs-only ignored in input, this var will be True
-                        required=False, type=pathlib.Path, help="Skip the pipeline and make final graphs only",) 
+                        required=False, help="Skip the pipeline and make final graphs only",) 
     parser.add_argument('--only-assay',default=None,  # need to handle default here
                         required=False, type=pathlib.Path, help="Run Pipeline on Only this Assay.",) 
     args = parser.parse_args()
