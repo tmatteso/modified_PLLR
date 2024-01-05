@@ -527,7 +527,7 @@ def plot_all_results(results_path):
     
     #print(all_assays[all_assays.assay == "RBP1_HUMAN_Rocklin_2023_2KWH.csv"])
     # now we make one for each distance from wildtype
-    #grouped = all_assays.groupby(['dist_from_WT'])
+    grouped = all_assays.groupby(['dist_from_WT'])
     #print(grouped)
 
     for (dist_from_WT), group_data in grouped:
