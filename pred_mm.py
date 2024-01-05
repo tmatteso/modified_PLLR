@@ -521,8 +521,10 @@ def plot_all_results(results_path):
     all_assays['assay_tokens'] = all_assays['assay'].str.split('_').str[:3].apply(lambda x: x[:3]).apply(lambda x: '_'.join(x))
     
     # Remove rows with duplicate assay names
-    less_assays = all_assays.drop_duplicates(subset=[ 'eval_size'], keep='first')  #subset=['assay_tokens', 'eval_size'], keep='first')
+    all_assays = all_assays.drop_duplicates(subset=[ 'eval_size'], keep='first')  #subset=['assay_tokens', 'eval_size'], keep='first')
 
+    print(all_assays[(all_assays.assay == "7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 3)])
+    raise Error
     # Replace "N/A" in the 'alpha' column with a different string
     all_assays['alpha'] = all_assays['alpha'].replace(np.nan, 'Not Available')
     # Group the data by assay and dist_from_WT
@@ -537,7 +539,7 @@ def plot_all_results(results_path):
     # now we make one for each distance from wildtype
     grouped = all_assays.groupby(['dist_from_WT'])
     #print(grouped)
-
+    F
     for (dist_from_WT), group_data in grouped:
         print(dist_from_WT[0], len(group_data.assay.unique()), sum(group_data.eval_size.unique()))
         if 15 > dist_from_WT[0] > 2:
