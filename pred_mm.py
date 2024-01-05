@@ -522,17 +522,20 @@ def plot_all_results(results_path):
     #     results_bargraph(group_data,
     #                      f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}', 
     #                      f"SM_pred_{assay}_{dist_from_WT}.png")
+    
     print(len(all_assays.assay.unique()))
     print(sum(all_assays.eval_size.unique()))
-    print(all_assays[all_assays.assay == "RBP1_HUMAN_Rocklin_2023_2KWH.csv"])
+    print(all_assays.groupby(["assay", "eval_size"]).size().reset_index().nunique())
+    #print(all_assays[all_assays.assay == "RBP1_HUMAN_Rocklin_2023_2KWH.csv"])
     # now we make one for each distance from wildtype
-    grouped = all_assays.groupby(['dist_from_WT'])
+    #grouped = all_assays.groupby(['dist_from_WT'])
     #print(grouped)
     raise Error
     for (dist_from_WT), group_data in grouped:
         results_bargraph(group_data,
                     f'Distance from WT: {dist_from_WT[0]}',
                     f"SM_pred_{dist_from_WT}_all_assays.png")
+                    
 
 def main(args):
     if not args.graphs_only:
