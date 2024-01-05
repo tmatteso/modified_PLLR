@@ -514,6 +514,10 @@ def results_bargraph(group_data, title, figname):
 def plot_all_results(results_path):
     # some assays come up twice
     all_assays = pd.read_csv(results_path) #"MM_Assay_splits.csv")
+    # will need to delete duplicate assays
+    # CAPSD_AAV2S_Sinai_substitutions_2021.csv == CAPSD_AAV2S_Sinai_2021.csv 
+    # 
+
     # Replace "N/A" in the 'alpha' column with a different string
     all_assays['alpha'] = all_assays['alpha'].replace(np.nan, 'Not Available')
     # Group the data by assay and dist_from_WT
@@ -531,9 +535,13 @@ def plot_all_results(results_path):
     #print(grouped)
 
     for (dist_from_WT), group_data in grouped:
-        print(group_data)
+        print(dist_from_WT[0])
         print(len(group_data.assay.unique()))
         print(sum(group_data.eval_size.unique()))
+        if 15 > dist_from_WT[0] > 3:
+            print(group_data.assay.unique())
+            print(group_data)
+
         results_bargraph(group_data,
                     f'Distance from WT: {dist_from_WT[0]}',
                     f"SM_pred_{dist_from_WT[0]}_all_assays.png")
