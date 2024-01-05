@@ -24,6 +24,7 @@ def get_dms_score_sum(row, dms_scores):
 
 def read_in_PG(query_string):
     # 'ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
+    print(query_string)
     all_human_files = glob.glob(f"{query_string}.csv") #'ProteinGym_substitutions/*')#HUMAN*') 
     filtered_files = [f for f in all_human_files if 'indel' not in f]
     ls_of_df = []
