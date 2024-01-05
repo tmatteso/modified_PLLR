@@ -501,7 +501,7 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
     all_records.to_csv("MM_Assay_splits.csv")
 
 def results_bargraph(group_data, title, figname):
-    plt.figure(figsize=(20, 6))
+    plt.figure(figsize=(30, 6))
     #print(group_data)
     sns.barplot(x='features', y='correlation_score', hue='alpha', data=group_data)
     plt.title(title) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
@@ -527,7 +527,7 @@ def plot_all_results(results_path):
     grouped = all_assays.groupby(['dist_from_WT'])
     for (dist_from_WT), group_data in grouped:
         results_bargraph(group_data,
-                    f'Distance from WT: {dist_from_WT}',
+                    f'Distance from WT: {dist_from_WT.shape[0]}',
                     f"SM_pred_{dist_from_WT}_all_assays.png")
 
 def main(args):
