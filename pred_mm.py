@@ -25,7 +25,7 @@ def get_dms_score_sum(row, dms_scores):
 def read_in_PG(query_string):
     # 'ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
     print(query_string)
-    all_human_files = glob.glob(f"{query_string}/*.csv") #'ProteinGym_substitutions/*')#HUMAN*') 
+    all_human_files = glob.glob(query_string) #'ProteinGym_substitutions/*')#HUMAN*') 
     filtered_files = [f for f in all_human_files if 'indel' not in f]
     ls_of_df = []
     for file in filtered_files:
@@ -560,7 +560,7 @@ def plot_all_results(results_path):
 
 def main(args):
     if not args.graphs_only:
-        query_string =  f"{args.pg_sub_dir}*.csv" #'../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
+        query_string =  f"{args.pg_sub_dir}/*.csv" #'../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
         intersect_set, full = read_in_PG(query_string)
             # desired assays:
         if args.only_assay is not None: # need some default here
