@@ -528,6 +528,7 @@ def plot_all_results(results_path):
     print(len(filtered_assays.assay.unique()))
     print(len(filtered_assays.eval_size.unique()))
     print(filtered_assays[["assay", "eval_size"]].drop_duplicates())
+    print(filtered_assays[filtered_assays.assay == "CAPSD_AAV2S_Sinai_substitutions_2021.csv"])
 
     
     #print(all_assays[all_assays.assay == "RBP1_HUMAN_Rocklin_2023_2KWH.csv"])
