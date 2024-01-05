@@ -530,7 +530,7 @@ def plot_all_results(results_path):
     # if the first 3 tokens after being split on _ are the same and eval size are the same, then the two assays are the same
     
     # Split each unique entry for "assay" on the "_" character
-    all_assays['assay_tokens'] = all_assays['assay'].str.split('_').str[:3].apply(lambda x: x[:3]).apply(lambda x: '_'.join(x))
+    all_assays['assay_tokens'] = all_assays['assay'].str.split('_').str[:3].apply(lambda x: x[:2]).apply(lambda x: '_'.join(x))
     
     
     # Remove rows with duplicate assay names
