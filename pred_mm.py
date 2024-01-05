@@ -535,7 +535,7 @@ def plot_all_results(results_path):
     
     # Remove rows with duplicate assay names
     less_assays = all_assays.drop_duplicates(subset=[ 'eval_size'], keep='first')  #subset=['assay_tokens', 'eval_size'], keep='first')    
-    print(all_assays.assay.unique() - (less_assays.assay.unique()))
+    print(set(all_assays.assay.unique()) - set(less_assays.assay.unique()))
     raise Error
     #print(all_assays[all_assays.assay == "RBP1_HUMAN_Rocklin_2023_2KWH.csv"])
     # now we make one for each distance from wildtype
