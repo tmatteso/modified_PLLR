@@ -10,6 +10,8 @@ from scipy import stats
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
+import argparse
+import pathlib
 # essentially just refactor the sm_pred_mm_2 notebook
 
 # Function to check if all split mutants for a given gene exist in df1
@@ -365,7 +367,7 @@ def from_ids_make_df(assay, full, LLRs):
         ids.append(f"{row['gene']}_{row['mutant']}")
     print(assay, len(ids))
     new_rows = {"gene":[], "mutant":[], "PLLR":[], "layer_33":[], "layer_21":[]}
-    possible_locations = ["0", "1", "2_to_6"]
+    possible_locations = ["0", "1", "2_to_6"] # this might want to be fixed at some point
     for id in ids:
         for j in possible_locations: #range(7):
             if os.path.isfile(f"../sm_pred_mm_{j}/{id}.pt"):# and id not in seen:
@@ -498,34 +500,80 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
     print(all_records)
     all_records.to_csv("MM_Assay_splits.csv")
 
-def main():
-    query_string =  '../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
-    print(1)
-    intersect_set, full = read_in_PG(query_string)
-        # desired assays:
-    desired = intersect_set #[
-                # "Q8WTC7_9CNID_Somermeyer_2022.csv",
-                # "H3JQU7_ENTQU_Poelwijk_2019.csv",
-                # "Q6WV13_9MAXI_Somermeyer_2022.csv",
-                # "GFP_AEQVI_Sarkisyan_2016.csv",
-                #"PHOT_CHLRE_Chen_2023_multiples.csv"
-                # "CBPA2_HUMAN_Rocklin_2023_1O6X.csv",
-               #  "RASK_HUMAN_Weng_2022_binding-RAF1.csv", 
-             #"RASK_HUMAN_Weng_2022_abundance.csv", 
-               #"AMFR_HUMAN_Rocklin_2023_4G3O.csv",
-               # "HIS7_YEAST_Pokusaeva_2019.csv" , 
-    #           "CAPSD_AAV2S_Sinai_substitutions_2021.csv"
-    #]
-    print(2)
-    LLR_string, WT_PLLR_string = "../WT_for_MM_assays.csv", "../WT_for_MM_assays_redux/*.pt"#WT_for_MM_assays_extra/*.pt"
-    WT_dict, LLRS, WT_PLLRS = get_LLR_and_WT_PLLR(intersect_set, full, LLR_string, WT_PLLR_string)
-    print(3)
-    eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS)
-    print(4)
-    pass
+def results_bargraph(group_data, title, figname):
+    plt.figure(figsize=(20, 6))
+    #print(group_data)
+    sns.barplot(x='features', y='correlation_score', hue='alpha', data=group_data)
+    plt.title(title) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
+    plt.xlabel('Features')
+    plt.ylabel('Correlation')
+    plt.legend(title='Alpha')
+    plt.savefig(figname) #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
+    plt.close()
 
-# we are running into a problem where we have the wrong PLLRs hanging around. 
+def plot_all_results(results_path):
+    # some assays come up twice
+    all_assays = pd.read_csv(results_path) #"MM_Assay_splits.csv")
+    # Replace "N/A" in the 'alpha' column with a different string
+    all_assays['alpha'] = all_assays['alpha'].replace(np.nan, 'Not Available')
+    # Group the data by assay and dist_from_WT
+    grouped = all_assays.groupby(['assay', 'dist_from_WT', 'eval_size'])
+    for (assay, dist_from_WT, eval_size), group_data in grouped:
+        results_bargraph(group_data,
+                         f'Distance from WT: {dist_from_WT}',
+                         f"SM_pred_{assay}_{dist_from_WT}.png")
+        
+    # now we make one for each distance from wildtype
+    grouped = all_assays.groupby(['dist_from_WT'])
+    for (dist_from_WT), group_data in grouped:
+        results_bargraph(group_data,
+                    f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}',
+                    f"SM_pred_{dist_from_WT}_all_assays.png")
+
+def main(args):
+    if not args.graphs_only:
+        query_string =  f"{args.pg_sub_dir}*.csv" #'../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
+        intersect_set, full = read_in_PG(query_string)
+            # desired assays:
+        if args.only_assay is not None: # need some default here
+            desired = intersect_set 
+        else:
+            desired = [args.only_assay] # force only one assay for now
+            #[
+                    # "Q8WTC7_9CNID_Somermeyer_2022.csv",
+                    # "H3JQU7_ENTQU_Poelwijk_2019.csv",
+                    # "Q6WV13_9MAXI_Somermeyer_2022.csv",
+                    # "GFP_AEQVI_Sarkisyan_2016.csv",
+                    #"PHOT_CHLRE_Chen_2023_multiples.csv"
+                    # "CBPA2_HUMAN_Rocklin_2023_1O6X.csv",
+                #  "RASK_HUMAN_Weng_2022_binding-RAF1.csv", 
+                #"RASK_HUMAN_Weng_2022_abundance.csv", 
+                #"AMFR_HUMAN_Rocklin_2023_4G3O.csv",
+                # "HIS7_YEAST_Pokusaeva_2019.csv" , 
+        #           "CAPSD_AAV2S_Sinai_substitutions_2021.csv"
+        #]
+        LLR_string, WT_PLLR_string = args.llr_csv, args.wt_pllr_dir #"../WT_for_MM_assays.csv", "../WT_for_MM_assays_redux/*.pt"#WT_for_MM_assays_extra/*.pt"
+        WT_dict, LLRS, WT_PLLRS = get_LLR_and_WT_PLLR(intersect_set, full, LLR_string, WT_PLLR_string)
+        eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS)
+    # results location is hardcoded at the moment
+    plot_all_results("MM_Assay_splits.csv") #args.results_path)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description='Predict Multimissense Mutations in Protein Gym.',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    
+    parser.add_argument('--pg-sub-dir', default= "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/",
+                        required=False, type=pathlib.Path, help='Path to Protein Gym Substitution Files.')
+    parser.add_argument('--llr-csv', default="../WT_for_MM_assays.csv", 
+                        required=False, type=pathlib.Path, help="LLR file location.",) 
+    parser.add_argument('--wt-pllr-dir',default= "../WT_for_MM_assays_redux/*.pt",  
+                        required=False, type=pathlib.Path, help="WT PLLR file location.",) 
+    parser.add_argument('--graphs-only', action='store_true', # if graphs-only ignored in input, this var will be True
+                        required=False, type=pathlib.Path, help="Skip the pipeline and make final graphs only",) 
+    parser.add_argument('--only-assay',default=None,  # need to handle default here
+                        required=False, type=pathlib.Path, help="Run Pipeline on Only this Assay.",) 
+    args = parser.parse_args()
+
+    main(args)
