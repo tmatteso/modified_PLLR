@@ -522,11 +522,11 @@ def plot_all_results(results_path):
     
     # Remove rows with duplicate assay names
     #all_assays = all_assays.drop_duplicates(subset=[ 'eval_size'], keep='first')  #subset=['assay_tokens', 'eval_size'], keep='first')
-    print(all_assays.assay.unique())
-    print(all_assays[(all_assays.assay == "7YBW7_MESOW_Ding_2023.csv")])    
-    print(all_assays[(all_assays.assay == "7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 2)])
-    print(all_assays[(all_assays.assay == "7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 3)])
-    print(all_assays[(all_assays.assay == "7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 4)])
+    #print(all_assays.assay.unique())
+    print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023..csv")])    
+    print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 2)])
+    print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 3)])
+    print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 4)])
     raise Error
     # Replace "N/A" in the 'alpha' column with a different string
     all_assays['alpha'] = all_assays['alpha'].replace(np.nan, 'Not Available')
