@@ -526,9 +526,16 @@ def plot_all_results(results_path):
     #     results_bargraph(group_data,
     #                      f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}', 
     #                      f"SM_pred_{assay}_{dist_from_WT}.png")
-
-
+    print(len(all_assays.assay.unique()))
+    # if the first 3 tokens after being split on _ are the same and eval size are the same, then the two assays are the same
     
+    # Split each unique entry for "assay" on the "_" character
+    all_assays['assay_tokens'] = all_assays['assay'].str.split('_').str[:3]
+    
+    # Remove rows with duplicate assay names
+    all_assays = all_assays.drop_duplicates(subset=['assay_tokens', 'eval_size'], keep='first')    
+    print(len(all_assays.assay.unique()))
+    raise Error
     #print(all_assays[all_assays.assay == "RBP1_HUMAN_Rocklin_2023_2KWH.csv"])
     # now we make one for each distance from wildtype
     grouped = all_assays.groupby(['dist_from_WT'])
