@@ -539,9 +539,7 @@ def plot_all_results(results_path):
     #print(grouped)
 
     for (dist_from_WT), group_data in grouped:
-        print(dist_from_WT[0])
-        print(len(group_data.assay.unique()))
-        print(sum(group_data.eval_size.unique()))
+        print(dist_from_WT[0], len(group_data.assay.unique()), sum(group_data.eval_size.unique()))
         if 15 > dist_from_WT[0] > 2:
             print(group_data.assay.unique())
             #print(group_data)
