@@ -524,8 +524,8 @@ def plot_all_results(results_path):
     #                      f"SM_pred_{assay}_{dist_from_WT}.png")
     
     print(len(all_assays.assay.unique()))
-    print(sum(all_assays.eval_size.unique()))
-    print(all_assays.groupby(["assay", "eval_size"]).size().reset_index().nunique())
+    print(len(all_assays.eval_size.unique()))
+    print(all_assays["assay", "eval_size"].unique())
     #print(all_assays[all_assays.assay == "RBP1_HUMAN_Rocklin_2023_2KWH.csv"])
     # now we make one for each distance from wildtype
     #grouped = all_assays.groupby(['dist_from_WT'])
