@@ -516,7 +516,12 @@ def plot_all_results(results_path):
     all_assays = pd.read_csv(results_path) #"MM_Assay_splits.csv")
     # will need to delete duplicate assays
     # CAPSD_AAV2S_Sinai_substitutions_2021.csv == CAPSD_AAV2S_Sinai_2021.csv 
-    # 
+    # this only eliminates 1 assay
+    # Split each unique entry for "assay" on the "_" character
+    all_assays['assay_tokens'] = all_assays['assay'].str.split('_').str[:3].apply(lambda x: x[:3]).apply(lambda x: '_'.join(x))
+    
+    # Remove rows with duplicate assay names
+    less_assays = all_assays.drop_duplicates(subset=[ 'eval_size'], keep='first')  #subset=['assay_tokens', 'eval_size'], keep='first')
 
     # Replace "N/A" in the 'alpha' column with a different string
     all_assays['alpha'] = all_assays['alpha'].replace(np.nan, 'Not Available')
@@ -526,17 +531,8 @@ def plot_all_results(results_path):
     #     results_bargraph(group_data,
     #                      f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}', 
     #                      f"SM_pred_{assay}_{dist_from_WT}.png")
-    print(len(all_assays.assay.unique()))
     # if the first 3 tokens after being split on _ are the same and eval size are the same, then the two assays are the same
     
-    # Split each unique entry for "assay" on the "_" character
-    all_assays['assay_tokens'] = all_assays['assay'].str.split('_').str[:3].apply(lambda x: x[:2]).apply(lambda x: '_'.join(x))
-    
-    
-    # Remove rows with duplicate assay names
-    less_assays = all_assays.drop_duplicates(subset=[ 'eval_size'], keep='first')  #subset=['assay_tokens', 'eval_size'], keep='first')    
-    print(set(all_assays.assay.unique()) - set(less_assays.assay.unique()))
-    raise Error
     #print(all_assays[all_assays.assay == "RBP1_HUMAN_Rocklin_2023_2KWH.csv"])
     # now we make one for each distance from wildtype
     grouped = all_assays.groupby(['dist_from_WT'])
