@@ -533,19 +533,10 @@ def plot_all_results(results_path):
     for (dist_from_WT), group_data in grouped:
         print(group_data)
         print(len(group_data.assay.unique()))
-        print(len(group_data.eval_size.unique()))
-        raise Error
-        # Filter rows where the entry for column "assay" has multiple possible entries for column "eval_size"
-        filtered_assays = group_data.groupby('assay').filter(lambda x: len(x['eval_size'].unique()) > 1)
-        
-        print(len(filtered_assays.assay.unique()))
-        print(len(filtered_assays.eval_size.unique()))
-        print(filtered_assays[["assay", "eval_size"]].drop_duplicates())
-        print(filtered_assays[filtered_assays.assay == "CAPSD_AAV2S_Sinai_substitutions_2021.csv"])
-        raise Error
+        print(sum(group_data.eval_size.unique()))
         results_bargraph(group_data,
                     f'Distance from WT: {dist_from_WT[0]}',
-                    f"SM_pred_{dist_from_WT}_all_assays.png")
+                    f"SM_pred_{dist_from_WT[0]}_all_assays.png")
                     
 
 def main(args):
