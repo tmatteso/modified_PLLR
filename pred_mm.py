@@ -44,7 +44,9 @@ def read_in_PG(query_string):
             pass 
     # then concatenate the dfs -- keep this for later to compare with clinvar mutations 
     all_gene_muts = pd.concat(ls_of_df)
-    print(all_gene_muts[all_gene_muts.assay == "F7YBW7_MESOW_Ding_2023.csv"])
+    mini_df = (all_gene_muts[all_gene_muts.assay == "F7YBW7_MESOW_Ding_2023.csv"])
+    print(mini_df[mini_df['mutant'].str.contains(":")])
+
     raise Error
 
     # filter for human only
