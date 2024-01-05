@@ -525,7 +525,10 @@ def plot_all_results(results_path):
         
     # now we make one for each distance from wildtype
     grouped = all_assays.groupby(['dist_from_WT'])
-    for (dist_from_WT), _, group_data in grouped:
+    for (dist_from_WT), group_data in grouped:
+        print(dist_from_WT)
+        print(group_data)
+        raise Error
         results_bargraph(group_data,
                     f'Distance from WT: {dist_from_WT}',
                     f"SM_pred_{dist_from_WT}_all_assays.png")
