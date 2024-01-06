@@ -549,7 +549,7 @@ def plot_all_results(results_path):
     # now we make one for each distance from wildtype
     grouped = all_assays.groupby(['dist_from_WT'])
     #print(grouped)
-    F
+    
     for (dist_from_WT), group_data in grouped:
         print(dist_from_WT[0], len(group_data.assay.unique()), sum(group_data.eval_size.unique()))
         results_bargraph(group_data,
