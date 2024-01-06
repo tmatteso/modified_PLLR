@@ -520,15 +520,16 @@ def results_bargraph(group_data, title, figname):
 def plot_all_results(results_path):
     # some assays come up twice
     all_assays = pd.read_csv(results_path) #"MM_Assay_splits.csv")
+
     #all_assays["features"] = (all_assays.features.str.split('+').apply(lambda x: [element.split("_")[-1] for element in x]).apply(lambda x: '+'.join(x)))#.str.split('_'))
     all_assays['alpha'] = all_assays['alpha'].replace(np.nan, 'Not Available')
-
+    print(all_assays)
     # will need to delete duplicate assays
     # CAPSD_AAV2S_Sinai_substitutions_2021.csv == CAPSD_AAV2S_Sinai_2021.csv 
     # this only eliminates 1 assay
     # Split each unique entry for "assay" on the "_" character
     all_assays['assay_tokens'] = all_assays['assay'].str.split('_').str[:3].apply(lambda x: x[:3]).apply(lambda x: '_'.join(x))
-    
+    print(all_assays)
     # Remove rows with duplicate assay names
     all_assays = all_assays.drop_duplicates(subset=[ 'eval_size'], keep='first')  #subset=['assay_tokens', 'eval_size'], keep='first')
     print(all_assays)
