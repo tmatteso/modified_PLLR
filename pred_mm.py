@@ -551,11 +551,12 @@ def plot_all_results(results_path):
     # lineplot for each feature type for each assay
     grouped = all_assays.groupby(['assay', 'features'])
     for (assay, feature), group_data in grouped:
-        results_lineplot(group_data,
-                         f'Assay: {assay}, Feature: {feature}', 
-                         f"SM_pred_{assay}_{feature}.png")
-        print(f"SM_pred_{assay}_{feature}.png")
-        raise Error
+        if len(group_data.dist_from_WT.unique()) > 1:
+            results_lineplot(group_data,
+                            f'Assay: {assay}, Feature: {feature}', 
+                            f"SM_pred_{assay}_{feature}.png")
+            print(f"SM_pred_{assay}_{feature}.png")
+            raise Error
     # now we make one for each distance from wildtype
     grouped = all_assays.groupby(['dist_from_WT'])
     #print(grouped)
