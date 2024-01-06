@@ -523,10 +523,10 @@ def plot_all_results(results_path):
 
     #all_assays["features"] = (all_assays.features.str.split('+').apply(lambda x: [element.split("_")[-1] for element in x]).apply(lambda x: '+'.join(x)))#.str.split('_'))
     all_assays['alpha'] = all_assays['alpha'].replace(np.nan, 'Not Available')
-    print(all_assays.features)
-    # will need to delete duplicate assays
-    all_assays = all_assays[all_assays.assay != "CAPSD_AAV2S_Sinai_2021.csv"]
     print(all_assays)
+    # will need to delete duplicate assays
+    print(all_assays[all_assays.assay != "CAPSD_AAV2S_Sinai_2021.csv"])
+    print(all_assays[all_assays.assay == "CAPSD_AAV2S_Sinai_2021.csv"])
     raise Error
     #print(all_assays.assay.unique())
     # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023..csv")])    
