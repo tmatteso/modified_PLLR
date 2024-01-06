@@ -521,8 +521,7 @@ def plot_all_results(results_path):
     # some assays come up twice
     all_assays = pd.read_csv(results_path) #"MM_Assay_splits.csv")
     #all_assays["features"] = (all_assays.features.str.split('+').apply(lambda x: [element.split("_")[-1] for element in x]).apply(lambda x: '+'.join(x)))#.str.split('_'))
-    print(all_assays)
-    raise Error
+    all_assays['alpha'] = all_assays['alpha'].replace(np.nan, 'Not Available')
 
     # will need to delete duplicate assays
     # CAPSD_AAV2S_Sinai_substitutions_2021.csv == CAPSD_AAV2S_Sinai_2021.csv 
@@ -532,6 +531,8 @@ def plot_all_results(results_path):
     
     # Remove rows with duplicate assay names
     all_assays = all_assays.drop_duplicates(subset=[ 'eval_size'], keep='first')  #subset=['assay_tokens', 'eval_size'], keep='first')
+    print(all_assays)
+    raise Error
     #print(all_assays.assay.unique())
     # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023..csv")])    
     # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 2)])
@@ -539,7 +540,7 @@ def plot_all_results(results_path):
     # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 4)])
     # raise Error
     # Replace "N/A" in the 'alpha' column with a different string
-    all_assays['alpha'] = all_assays['alpha'].replace(np.nan, 'Not Available')
+    
     print(all_assays)
     # Group the data by assay and dist_from_WT
     # grouped = all_assays.groupby(['assay', 'dist_from_WT', 'eval_size'])
