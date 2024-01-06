@@ -519,7 +519,7 @@ def results_bargraph(group_data, title, figname):
 def plot_all_results(results_path):
     # some assays come up twice
     all_assays = pd.read_csv(results_path) #"MM_Assay_splits.csv")
-    print(all_assays.features.str.split('+'))#.str.split('_'))
+    print(all_assays.features.str.split('+').apply(lambda x: x.str.split("_")))#.str.split('_'))
 
 
     # will need to delete duplicate assays
