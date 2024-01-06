@@ -45,7 +45,10 @@ def read_in_PG(query_string):
     # then concatenate the dfs -- keep this for later to compare with clinvar mutations 
     all_gene_muts = pd.concat(ls_of_df)
     mini_df = (all_gene_muts[all_gene_muts.assay == "F7YBW7_MESOW_Ding_2023.csv"])
-    print(mini_df[mini_df['mutant'].str.len() == 14])
+    print(len(mini_df[mini_df['mutant'].str.len() == 5].index))
+    print(len(mini_df[mini_df['mutant'].str.len() == 9].index))
+    print(len(mini_df[mini_df['mutant'].str.len() == 14].index))
+    print(len(mini_df[mini_df['mutant'].str.len() == 19].index))
 
     raise Error
 
