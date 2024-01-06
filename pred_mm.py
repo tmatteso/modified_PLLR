@@ -24,7 +24,6 @@ def get_dms_score_sum(row, dms_scores):
 
 def read_in_PG(query_string):
     # 'ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
-    print(query_string)
     all_human_files = glob.glob(query_string) #'ProteinGym_substitutions/*')#HUMAN*') 
     filtered_files = [f for f in all_human_files if 'indel' not in f]
     ls_of_df = []
@@ -507,6 +506,8 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
     all_records.to_csv("MM_Assay_splits.csv")
 
 def results_bargraph(group_data, title, figname):
+    print(group_data.features)
+    raise error
     plt.figure(figsize=(30, 6))
     #print(group_data)
     sns.barplot(x='features', y='correlation_score', hue='alpha', data=group_data)
@@ -529,11 +530,11 @@ def plot_all_results(results_path):
     # Remove rows with duplicate assay names
     #all_assays = all_assays.drop_duplicates(subset=[ 'eval_size'], keep='first')  #subset=['assay_tokens', 'eval_size'], keep='first')
     #print(all_assays.assay.unique())
-    print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023..csv")])    
-    print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 2)])
-    print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 3)])
-    print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 4)])
-    raise Error
+    # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023..csv")])    
+    # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 2)])
+    # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 3)])
+    # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 4)])
+    # raise Error
     # Replace "N/A" in the 'alpha' column with a different string
     all_assays['alpha'] = all_assays['alpha'].replace(np.nan, 'Not Available')
     # Group the data by assay and dist_from_WT
@@ -551,10 +552,6 @@ def plot_all_results(results_path):
     F
     for (dist_from_WT), group_data in grouped:
         print(dist_from_WT[0], len(group_data.assay.unique()), sum(group_data.eval_size.unique()))
-        if 15 > dist_from_WT[0] > 2:
-            print(group_data.assay.unique())
-            #print(group_data)
-
         results_bargraph(group_data,
                     f'Distance from WT: {dist_from_WT[0]}',
                     f"SM_pred_{dist_from_WT[0]}_all_assays.png")
