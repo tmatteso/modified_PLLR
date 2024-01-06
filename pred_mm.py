@@ -506,8 +506,6 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
     all_records.to_csv("MM_Assay_splits.csv")
 
 def results_bargraph(group_data, title, figname):
-    print(group_data.features)
-    raise error
     plt.figure(figsize=(30, 6))
     #print(group_data)
     sns.barplot(x='features', y='correlation_score', hue='alpha', data=group_data)
@@ -521,6 +519,9 @@ def results_bargraph(group_data, title, figname):
 def plot_all_results(results_path):
     # some assays come up twice
     all_assays = pd.read_csv(results_path) #"MM_Assay_splits.csv")
+    print(all_assays.features.str.split('+').str.split('_'))
+
+
     # will need to delete duplicate assays
     # CAPSD_AAV2S_Sinai_substitutions_2021.csv == CAPSD_AAV2S_Sinai_2021.csv 
     # this only eliminates 1 assay
