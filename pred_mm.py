@@ -507,7 +507,7 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
 
 def results_bargraph(group_data, title, figname):
     plt.figure(figsize=(30, 6))
-    #print(group_data)
+    print(group_data.features)
     sns.barplot(x='features', y='correlation_score', hue='alpha', data=group_data)
     plt.title(title) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
     plt.xlabel('Features')
