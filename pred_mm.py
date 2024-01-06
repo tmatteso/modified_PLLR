@@ -523,11 +523,8 @@ def plot_all_results(results_path):
 
     #all_assays["features"] = (all_assays.features.str.split('+').apply(lambda x: [element.split("_")[-1] for element in x]).apply(lambda x: '+'.join(x)))#.str.split('_'))
     all_assays['alpha'] = all_assays['alpha'].replace(np.nan, 'Not Available')
-    print(all_assays)
     # will need to delete duplicate assays
-    print(all_assays[all_assays.assay != "CAPSD_AAV2S_Sinai_2021.csv"])
-    print(all_assays[all_assays.assay == "CAPSD_AAV2S_Sinai_2021.csv"])
-    raise Error
+    all_assays = (all_assays[all_assays.assay != "CAPSD_AAV2S_Sinai_2021.csv"])
     #print(all_assays.assay.unique())
     # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023..csv")])    
     # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 2)])
@@ -535,8 +532,7 @@ def plot_all_results(results_path):
     # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 4)])
     # raise Error
     # Replace "N/A" in the 'alpha' column with a different string
-    
-    print(all_assays)
+
     # Group the data by assay and dist_from_WT
     # grouped = all_assays.groupby(['assay', 'dist_from_WT', 'eval_size'])
     # for (assay, dist_from_WT, eval_size), group_data in grouped:
