@@ -515,6 +515,17 @@ def results_bargraph(group_data, title, figname):
     plt.savefig(figname) #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
     plt.close()
 
+# I want another graph: one where for each feature type, we get a line plot of how the correlation changes with distance from WT
+def results_lineplot(group_data, title, figname):
+    plt.figure(figsize=(20, 6))
+    sns.lineplot(x='dist_from_WT', y='correlation_score', hue='alpha', data=group_data)
+    plt.title(title) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
+    plt.xlabel('Distance from WT')
+    plt.ylabel('Correlation')
+    plt.legend(title='Alpha')
+    plt.savefig(figname) #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
+    plt.close()
+
 def plot_all_results(results_path):
     # some assays come up twice
     all_assays = pd.read_csv(results_path) #"MM_Assay_splits.csv")
@@ -529,27 +540,21 @@ def plot_all_results(results_path):
         'one_hot+layer_21+layer_33+sum_LLR': 'oh+21+33+LLR',
         'layer_21+layer_33+sum_LLR': '21+33+LLR'
     })
-    # one_hot+layer_21+layer_33+sum_LLR+PLLR
-    # one_hot+layer_21+layer_33+sum_LLR
-    # layer_21+layer_33+sum_LLR
-
-    #print(all_assays.assay.unique())
-    # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023..csv")])    
-    # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 2)])
-    # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 3)])
-    # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 4)])
-    # raise Error
-    # Replace "N/A" in the 'alpha' column with a different string
-
     # Group the data by assay and dist_from_WT
-    # grouped = all_assays.groupby(['assay', 'dist_from_WT', 'eval_size'])
-    # for (assay, dist_from_WT, eval_size), group_data in grouped:
-    #     results_bargraph(group_data,
-    #                      f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}', 
-    #                      f"SM_pred_{assay}_{dist_from_WT}.png")
-    # if the first 3 tokens after being split on _ are the same and eval size are the same, then the two assays are the same
-    
-    #print(all_assays[all_assays.assay == "RBP1_HUMAN_Rocklin_2023_2KWH.csv"])
+    grouped = all_assays.groupby(['assay', 'dist_from_WT', 'eval_size'])
+    for (assay, dist_from_WT, eval_size), group_data in grouped:
+        results_bargraph(group_data,
+                         f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}', 
+                         f"SM_pred_{assay}_{dist_from_WT}.png")
+        
+    # lineplot for each feature type for each assay
+    grouped = all_assays.groupby(['assay', 'features'])
+    for (assay, feature), group_data in grouped:
+        results_lineplot(group_data,
+                         f'Assay: {assay}, Feature: {feature}', 
+                         f"SM_pred_{assay}_{feature}.png")
+        print(f"SM_pred_{assay}_{feature}.png")
+        raise Error
     # now we make one for each distance from wildtype
     grouped = all_assays.groupby(['dist_from_WT'])
     #print(grouped)
@@ -557,7 +562,7 @@ def plot_all_results(results_path):
     for (dist_from_WT), group_data in grouped:
         print(dist_from_WT[0], len(group_data.assay.unique()), sum(group_data.eval_size.unique()))
         results_bargraph(group_data,
-                    f'Distance from WT: {dist_from_WT[0]}, Number of Assays: {len(group_data.assay.unique())}, Total Evaluation Size:{sum(group_data.eval_size.unique())}',
+                    f'Distance from WT: {dist_from_WT[0]}, Number of Assays: {len(group_data.assay.unique())}, Total Evaluation Size: {sum(group_data.eval_size.unique())}',
                     f"SM_pred_{dist_from_WT[0]}_all_assays.png")
                     
 
