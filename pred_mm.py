@@ -556,7 +556,7 @@ def plot_all_results(results_path):
                             f'Assay: {assay}, Feature: {feature}', 
                             f"SM_pred_{assay}_{feature}.png")
             print(f"SM_pred_{assay}_{feature}.png")
-            raise Error
+            
     # now we make one for each distance from wildtype
     grouped = all_assays.groupby(['dist_from_WT'])
     #print(grouped)
