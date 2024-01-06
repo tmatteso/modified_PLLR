@@ -45,12 +45,9 @@ def read_in_PG(query_string):
     # then concatenate the dfs -- keep this for later to compare with clinvar mutations 
     all_gene_muts = pd.concat(ls_of_df)
     mini_df = (all_gene_muts[all_gene_muts.assay == "F7YBW7_MESOW_Ding_2023.csv"])
-    print(len(mini_df[mini_df['mutant'].str.len() == 5].index))
     print(len(mini_df[mini_df['mutant'].str.len() == 9].index))
     print(len(mini_df[mini_df['mutant'].str.len() == 14].index))
     print(len(mini_df[mini_df['mutant'].str.len() == 19].index))
-
-    raise Error
 
     # filter for human only
     #all_gene_muts = all_gene_muts[all_gene_muts.gene.str.contains("HUMAN")]
@@ -75,6 +72,15 @@ def read_in_PG(query_string):
     # Apply the function to check if all split mutants for a given gene exist in df1 from df2
     mm_subset['exists_in_df1'] = mm_subset.apply(lambda row: mutants_exist(row, df1_pairs), axis=1)
     mm_subset = mm_subset[mm_subset['exists_in_df1']]
+
+
+
+    mini_df = (mm_subset[mm_subset.assay == "F7YBW7_MESOW_Ding_2023.csv"])
+    print(len(mini_df[mini_df['mutant'].str.len() == 9].index))
+    print(len(mini_df[mini_df['mutant'].str.len() == 14].index))
+    print(len(mini_df[mini_df['mutant'].str.len() == 19].index))
+    raise Error
+
     # Create a dictionary with (gene, mutant) as keys and DMS_score as values for fast lookup from df1
     # global dms_scores # needed for get_dms_score_sum to work -- this is dumb
     dms_scores = sm_subset.set_index(['gene', 'mutant'])['DMS_score'].to_dict()
