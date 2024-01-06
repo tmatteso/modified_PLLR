@@ -539,6 +539,7 @@ def plot_all_results(results_path):
     # raise Error
     # Replace "N/A" in the 'alpha' column with a different string
     all_assays['alpha'] = all_assays['alpha'].replace(np.nan, 'Not Available')
+    print(all_assays)
     # Group the data by assay and dist_from_WT
     # grouped = all_assays.groupby(['assay', 'dist_from_WT', 'eval_size'])
     # for (assay, dist_from_WT, eval_size), group_data in grouped:
