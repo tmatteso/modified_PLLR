@@ -506,7 +506,7 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
     all_records.to_csv("MM_Assay_splits.csv")
 
 def results_bargraph(group_data, title, figname):
-    plt.figure(figsize=(30, 6))
+    plt.figure(figsize=(20, 6))
     print(group_data)
     raise Error
     sns.barplot(x='features', y='correlation_score', hue='alpha', data=group_data)
@@ -525,6 +525,16 @@ def plot_all_results(results_path):
     all_assays['alpha'] = all_assays['alpha'].replace(np.nan, 'Not Available')
     # will need to delete duplicate assays
     all_assays = (all_assays[all_assays.assay != "CAPSD_AAV2S_Sinai_2021.csv"])
+    # now we need to shorten the names of sum of features
+    all_assays['features'] = all_assays['features'].replace({
+        'one_hot+layer_21+layer_33+sum_LLR+PLLR': 'oh+21+33+LLR+PLLR',
+        'one_hot+layer_21+layer_33+sum_LLR': 'oh+21+33+LLR',
+        'layer_21+layer_33+sum_LLR': '21+33+LLR'
+    })
+    # one_hot+layer_21+layer_33+sum_LLR+PLLR
+    # one_hot+layer_21+layer_33+sum_LLR
+    # layer_21+layer_33+sum_LLR
+
     #print(all_assays.assay.unique())
     # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023..csv")])    
     # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023.csv") & (all_assays.dist_from_WT == 2)])
