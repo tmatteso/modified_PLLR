@@ -529,10 +529,10 @@ def plot_all_results(results_path):
     # this only eliminates 1 assay
     # Split each unique entry for "assay" on the "_" character
     all_assays['assay_tokens'] = all_assays['assay'].str.split('_').str[:3].apply(lambda x: x[:3]).apply(lambda x: '_'.join(x))
-    print(all_assays.features)
+    print(all_assays)
     # Remove rows with duplicate assay names
     all_assays = all_assays.drop_duplicates(subset=['assay_tokens', 'eval_size'], keep='first')  #subset=['assay_tokens', 'eval_size'], keep='first')
-    print(all_assays.features)
+    print(all_assays)
     raise Error
     #print(all_assays.assay.unique())
     # print(all_assays[(all_assays.assay == "F7YBW7_MESOW_Ding_2023..csv")])    
