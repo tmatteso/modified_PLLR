@@ -518,16 +518,16 @@ def results_bargraph(group_data, title, figname):
 # I want another graph: one where for each feature type, we get a line plot of how the correlation changes with distance from WT
 def results_lineplot(group_data, title, figname):
     print(group_data)
-    plt.figure(figsize=(25, 10))
+    plt.figure(figsize=(20, 8))
     ax = sns.lineplot(x='dist_from_WT', y='correlation_score',
                  hue = 'features', style = 'alpha',
                 #hue='alpha', 
                  data=group_data)
     
-    plt.title(title, fontsize=16) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
-    plt.xlabel('Distance from WT', fontsize=16)
-    plt.ylabel('Correlation', fontsize=16)
-    plt.legend(title='Features and Alpha', fontsize=8)
+    plt.title(title, fontsize=32) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
+    plt.xlabel('Distance from WT', fontsize=32)
+    plt.ylabel('Correlation', fontsize=32)
+    plt.legend(title='Features and Alpha', fontsize=16)
 
     sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
     plt.savefig(figname) #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
