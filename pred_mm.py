@@ -583,7 +583,7 @@ def plot_all_results(results_path):
         "PHOT_CHLRE_Chen_2023_multiples.csv",
         "CTHL3_BOVIN_Koch_2022.csv",
         "D7PM05_CLYGR_Somermeyer_2022.csv",
-        "GFP_AEQVI_Sarkisyan_2016.csv ",
+        "GFP_AEQVI_Sarkisyan_2016.csv",
         "H3JQU7_ENTQU_Poelwijk_2019.csv"
     ]
     for assay in desired_assays:
