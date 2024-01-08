@@ -566,7 +566,7 @@ def plot_all_results(results_path):
     for ( alpha), group_data in grouped: # feature
         if len(group_data.dist_from_WT.unique()) > 1:
             results_lineplot(group_data,
-                            f'All Assays, Alpha: {alpha[0]}'# Feature: {feature[0]}', 
+                            f'All Assays, Alpha: {alpha[0]}', # Feature: {feature[0]}', 
                             f"SM_pred_{alpha[0]}_all_assays.png")
             print(f"SM_pred_{alpha}_all_assays.png")
 
