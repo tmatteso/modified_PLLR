@@ -530,7 +530,7 @@ def results_lineplot(group_data, title, figname):
     plt.legend(title='Features and Alpha', fontsize=16)
 
     sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
-    plt.savefig(figname) #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
+    plt.savefig(figname, bbox_inches='tight') #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
     plt.close()
 
 def plot_all_results(results_path):
