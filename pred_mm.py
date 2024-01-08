@@ -524,10 +524,10 @@ def results_lineplot(group_data, title, figname):
                 #hue='alpha', 
                  data=group_data)
     
-    plt.title(title, fontsize=32) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
-    plt.xlabel('Distance from WT', fontsize=32)
-    plt.ylabel('Correlation', fontsize=32)
-    plt.legend(title='Features and Alpha', fontsize=16)
+    plt.title(title, fontsize=30) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
+    plt.xlabel('Distance from WT', fontsize=30)
+    plt.ylabel('Correlation', fontsize=30)
+    plt.legend(title='Features and Alpha', fontsize=24)
 
     sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
     plt.savefig(figname, bbox_inches='tight') #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
