@@ -570,7 +570,8 @@ def plot_all_results(results_path):
     #                         f"SM_pred_{alpha[0]}_all_assays.png")
     #         print(f"SM_pred_{alpha[0]}_all_assays.png")
 
-    results_lineplot(all_assays,
+    # graph only those with dist from WT < 15
+    results_lineplot(all_assays[all_assays.dist_from_WT < 15],
                             f'All Assays, All Features',
                             f"SM_pred_all_features_all_assays.png")
     # now we make one for each distance from wildtype
