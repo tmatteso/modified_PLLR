@@ -552,7 +552,6 @@ def plot_all_results(results_path):
         results_bargraph(group_data,
                          f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}', 
                          f"SM_pred_{assay}_{dist_from_WT}.png")
-    raise Error
     # lineplot for each feature type for each assay
     # grouped = all_assays.groupby(['assay', 'features'])
     # for (assay, feature), group_data in grouped:
@@ -578,8 +577,14 @@ def plot_all_results(results_path):
                             f"SM_pred_all_features_all_assays.png")
     # do this but only for one assay in question:
     # we wil do this for 3 assays in question (all the ones that get 14 dist from WT)
-
-
+    desired_assays = ["CAPSD_AAV2S_Sinai_substitutions_2021.csv",
+        "HIS7_YEAST_Pokusaeva_2019.csv", 
+        "PHOT_CHLRE_Chen_2023_multiples.csv"
+    ]
+    for assay in desired_assays:
+        results_lineplot(all_assays[all_assays.assay == assay],
+                            f'Assay: {assay}, All Features',
+                            f"SM_pred_all_features_{assay}.png")
     # now we make one for each distance from wildtype
     grouped = all_assays.groupby(['dist_from_WT'])
     #print(grouped)
