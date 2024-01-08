@@ -547,11 +547,12 @@ def plot_all_results(results_path):
     # Group the data by assay and dist_from_WT
     grouped = all_assays.groupby(['assay', 'dist_from_WT', 'eval_size'])
     for (assay, dist_from_WT, eval_size), group_data in grouped:
-        if dist_from_WT == 14:
+        if dist_from_WT == 10:
             print(assay, dist_from_WT, eval_size)
         results_bargraph(group_data,
                          f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}', 
                          f"SM_pred_{assay}_{dist_from_WT}.png")
+    raise Error
     # lineplot for each feature type for each assay
     # grouped = all_assays.groupby(['assay', 'features'])
     # for (assay, feature), group_data in grouped:
