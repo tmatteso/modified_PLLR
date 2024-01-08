@@ -519,6 +519,7 @@ def results_bargraph(group_data, title, figname):
 def results_lineplot(group_data, title, figname):
     print(group_data)
     plt.figure(figsize=(25, 10))
+    sns.set(font_scale=2)
     sns.lineplot(x='dist_from_WT', y='correlation_score',
                  hue = 'features', style = 'alpha',
                 #hue='alpha', 
@@ -526,7 +527,7 @@ def results_lineplot(group_data, title, figname):
     plt.title(title) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
     plt.xlabel('Distance from WT')
     plt.ylabel('Correlation')
-    plt.legend(title='Alpha')
+    plt.legend(title='Features and Alpha')
     plt.savefig(figname) #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
     plt.close()
 
@@ -552,7 +553,6 @@ def plot_all_results(results_path):
         results_bargraph(group_data,
                          f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}', 
                          f"SM_pred_{assay}_{dist_from_WT}.png")
-    raise Error
     # lineplot for each feature type for each assay
     # grouped = all_assays.groupby(['assay', 'features'])
     # for (assay, feature), group_data in grouped:
@@ -580,7 +580,11 @@ def plot_all_results(results_path):
     # we wil do this for 3 assays in question (all the ones that get 14 dist from WT)
     desired_assays = ["CAPSD_AAV2S_Sinai_substitutions_2021.csv",
         "HIS7_YEAST_Pokusaeva_2019.csv", 
-        "PHOT_CHLRE_Chen_2023_multiples.csv"
+        "PHOT_CHLRE_Chen_2023_multiples.csv",
+        "CTHL3_BOVIN_Koch_2022.csv",
+        "D7PM05_CLYGR_Somermeyer_2022.csv",
+        "GFP_AEQVI_Sarkisyan_2016.csv ",
+        "H3JQU7_ENTQU_Poelwijk_2019.csv"
     ]
     for assay in desired_assays:
         results_lineplot(all_assays[all_assays.assay == assay],
