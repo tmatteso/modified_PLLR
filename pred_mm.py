@@ -520,10 +520,11 @@ def results_lineplot(group_data, title, figname):
     print(group_data)
     plt.figure(figsize=(25, 10))
     sns.set(font_scale=2)
-    sns.lineplot(x='dist_from_WT', y='correlation_score',
+    ax = sns.lineplot(x='dist_from_WT', y='correlation_score',
                  hue = 'features', style = 'alpha',
                 #hue='alpha', 
                  data=group_data)
+    sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
     plt.title(title) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
     plt.xlabel('Distance from WT')
     plt.ylabel('Correlation')
