@@ -518,9 +518,9 @@ def results_bargraph(group_data, title, figname):
 # I want another graph: one where for each feature type, we get a line plot of how the correlation changes with distance from WT
 def results_lineplot(group_data, title, figname):
     print(group_data)
-    plt.figure(figsize=(30, 8))
+    plt.figure(figsize=(25, 10))
     sns.lineplot(x='dist_from_WT', y='correlation_score',
-                 hue = 'features', # style = 'alpha',
+                 hue = 'features', style = 'alpha',
                 #hue='alpha', 
                  data=group_data)
     plt.title(title) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
@@ -562,15 +562,17 @@ def plot_all_results(results_path):
 
     # lineplot for each feature type for all assays
     # if we could do this for all features at once that would be preferrable
-    grouped = all_assays.groupby( ['alpha'])#[ 'features'])
-    for ( alpha), group_data in grouped: # feature
-        if len(group_data.dist_from_WT.unique()) > 1:
-            results_lineplot(group_data,
-                            f'All Assays, Alpha: {alpha[0]}', # Feature: {feature[0]}', 
-                            f"SM_pred_{alpha[0]}_all_assays.png")
-            print(f"SM_pred_{alpha}_all_assays.png")
+    # grouped = all_assays.groupby( ['alpha'])#[ 'features'])
+    # for ( alpha), group_data in grouped: # feature
+    #     if len(group_data.dist_from_WT.unique()) > 1:
+    #         results_lineplot(group_data,
+    #                         f'All Assays, Alpha: {alpha[0]}', # Feature: {feature[0]}', 
+    #                         f"SM_pred_{alpha[0]}_all_assays.png")
+    #         print(f"SM_pred_{alpha[0]}_all_assays.png")
 
-    
+    results_lineplot(all_assays,
+                            f'All Assays, All Features',
+                            f"SM_pred_all_features_all_assays.png")
     # now we make one for each distance from wildtype
     grouped = all_assays.groupby(['dist_from_WT'])
     #print(grouped)
