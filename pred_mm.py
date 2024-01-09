@@ -444,6 +444,8 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
     records = []
     # for each assay, subset the data 
     count = 0
+    print("intersect_set", intersect_set)
+    print("desired", desired)
     for assay in intersect_set: # spawn a process for each assay
         if assay in desired:
             # create the df from PG, .pt for representations and LLRS and PLLRS
