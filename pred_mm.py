@@ -501,9 +501,10 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
                         # so this version uses only sm for train
                         records = get_spearmans(all_mm[key].DMS_score, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, sm)
                         # now do the exact same, but sm + all previous mm for train: just need to change the sm arg
-                        name_ls = [f"{name}_redux" for name in name_ls]
-                        records = get_spearmans(all_mm[key].DMS_score, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, 
-                                                pd.concat([sm] + [all_mm[k] for k in all_mm.keys() if k < key]))
+                        if key > 1:
+                            name_ls = [f"{name}_redux" for name in name_ls]
+                            records = get_spearmans(all_mm[key].DMS_score, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, 
+                                                    pd.concat([sm] + [all_mm[k] for k in all_mm.keys() if k < key]))
                         
                         # now we need to collect the other ones
 
@@ -619,7 +620,7 @@ def main(args):
         if args.only_assay is None: # need some default here
             desired = intersect_set 
         else:
-            desired = [args.only_assay] # force only one assay for now
+            desired = ["PHOT_CHLRE_Chen_2023_multiples.csv"] #[args.only_assay] # force only one assay for now
             #[
                     # "Q8WTC7_9CNID_Somermeyer_2022.csv",
                     # "H3JQU7_ENTQU_Poelwijk_2019.csv",
