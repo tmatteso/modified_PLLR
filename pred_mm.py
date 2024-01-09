@@ -557,12 +557,13 @@ def plot_all_results(results_path):
     })
     # Group the data by assay and dist_from_WT
     grouped = all_assays.groupby(['assay', 'dist_from_WT', 'eval_size'])
-    for (assay, dist_from_WT, eval_size), group_data in grouped:
-        if dist_from_WT == 10:
-            print(assay, dist_from_WT, eval_size)
-        results_bargraph(group_data,
-                         f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}', 
-                         f"SM_pred_{assay}_{dist_from_WT}.png")
+    # for (assay, dist_from_WT, eval_size), group_data in grouped:
+    #     if dist_from_WT == 10:
+    #         print(assay, dist_from_WT, eval_size)
+    #     results_bargraph(group_data,
+    #                      f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}', 
+    #                      f"SM_pred_{assay}_{dist_from_WT}.png")
+
     # lineplot for each feature type for each assay
     # grouped = all_assays.groupby(['assay', 'features'])
     # for (assay, feature), group_data in grouped:
@@ -583,7 +584,7 @@ def plot_all_results(results_path):
     #         print(f"SM_pred_{alpha[0]}_all_assays.png")
 
     # graph only those with dist from WT < 15
-    results_lineplot(all_assays[all_assays.dist_from_WT < 15],
+    results_lineplot(all_assays[(all_assays.dist_from_WT < 15) & (all_assays['features'].str.contains('redux'))],
                             f'All Assays, All Features',
                             f"SM_pred_all_features_all_assays.png")
     # do this but only for one assay in question:
@@ -598,7 +599,7 @@ def plot_all_results(results_path):
     #     "H3JQU7_ENTQU_Poelwijk_2019.csv"
     # ]
     for assay in desired_assays:
-        results_lineplot(all_assays[all_assays.assay == assay],
+        results_lineplot(all_assays[(all_assays.assay == assay) & (all_assays['features'].str.contains('redux'))],
                             f'Assay: {assay}, All Features',
                             f"SM_pred_all_features_{assay}.png")
     # now we make one for each distance from wildtype
