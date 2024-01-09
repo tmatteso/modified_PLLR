@@ -504,7 +504,7 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
                         # now do the exact same, but sm + all previous mm for train: just need to change the sm arg
                         name_ls = [f"{name}_redux" for name in name_ls]
                         records = get_spearmans(all_mm[key].DMS_score, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, 
-                                                pd.concat([sm] + [all_mm[k] for k in enumerate(all_mm.keys()) if k < key]))
+                                                pd.concat([sm] + [all_mm[k] for k in all_mm.keys() if k < key]))
                         raise
                         # now we need to collect the other ones
 
