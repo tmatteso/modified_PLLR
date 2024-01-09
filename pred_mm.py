@@ -618,7 +618,7 @@ def main(args):
         intersect_set, full = read_in_PG(query_string)
         print("intersect_set", intersect_set)
         print("args.only_assay",args.only_assay )
-        raise Error
+        
             # desired assays:
         if args.only_assay is not None: # need some default here
             desired = intersect_set 
@@ -637,6 +637,8 @@ def main(args):
                 # "HIS7_YEAST_Pokusaeva_2019.csv" , 
         #           "CAPSD_AAV2S_Sinai_substitutions_2021.csv"
         #]
+        print("desired", desired)
+        raise Error
         LLR_string, WT_PLLR_string = args.llr_csv, args.wt_pllr_dir #"../WT_for_MM_assays.csv", "../WT_for_MM_assays_redux/*.pt"#WT_for_MM_assays_extra/*.pt"
         WT_dict, LLRS, WT_PLLRS = get_LLR_and_WT_PLLR(intersect_set, full, LLR_string, WT_PLLR_string)
         print(1)
