@@ -432,6 +432,7 @@ def get_spearmans(DMS_scores, pred_ls, estimator_ls, name_ls, assay, all_mm, key
             s = pred_combo(sm, all_mm[key], pred_ls[i], #["PLLR", "sum_LLR"], 
                            alpha_arr[i])
         print(name_ls[i], key+1,s)
+        print(f"assay: {assay}, eval_size: {len(all_mm[key].index)}, features: {name_ls[i]}, dist_from_WT: {key+1}, correlation_score:{s}, alpha: {alpha_arr[i]}")
         records.append({"assay": assay, "eval_size": len(all_mm[key].index), "features": name_ls[i], 
                         "dist_from_WT": key+1, "correlation_score":s, "alpha": alpha_arr[i],})
     return records
@@ -504,6 +505,7 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
                         [f"{name}_redux" for name in name_ls]
                         records = get_spearmans(all_mm[key].DMS_score, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, 
                                                 pd.concat([sm] + [all_mm[k] for k in enumerate(all_mm.keys()) if k < key]))
+                        raise
                         # now we need to collect the other ones
 
     #Convert the list of records into a DataFrame
