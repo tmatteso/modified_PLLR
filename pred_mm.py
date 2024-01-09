@@ -617,6 +617,8 @@ def main(args):
         query_string =  f"{args.pg_sub_dir}/*.csv" #'../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
         intersect_set, full = read_in_PG(query_string)
         print("intersect_set", intersect_set)
+        print("args.only_assay",args.only_assay )
+        raise Error
             # desired assays:
         if args.only_assay is not None: # need some default here
             desired = intersect_set 
