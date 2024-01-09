@@ -428,13 +428,15 @@ def get_spearmans(DMS_scores, pred_ls, estimator_ls, name_ls, assay, all_mm, key
         if estimator_ls[i] is None:
             s, _ = stats.spearmanr(DMS_scores, all_mm[key][pred_ls[i]])
             
-        else:
+        else: # (sm, mm, combos, alpha): so first arg is train_set
             s = pred_combo(sm, all_mm[key], pred_ls[i], #["PLLR", "sum_LLR"], 
                            alpha_arr[i])
         print(name_ls[i], key+1,s)
         records.append({"assay": assay, "eval_size": len(all_mm[key].index), "features": name_ls[i], 
                         "dist_from_WT": key+1, "correlation_score":s, "alpha": alpha_arr[i],})
     return records
+
+# now let's do this where we aggregate all previous dist from WT and use it in train.
 
 # if anything, it would be nice for this to be parallelized
 def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
@@ -497,7 +499,11 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
                             "one_hot+layer_21+layer_33+sum_LLR+PLLR"
                         ]
                         alpha_arr = ["N/A", "N/A", "N/A"] + 10*[0] + 10*[100]
+                        # so this version uses only sm for train
                         records = get_spearmans(all_mm[key].DMS_score, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, sm)
+                        # now do the exact same, but sm + all previous mm for train: just need to change the sm arg
+                        records = get_spearmans(all_mm[key].DMS_score, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, 
+                                                pd.concat([sm] + [all_mm[k] for k in enumerate(all_mm.keys()) if k < key]))
                         # now we need to collect the other ones
 
     #Convert the list of records into a DataFrame
