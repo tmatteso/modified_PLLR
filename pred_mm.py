@@ -111,7 +111,7 @@ def get_LLR_and_WT_PLLR(intersect_set, full, LLR_string, WT_PLLR_string):
     # import LLR  
     LLRS = pd.read_csv(LLR_string) #"WT_for_MM_assays.csv")
     LLRS = LLRS.rename(columns={"seq_id":"assay", "mut_name":"mutant", "esm_score":"sum_LLR"}, inplace=False)
-    print("WT_PLLR_string", WT_PLLR_string, type(WT_PLLR_string))
+    
     # WT PLLR
     all_files = glob.glob(WT_PLLR_string) #"WT_for_MM_assays_extra/*.pt")
     new_rows = {"assay":[], "PLLR":[], }#"layer_33":[], "layer_21":[]}
@@ -452,10 +452,10 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
             appropriate_WT_PLLR = (WT_PLLRS[WT_PLLRS.assay == assay].PLLR.values[0])
             # Index(['gene', 'mutant', 'assay', 'mutated_sequence', 'DMS_score',
             # 'exists_in_df1', 'pred_DMS_score', 'PLLR', 'layer_33', 'layer_21']
-            # print(sm["mutated_sequence"].values[:2])
-            # print("sm['PLLR']", sm["PLLR"].values[:2])
-            # print("appropriate_WT_PLLR", appropriate_WT_PLLR)
-            # raise Error
+            print(sm["mutated_sequence"].values[:2])
+            print("sm['PLLR']", sm["PLLR"].values[:2])
+            print("appropriate_WT_PLLR", appropriate_WT_PLLR)
+            raise Error
             # try to apply the WT PLLR normalization here
             sm["PLLR"] = sm.PLLR - appropriate_WT_PLLR
             # make all the SM heatmaps for DMS, LLR, PLLR
