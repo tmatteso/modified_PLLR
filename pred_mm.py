@@ -618,9 +618,9 @@ def main(args):
         
             # desired assays:
         if args.only_assay is None: # need some default here
-            desired = intersect_set 
+            desired = ["PHOT_CHLRE_Chen_2023_multiples.csv"] #intersect_set 
         else:
-            desired = ["PHOT_CHLRE_Chen_2023_multiples.csv"] #[args.only_assay] # force only one assay for now
+            desired =  [args.only_assay] # force only one assay for now
             #[
                     # "Q8WTC7_9CNID_Somermeyer_2022.csv",
                     # "H3JQU7_ENTQU_Poelwijk_2019.csv",
