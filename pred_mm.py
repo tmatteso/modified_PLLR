@@ -614,6 +614,7 @@ def main(args):
     if not args.graphs_only:
         query_string =  f"{args.pg_sub_dir}/*.csv" #'../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
         intersect_set, full = read_in_PG(query_string)
+        print("intersect_set", intersect_set)
             # desired assays:
         if args.only_assay is not None: # need some default here
             desired = intersect_set 
@@ -634,7 +635,9 @@ def main(args):
         #]
         LLR_string, WT_PLLR_string = args.llr_csv, args.wt_pllr_dir #"../WT_for_MM_assays.csv", "../WT_for_MM_assays_redux/*.pt"#WT_for_MM_assays_extra/*.pt"
         WT_dict, LLRS, WT_PLLRS = get_LLR_and_WT_PLLR(intersect_set, full, LLR_string, WT_PLLR_string)
+        print(1)
         eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS)
+        print(2)
     # results location is hardcoded at the moment
     plot_all_results("MM_Assay_splits.csv") #args.results_path)
 
