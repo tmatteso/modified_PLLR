@@ -111,7 +111,7 @@ def get_LLR_and_WT_PLLR(intersect_set, full, LLR_string, WT_PLLR_string):
     # import LLR  
     LLRS = pd.read_csv(LLR_string) #"WT_for_MM_assays.csv")
     LLRS = LLRS.rename(columns={"seq_id":"assay", "mut_name":"mutant", "esm_score":"sum_LLR"}, inplace=False)
-    print("WT_PLLR_string", WT_PLLR_string)
+    print("WT_PLLR_string", WT_PLLR_string, type(WT_PLLR_string))
     # WT PLLR
     all_files = glob.glob(WT_PLLR_string) #"WT_for_MM_assays_extra/*.pt")
     new_rows = {"assay":[], "PLLR":[], }#"layer_33":[], "layer_21":[]}
