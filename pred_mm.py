@@ -443,9 +443,6 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
     heat_ls = ["DMS_score", "sum_LLR", "PLLR"]
     records = []
     # for each assay, subset the data 
-    count = 0
-    print("intersect_set", intersect_set)
-    print("desired", desired)
     for assay in intersect_set: # spawn a process for each assay
         if assay in desired:
             # create the df from PG, .pt for representations and LLRS and PLLRS
@@ -454,10 +451,10 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
             appropriate_WT_PLLR = (WT_PLLRS[WT_PLLRS.assay == assay].PLLR.values[0])
             # Index(['gene', 'mutant', 'assay', 'mutated_sequence', 'DMS_score',
             # 'exists_in_df1', 'pred_DMS_score', 'PLLR', 'layer_33', 'layer_21']
-            print(sm["mutated_sequence"].values[:2])
-            print("sm['PLLR']", sm["PLLR"].values[:2])
-            print("appropriate_WT_PLLR", appropriate_WT_PLLR)
-            raise Error
+            # print(sm["mutated_sequence"].values[:2])
+            # print("sm['PLLR']", sm["PLLR"].values[:2])
+            # print("appropriate_WT_PLLR", appropriate_WT_PLLR)
+            # raise Error
             # try to apply the WT PLLR normalization here
             sm["PLLR"] = sm.PLLR - appropriate_WT_PLLR
             # make all the SM heatmaps for DMS, LLR, PLLR
@@ -616,8 +613,6 @@ def main(args):
     if not args.graphs_only:
         query_string =  f"{args.pg_sub_dir}/*.csv" #'../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
         intersect_set, full = read_in_PG(query_string)
-        print("intersect_set", intersect_set)
-        print("args.only_assay",args.only_assay )
         
             # desired assays:
         if args.only_assay is None: # need some default here
@@ -637,13 +632,9 @@ def main(args):
                 # "HIS7_YEAST_Pokusaeva_2019.csv" , 
         #           "CAPSD_AAV2S_Sinai_substitutions_2021.csv"
         #]
-        print("desired", desired)
-        raise Error
         LLR_string, WT_PLLR_string = args.llr_csv, args.wt_pllr_dir #"../WT_for_MM_assays.csv", "../WT_for_MM_assays_redux/*.pt"#WT_for_MM_assays_extra/*.pt"
         WT_dict, LLRS, WT_PLLRS = get_LLR_and_WT_PLLR(intersect_set, full, LLR_string, WT_PLLR_string)
-        print(1)
         eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS)
-        print(2)
     # results location is hardcoded at the moment
     plot_all_results("MM_Assay_splits.csv") #args.results_path)
 
