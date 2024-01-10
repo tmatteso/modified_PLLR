@@ -534,13 +534,13 @@ def results_lineplot(group_data, title, figname):
         "sum_DMS": "blue",
         "one_hot": "darkblue",
         "one_hot+sum_LLR": "lightblue",
-        'PLLR+sum_LLR': "purple",
+        'PLLR+sum_LLR': "lightpurple",
         # ESM layer or ESM layer + sum LLR
         "layer_21": "green",
         "layer_33": "yellow",
         "layer_21+sum_LLR": "lightgreen",
         "layer_33+sum_LLR": "orange",
-        "21+33+LLR": "darkorange",
+        "21+33+LLR": "purple",
         # wambo combos
         "oh+21+33+LLR": "brown",
         "oh+21+33+LLR+PLLR": "black",
