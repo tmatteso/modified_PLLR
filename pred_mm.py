@@ -529,7 +529,7 @@ def results_lineplot(group_data, title, figname):
     color_mapping = {
         # unsupervised
         "sum_LLR": "red",
-        "PLLR": "scarlet",
+        "PLLR": "lightred",
         # one hot without embeddings
         "one_hot": "blue",
         "sum_DMS": "darkblue",
