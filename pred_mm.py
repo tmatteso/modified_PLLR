@@ -524,7 +524,7 @@ def results_bargraph(group_data, title, figname):
     plt.close()
 
 # I want another graph: one where for each feature type, we get a line plot of how the correlation changes with distance from WT
-def results_lineplot(group_data, title, figname, redux=False, all_assays=False):
+def results_lineplot(group_data, title, figname, redux=True, all_assays=False):
     # add some logic to make it work for all assays
     if all_assays:
         # sum the eval size for each dist from wt,
