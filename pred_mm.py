@@ -545,10 +545,10 @@ def results_lineplot(group_data, title, figname):
         "one_hot+layer_21+layer_33+sum_LLR+PLLR": "pink",
 
     }
+    print(dict(f"{key}_redux": value for key, value in color_mapping.items()))
+    raise Error
     # create the combo of dist_form_WT and eval_size
     group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['eval_size']}", axis=1)
-    print(group_data["X-axis"])
-    raise Error
     plt.figure(figsize=(20, 8))
     ax = sns.lineplot(x ='X-axis', #x='dist_from_WT',
                        y='correlation_score',
@@ -558,7 +558,7 @@ def results_lineplot(group_data, title, figname):
                  data=group_data)
     
     plt.title(title, fontsize=30) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
-    plt.xlabel('Distance from WT', fontsize=30)
+    plt.xlabel('Distance from WT, Number of Variants', fontsize=30)
     plt.ylabel('Correlation', fontsize=30)
     plt.legend(title='Features and Alpha', fontsize=24)
 
@@ -609,9 +609,9 @@ def plot_all_results(results_path):
     #         print(f"SM_pred_{alpha[0]}_all_assays.png")
 
     # graph only those with dist from WT < 15
-    results_lineplot(all_assays[(all_assays.dist_from_WT < 15) & (all_assays['features'].str.contains('redux'))],
-                            f'All Assays, All Features',
-                            f"SM_pred_all_features_all_assays.png")
+    # results_lineplot(all_assays[(all_assays.dist_from_WT < 15) & (all_assays['features'].str.contains('redux'))],
+    #                         f'All Assays, All Features',
+    #                         f"SM_pred_all_features_all_assays.png")
     # do this but only for one assay in question:
     # we wil do this for 3 assays in question (all the ones that get 14 dist from WT)
     desired_assays = ["CAPSD_AAV2S_Sinai_substitutions_2021.csv",
