@@ -615,14 +615,15 @@ def plot_all_results(results_path):
     #                         f"SM_pred_all_features_all_assays.png")
     # do this but only for one assay in question:
     # we wil do this for 3 assays in question (all the ones that get 14 dist from WT)
-    desired_assays = ["CAPSD_AAV2S_Sinai_substitutions_2021.csv",
-        "HIS7_YEAST_Pokusaeva_2019.csv", 
-        "PHOT_CHLRE_Chen_2023_multiples.csv",
-        "CTHL3_BOVIN_Koch_2022.csv",
-        "D7PM05_CLYGR_Somermeyer_2022.csv",
-        "GFP_AEQVI_Sarkisyan_2016.csv",
-        "H3JQU7_ENTQU_Poelwijk_2019.csv"
-    ]
+    desired_assays = ["PHOT_CHLRE_Chen_2023_multiples.csv"]
+    # ["CAPSD_AAV2S_Sinai_substitutions_2021.csv",
+    #     "HIS7_YEAST_Pokusaeva_2019.csv", 
+    #     "PHOT_CHLRE_Chen_2023_multiples.csv",
+    #     "CTHL3_BOVIN_Koch_2022.csv",
+    #     "D7PM05_CLYGR_Somermeyer_2022.csv",
+    #     "GFP_AEQVI_Sarkisyan_2016.csv",
+    #     "H3JQU7_ENTQU_Poelwijk_2019.csv"
+    # ]
     for assay in desired_assays:
         results_lineplot(all_assays[(all_assays.assay == assay) & (all_assays['features'].str.contains('redux'))],
                             f'Assay: {assay}, All Features',
