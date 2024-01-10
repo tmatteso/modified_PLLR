@@ -542,8 +542,8 @@ def results_lineplot(group_data, title, figname):
         "layer_33+sum_LLR": "gold",
         "layer_21+layer_33+sum_LLR": "orange",
         # wambo combos
-        "one_hot+layer_21+layer_33+sum_LLR": "darkpink",
-        "one_hot+layer_21+layer_33+sum_LLR+PLLR": "pink",
+        "one_hot+layer_21+layer_33+sum_LLR": "pink",
+        "one_hot+layer_21+layer_33+sum_LLR+PLLR": "black",
 
     }
     color_mapping = ({f"{key}_redux": value for key, value in color_mapping.items()})
