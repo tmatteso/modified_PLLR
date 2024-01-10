@@ -587,7 +587,10 @@ def plot_all_results(results_path):
     all_assays['features'] = all_assays['features'].replace({
         'one_hot+layer_21+layer_33+sum_LLR+PLLR': 'oh+21+33+LLR+PLLR',
         'one_hot+layer_21+layer_33+sum_LLR': 'oh+21+33+LLR',
-        'layer_21+layer_33+sum_LLR': '21+33+LLR'
+        'layer_21+layer_33+sum_LLR': '21+33+LLR',
+        'one_hot+layer_21+layer_33+sum_LLR+PLLR_redux': 'oh+21+33+LLR+PLLR_redux',
+        'one_hot+layer_21+layer_33+sum_LLR_redux': 'oh+21+33+LLR_redux',
+        'layer_21+layer_33+sum_LLR_redux': '21+33+LLR_redux'
     })
     # Group the data by assay and dist_from_WT
     grouped = all_assays.groupby(['assay', 'dist_from_WT', 'eval_size'])
