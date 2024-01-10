@@ -526,9 +526,34 @@ def results_bargraph(group_data, title, figname):
 # I want another graph: one where for each feature type, we get a line plot of how the correlation changes with distance from WT
 def results_lineplot(group_data, title, figname):
     print(group_data)
+    color_mapping = {
+        # unsupervised
+        "sum_LLR": "red",
+        "PLLR": "darkred",
+        # one hot without embeddings
+        "one_hot": "blue",
+        "sum_DMS": "darkblue",
+        "one_hot+sum_LLR": "lightblue",
+        # ESM layer or ESM layer + sum LLR
+        "layer_21": "green",
+        "layer_33": "yellow",
+        "layer_21+sum_LLR": "darkgreen",
+        "layer_33+sum_LLR": "darkyellow",
+        "layer_21+layer_33+sum_LLR": "orange",
+        # wambo combos
+        "one_hot+layer_21+layer_33+sum_LLR": "purple",
+        "one_hot+layer_21+layer_33+sum_LLR+PLLR": "pink",
+
+    }
+    # create the combo of dist_form_WT and eval_size
+    group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}_{row['eval_size']}", axis=1)
+    print(group_data["X-axis"])
+    raise Error
     plt.figure(figsize=(20, 8))
-    ax = sns.lineplot(x='dist_from_WT', y='correlation_score',
+    ax = sns.lineplot(x ='X-axis', #x='dist_from_WT',
+                       y='correlation_score',
                  hue = 'features', style = 'alpha',
+                 palette=color_mapping,
                 #hue='alpha', 
                  data=group_data)
     
