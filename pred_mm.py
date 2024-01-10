@@ -531,8 +531,8 @@ def results_lineplot(group_data, title, figname):
         "sum_LLR": "red",
         "PLLR": "pink",
         # one hot without embeddings
-        "one_hot": "blue",
-        "sum_DMS": "darkblue",
+        "sum_DMS": "blue",
+        "one_hot": "darkblue",
         "one_hot+sum_LLR": "lightblue",
         'PLLR+sum_LLR': "purple",
         # ESM layer or ESM layer + sum LLR
@@ -546,6 +546,9 @@ def results_lineplot(group_data, title, figname):
         "one_hot+layer_21+layer_33+sum_LLR+PLLR": "black",
 
     }
+    color_order = ["sum_DMS", "one_hot", "sum_LLR", "PLLR", "one_hot+sum_LLR", "PLLR+sum_LLR", 
+                   "layer_21", "layer_33", "layer_21+sum_LLR", "layer_33+sum_LLR", "layer_21+layer_33+sum_LLR", 
+                   "one_hot+layer_21+layer_33+sum_LLR", "one_hot+layer_21+layer_33+sum_LLR+PLLR"]
     color_mapping = ({f"{key}_redux": value for key, value in color_mapping.items()})
     print(color_mapping)
     # create the combo of dist_form_WT and eval_size
@@ -556,6 +559,7 @@ def results_lineplot(group_data, title, figname):
                        y='correlation_score',
                  hue = 'features', style = 'alpha',
                  palette=color_mapping,
+                 hue_order=color_order
                 #hue='alpha', 
                  data=group_data)
     
