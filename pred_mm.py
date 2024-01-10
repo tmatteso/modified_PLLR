@@ -559,7 +559,7 @@ def results_lineplot(group_data, title, figname):
                        y='correlation_score',
                  hue = 'features', style = 'alpha',
                  palette=color_mapping,
-                 hue_order=color_order
+                 hue_order=color_order,
                 #hue='alpha', 
                  data=group_data)
     
