@@ -534,7 +534,7 @@ def results_lineplot(group_data, title, figname):
         "sum_DMS": "blue",
         "one_hot": "darkblue",
         "one_hot+sum_LLR": "lightblue",
-        'PLLR+sum_LLR': "lightpurple",
+        'PLLR+sum_LLR': "magenta",
         # ESM layer or ESM layer + sum LLR
         "layer_21": "green",
         "layer_33": "yellow",
