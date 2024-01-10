@@ -529,7 +529,7 @@ def results_lineplot(group_data, title, figname):
     color_mapping = {
         # unsupervised
         "sum_LLR": "red",
-        "PLLR": "darkred",
+        "PLLR": "scarlet",
         # one hot without embeddings
         "one_hot": "blue",
         "sum_DMS": "darkblue",
@@ -538,11 +538,11 @@ def results_lineplot(group_data, title, figname):
         # ESM layer or ESM layer + sum LLR
         "layer_21": "green",
         "layer_33": "yellow",
-        "layer_21+sum_LLR": "darkgreen",
+        "layer_21+sum_LLR": "lightgreen",
         "layer_33+sum_LLR": "gold",
         "layer_21+layer_33+sum_LLR": "orange",
         # wambo combos
-        "one_hot+layer_21+layer_33+sum_LLR": "pink",
+        "one_hot+layer_21+layer_33+sum_LLR": "brown",
         "one_hot+layer_21+layer_33+sum_LLR+PLLR": "black",
 
     }
