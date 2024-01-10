@@ -546,6 +546,7 @@ def results_lineplot(group_data, title, figname):
 
     }
     color_mapping = ({f"{key}_redux": value for key, value in color_mapping.items()})
+    print(color_mapping)
     # create the combo of dist_form_WT and eval_size
     group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['eval_size']}", axis=1)
     print(group_data["X-axis"])
