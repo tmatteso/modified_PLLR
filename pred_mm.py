@@ -549,6 +549,8 @@ def results_lineplot(group_data, title, figname):
     color_order = ["sum_DMS", "one_hot", "sum_LLR", "PLLR", "one_hot+sum_LLR", "PLLR+sum_LLR", 
                    "layer_21", "layer_33", "layer_21+sum_LLR", "layer_33+sum_LLR", "layer_21+layer_33+sum_LLR", 
                    "one_hot+layer_21+layer_33+sum_LLR", "one_hot+layer_21+layer_33+sum_LLR+PLLR"]
+    
+    color_order = [f"{color_mapping[key]}_redux" for key in color_order]
     color_mapping = ({f"{key}_redux": value for key, value in color_mapping.items()})
     print(color_mapping)
     # create the combo of dist_form_WT and eval_size
