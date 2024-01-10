@@ -545,7 +545,7 @@ def results_lineplot(group_data, title, figname):
         "one_hot+layer_21+layer_33+sum_LLR+PLLR": "pink",
 
     }
-    print(dict(f"{key}_redux": value for key, value in color_mapping.items()))
+    print({f"{key}_redux": value for key, value in color_mapping.items()})
     raise Error
     # create the combo of dist_form_WT and eval_size
     group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['eval_size']}", axis=1)
