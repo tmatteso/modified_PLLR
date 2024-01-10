@@ -501,10 +501,9 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
                         # so this version uses only sm for train
                         records = get_spearmans(all_mm[key].DMS_score, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, sm)
                         # now do the exact same, but sm + all previous mm for train: just need to change the sm arg
-                        if key > 1:
-                            name_ls = [f"{name}_redux" for name in name_ls]
-                            records = get_spearmans(all_mm[key].DMS_score, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, 
-                                                    pd.concat([sm] + [all_mm[k] for k in all_mm.keys() if k < key]))
+                        name_ls = [f"{name}_redux" for name in name_ls]
+                        records = get_spearmans(all_mm[key].DMS_score, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, 
+                                                pd.concat([sm] + [all_mm[k] for k in all_mm.keys() if k < key]))
                         
                         # now we need to collect the other ones
 
@@ -525,17 +524,7 @@ def results_bargraph(group_data, title, figname):
 
 # I want another graph: one where for each feature type, we get a line plot of how the correlation changes with distance from WT
 def results_lineplot(group_data, title, figname, redux=True, all_assays=False):
-    # add some logic to make it work for all assays
-    if all_assays:
-        # sum the eval size for each dist from wt,
-        group_data["full_eval_size"] = group_data.groupby(["dist_from_WT", "features"])["eval_size"].transform("sum")
-        # create the combo of dist_form_WT and eval_size
-        group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['full_eval_size']}", axis=1)
-    else:
-        # create the combo of dist_form_WT and eval_size
-        group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['eval_size']}", axis=1)
-
-    print("group_data", group_data)
+    # make a specific high contrast grouped color pallette
     color_mapping = {
         # unsupervised
         "sum_LLR": "red",
@@ -556,12 +545,30 @@ def results_lineplot(group_data, title, figname, redux=True, all_assays=False):
         "oh+21+33+LLR+PLLR": "black",
 
     }
+    # define the order for the legend
     color_order = ["sum_DMS", "one_hot", "sum_LLR", "PLLR", "one_hot+sum_LLR", "PLLR+sum_LLR", 
                    "layer_21", "layer_33", "layer_21+sum_LLR", "layer_33+sum_LLR", "21+33+LLR", 
                    "oh+21+33+LLR", "oh+21+33+LLR+PLLR"]
+    # rename the color_mapping and order to accomodate for the redux
     if redux:
         color_order = [f"{key}_redux" for key in color_order]
         color_mapping = ({f"{key}_redux": value for key, value in color_mapping.items()})
+
+    # add some logic to make it work for all assays
+    if all_assays:
+        # sum the eval size for each dist from wt,
+        group_data["full_eval_size"] = group_data.groupby(["dist_from_WT", "features"])["eval_size"].transform("sum")
+        # sum the number of assays for each dist from wt
+        group_data["full_assay_size"] = group_data.groupby("dist_from_WT")["Assay"].transform("nunique")
+        # create the combo of dist_form_WT and eval_size
+        group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['full_eval_size']}, {row['full_assay_size']}", axis=1)
+        
+    else:
+        # create the combo of dist_form_WT and eval_size
+        group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['eval_size']}", axis=1)
+
+    print("group_data", group_data)
+
 
     plt.figure(figsize=(20, 8))
     ax = sns.lineplot(x ='X-axis', #x='dist_from_WT',
@@ -573,7 +580,10 @@ def results_lineplot(group_data, title, figname, redux=True, all_assays=False):
                  data=group_data)
     
     plt.title(title, fontsize=30) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
-    plt.xlabel('Distance from WT, Number of Variants', fontsize=30)
+    if all_assays:
+        plt.xlabel('Distance from WT, Number of Variants, Number of Assays', fontsize=30)
+    else:
+        plt.xlabel('Distance from WT, Number of Variants', fontsize=30)
     plt.ylabel('Correlation', fontsize=30)
     plt.legend(title='Features and Alpha', fontsize=24)
 
@@ -591,7 +601,7 @@ def plot_all_results(results_path):
     # will need to delete duplicate assays
     all_assays = (all_assays[all_assays.assay != "CAPSD_AAV2S_Sinai_2021.csv"])
 
-    # now we need to shorten the names of sum of features
+    # now we need to shorten the names of some of the features
     all_assays['features'] = all_assays['features'].replace({
         'one_hot+layer_21+layer_33+sum_LLR+PLLR': 'oh+21+33+LLR+PLLR',
         'one_hot+layer_21+layer_33+sum_LLR': 'oh+21+33+LLR',
@@ -685,6 +695,7 @@ def main(args):
         LLR_string, WT_PLLR_string = args.llr_csv, args.wt_pllr_dir #"../WT_for_MM_assays.csv", "../WT_for_MM_assays_redux/*.pt"#WT_for_MM_assays_extra/*.pt"
         WT_dict, LLRS, WT_PLLRS = get_LLR_and_WT_PLLR(intersect_set, full, LLR_string, WT_PLLR_string)
         eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS)
+        raise Error
     # results location is hardcoded at the moment
     plot_all_results("MM_Assay_splits.csv") #args.results_path)
 
