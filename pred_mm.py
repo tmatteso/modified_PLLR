@@ -583,6 +583,8 @@ def plot_all_results(results_path):
     all_assays['alpha'] = all_assays['alpha'].replace(np.nan, 'Not Available')
     # will need to delete duplicate assays
     all_assays = (all_assays[all_assays.assay != "CAPSD_AAV2S_Sinai_2021.csv"])
+    print(all_assays['features'])
+    raise error
     # now we need to shorten the names of sum of features
     all_assays['features'] = all_assays['features'].replace({
         'one_hot+layer_21+layer_33+sum_LLR+PLLR': 'oh+21+33+LLR+PLLR',
