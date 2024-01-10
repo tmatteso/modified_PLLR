@@ -524,7 +524,17 @@ def results_bargraph(group_data, title, figname):
     plt.close()
 
 # I want another graph: one where for each feature type, we get a line plot of how the correlation changes with distance from WT
-def results_lineplot(group_data, title, figname):
+def results_lineplot(group_data, title, figname, redux=False, all_assays=False):
+    # add some logic to make it work for all assays
+    if all_assays:
+        # sum the eval size for each dist from wt,
+        group_data["full_eval_size"] = group_data.groupby(["dist_from_WT", "features"])["eval_size"].transform("sum")
+        # create the combo of dist_form_WT and eval_size
+        group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['full_eval_size']}", axis=1)
+    else:
+        # create the combo of dist_form_WT and eval_size
+        group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['eval_size']}", axis=1)
+
     print("group_data", group_data)
     color_mapping = {
         # unsupervised
@@ -549,13 +559,10 @@ def results_lineplot(group_data, title, figname):
     color_order = ["sum_DMS", "one_hot", "sum_LLR", "PLLR", "one_hot+sum_LLR", "PLLR+sum_LLR", 
                    "layer_21", "layer_33", "layer_21+sum_LLR", "layer_33+sum_LLR", "21+33+LLR", 
                    "oh+21+33+LLR", "oh+21+33+LLR+PLLR"]
-    
-    color_order = [f"{key}_redux" for key in color_order]
-    color_mapping = ({f"{key}_redux": value for key, value in color_mapping.items()})
-    print(color_mapping)
-    # create the combo of dist_form_WT and eval_size
-    group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['eval_size']}", axis=1)
-    print(group_data["X-axis"])
+    if redux:
+        color_order = [f"{key}_redux" for key in color_order]
+        color_mapping = ({f"{key}_redux": value for key, value in color_mapping.items()})
+
     plt.figure(figsize=(20, 8))
     ax = sns.lineplot(x ='X-axis', #x='dist_from_WT',
                        y='correlation_score',
