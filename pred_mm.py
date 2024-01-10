@@ -525,7 +525,7 @@ def results_bargraph(group_data, title, figname):
 
 # I want another graph: one where for each feature type, we get a line plot of how the correlation changes with distance from WT
 def results_lineplot(group_data, title, figname):
-    print(group_data)
+    print("group_data", group_data)
     color_mapping = {
         # unsupervised
         "sum_LLR": "red",
@@ -548,6 +548,7 @@ def results_lineplot(group_data, title, figname):
     color_mapping = ({f"{key}_redux": value for key, value in color_mapping.items()})
     # create the combo of dist_form_WT and eval_size
     group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['eval_size']}", axis=1)
+    print(group_data["X-axis"])
     plt.figure(figsize=(20, 8))
     ax = sns.lineplot(x ='X-axis', #x='dist_from_WT',
                        y='correlation_score',
