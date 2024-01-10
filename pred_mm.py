@@ -548,7 +548,7 @@ def results_lineplot(group_data, title, figname):
     }
     color_order = ["sum_DMS", "one_hot", "sum_LLR", "PLLR", "one_hot+sum_LLR", "PLLR+sum_LLR", 
                    "layer_21", "layer_33", "layer_21+sum_LLR", "layer_33+sum_LLR", "21+33+LLR", 
-                   "oh+21+33+LLR+PLLR", "oh+21+33+LLR+PLLR"]
+                   "oh+21+33+LLR", "oh+21+33+LLR+PLLR"]
     
     color_order = [f"{key}_redux" for key in color_order]
     color_mapping = ({f"{key}_redux": value for key, value in color_mapping.items()})
