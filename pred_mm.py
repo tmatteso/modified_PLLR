@@ -542,7 +542,7 @@ def results_lineplot(group_data, title, figname):
         "layer_33+sum_LLR": "orange",
         "21+33+LLR": "brown",
         # wambo combos
-        "oh+21+33+LLR": "silver",
+        "oh+21+33+LLR": "bluegreen",
         "oh+21+33+LLR+PLLR": "black",
 
     }
