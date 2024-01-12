@@ -672,11 +672,11 @@ def plot_all_results(results_path):
         results_bargraph(group_data,
                     f'Distance from WT: {dist_from_WT[0]}, Number of Assays: {len(group_data.assay.unique())}, Total Evaluation Size: {sum(group_data.eval_size.unique())}',
                     f"SM_pred_{dist_from_WT[0]}_all_assays.png",
-                    redux=False, all_assays=True)
+                        )
         results_bargraph(group_data,
                     f'Distance from WT: {dist_from_WT[0]}, Number of Assays: {len(group_data.assay.unique())}, Total Evaluation Size: {sum(group_data.eval_size.unique())}',
                     f"SM_pred_{dist_from_WT[0]}_all_assays.png",
-                    redux=True, all_assays=True)                  
+                        )                  
 
 def main(args):
     if not args.graphs_only:
