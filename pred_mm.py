@@ -523,7 +523,7 @@ def results_bargraph(group_data, title, figname):
     plt.close()
 
 # I want another graph: one where for each feature type, we get a line plot of how the correlation changes with distance from WT
-def results_lineplot(group_data, title, figname, redux=True, all_assays=False):
+def results_lineplot(group_data, title, figname, redux=False, all_assays=False):
     # make a specific high contrast grouped color pallette
     color_mapping = {
         # unsupervised
@@ -645,19 +645,24 @@ def plot_all_results(results_path):
     #                         f"SM_pred_all_features_all_assays.png")
     # do this but only for one assay in question:
     # we wil do this for 3 assays in question (all the ones that get 14 dist from WT)
-    desired_assays = ["PHOT_CHLRE_Chen_2023_multiples.csv"]
-    # ["CAPSD_AAV2S_Sinai_substitutions_2021.csv",
-    #     "HIS7_YEAST_Pokusaeva_2019.csv", 
-    #     "PHOT_CHLRE_Chen_2023_multiples.csv",
-    #     "CTHL3_BOVIN_Koch_2022.csv",
+    desired_assays = [
+    # "CAPSD_AAV2S_Sinai_substitutions_2021.csv",
+        "HIS7_YEAST_Pokusaeva_2019.csv", 
+        "PHOT_CHLRE_Chen_2023_multiples.csv",
+        "CTHL3_BOVIN_Koch_2022.csv",
     #     "D7PM05_CLYGR_Somermeyer_2022.csv",
     #     "GFP_AEQVI_Sarkisyan_2016.csv",
-    #     "H3JQU7_ENTQU_Poelwijk_2019.csv"
-    # ]
+        "H3JQU7_ENTQU_Poelwijk_2019.csv"
+    ]
     for assay in desired_assays:
+        results_lineplot(all_assays[(all_assays.assay == assay)],
+                            f'Assay: {assay}, All Features',
+                            f"SM_pred_all_features_{assay}.png",
+                            redux=False, all_assays=False)
         results_lineplot(all_assays[(all_assays.assay == assay) & (all_assays['features'].str.contains('redux'))],
                             f'Assay: {assay}, All Features',
-                            f"SM_pred_all_features_{assay}.png")
+                            f"SM_pred_all_features_{assay}.png",
+                            redux=True, all_assays=False)
     # now we make one for each distance from wildtype
     grouped = all_assays.groupby(['dist_from_WT'])
     #print(grouped)
@@ -666,8 +671,12 @@ def plot_all_results(results_path):
         print(dist_from_WT[0], len(group_data.assay.unique()), sum(group_data.eval_size.unique()))
         results_bargraph(group_data,
                     f'Distance from WT: {dist_from_WT[0]}, Number of Assays: {len(group_data.assay.unique())}, Total Evaluation Size: {sum(group_data.eval_size.unique())}',
-                    f"SM_pred_{dist_from_WT[0]}_all_assays.png")
-                    
+                    f"SM_pred_{dist_from_WT[0]}_all_assays.png",
+                    redux=False, all_assays=True)
+        results_bargraph(group_data,
+                    f'Distance from WT: {dist_from_WT[0]}, Number of Assays: {len(group_data.assay.unique())}, Total Evaluation Size: {sum(group_data.eval_size.unique())}',
+                    f"SM_pred_{dist_from_WT[0]}_all_assays.png",
+                    redux=True, all_assays=True)                  
 
 def main(args):
     if not args.graphs_only:
