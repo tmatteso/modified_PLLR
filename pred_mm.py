@@ -640,9 +640,15 @@ def plot_all_results(results_path):
     #         print(f"SM_pred_{alpha[0]}_all_assays.png")
 
     # graph only those with dist from WT < 15
-    # results_lineplot(all_assays[(all_assays.dist_from_WT < 15) & (all_assays['features'].str.contains('redux'))],
-    #                         f'All Assays, All Features',
-    #                         f"SM_pred_all_features_all_assays.png")
+    results_lineplot(all_assays[(all_assays.dist_from_WT < 15) & (all_assays['features'].str.contains('redux'))],
+                            f'All Assays, All Features',
+                            f"SM_pred_all_features_all_assays.png",
+                            redux=False, all_assays=True)
+    # now redux only
+    results_lineplot(all_assays[(all_assays.dist_from_WT < 15) & (all_assays['features'].str.contains('redux'))],
+                            f'All Assays, All Features',
+                            f"SM_pred_all_features_all_assays.png",
+                            redux=True, all_assays=True)
     # do this but only for one assay in question:
     # we wil do this for 3 assays in question (all the ones that get 14 dist from WT)
     desired_assays = [
