@@ -554,6 +554,7 @@ def results_lineplot(group_data, title, figname, redux=False, all_assays=False):
         color_order = [f"{key}_redux" for key in color_order]
         color_mapping = ({f"{key}_redux": value for key, value in color_mapping.items()})
 
+    plt.figure(figsize=(20, 8))
     # add some logic to make it work for all assays
     if all_assays:
         # sum the eval size for each dist from wt,
@@ -562,7 +563,7 @@ def results_lineplot(group_data, title, figname, redux=False, all_assays=False):
         group_data["full_assay_size"] = group_data.groupby("dist_from_WT")["assay"].transform("nunique")
         # create the combo of dist_form_WT and eval_size
         group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['full_eval_size']}, {row['full_assay_size']}", axis=1)
-        
+        plt.figure(figsize=(30, 8))
     else:
         # create the combo of dist_form_WT and eval_size
         group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['eval_size']}", axis=1)
@@ -570,12 +571,13 @@ def results_lineplot(group_data, title, figname, redux=False, all_assays=False):
     print("group_data", group_data)
 
 
-    plt.figure(figsize=(20, 8))
+    
     ax = sns.lineplot(x ='X-axis', #x='dist_from_WT',
                        y='correlation_score',
                  hue = 'features', style = 'alpha',
                  palette=color_mapping,
                  hue_order=color_order,
+                 errorbar=None,
                 #hue='alpha', 
                  data=group_data)
     
