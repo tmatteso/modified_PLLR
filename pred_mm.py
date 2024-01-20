@@ -581,11 +581,15 @@ def results_lineplot(group_data, title, figname,
         # sum the number of assays for each dist from wt
         group_data["full_assay_size"] = group_data.groupby("dist_from_WT")["assay"].transform("nunique")
         
-        print('group_data["full_eval_size"]', group_data[["dist_from_WT", "full_eval_size"]] )
+        # Convert the new columns to integers
+        group_data['dist_from_WT'] = group_data['dist_from_WT'].astype(int)
+        group_data['full_eval_size'] = group_data['full_eval_size'].astype(int)
+
+        # Sort the DataFrame by 'dist_from_WT' and 'full_eval_size'
+        group_data = group_data.sort_values(['dist_from_WT', 'full_eval_size'])
         # create the combo of dist_form_WT and eval_size
         #group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']},{row['full_eval_size']},{row['full_assay_size']}", axis=1)
         group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['full_eval_size']}", axis=1)
-        group_data['X-axis'] = pd.Categorical(group_data['X-axis'], categories=group_data['X-axis'].unique(), ordered=True)
         print('group_data["X-axis"]', group_data["X-axis"] )
         plt.figure(figsize=(24, 10))
 
