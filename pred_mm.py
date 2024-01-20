@@ -613,6 +613,8 @@ def results_lineplot(group_data, title, figname,
         print("x_start", x_start, "x_end", x_end)
         # Set new x-axis limits and x-ticks
         plt.xlim(x_start - 1, x_end + 1)  # Adjust as needed
+        x_start, x_end = plt.xlim()
+        print("x_start", x_start, "x_end", x_end)
         #plt.xticks(np.arange(x_start, x_end, step=0.1))  # Adjust the step as needed
 
     print(figname)
