@@ -581,12 +581,6 @@ def results_lineplot(group_data, title, figname,
         #group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']},{row['full_eval_size']},{row['full_assay_size']}", axis=1)
         group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['full_eval_size']}", axis=1)
         plt.figure(figsize=(30, 10))
-        # Get current x-axis limits
-        x_start, x_end = plt.xlim()
-        print("x_start", x_start, "x_end", x_end)
-        # Set new x-axis limits and x-ticks
-        plt.xlim(x_start - 0.5, x_end + 0.5)  # Adjust as needed
-        plt.xticks(np.arange(x_start, x_end, step=0.1))  # Adjust the step as needed
 
     else:
         # create the combo of dist_form_WT and eval_size
@@ -610,6 +604,13 @@ def results_lineplot(group_data, title, figname,
     plt.ylabel('Correlation', fontsize=30)
     plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
+    if all_assays:
+        # Get current x-axis limits
+        x_start, x_end = plt.xlim()
+        print("x_start", x_start, "x_end", x_end)
+        # Set new x-axis limits and x-ticks
+        plt.xlim(x_start - 0.5, x_end + 0.5)  # Adjust as needed
+        plt.xticks(np.arange(x_start, x_end, step=0.1))  # Adjust the step as needed
     
     legend = plt.legend(title='Features and Alpha', fontsize=12)
     legend.get_title().set_fontsize('12')  # Set the font size of the legend title
