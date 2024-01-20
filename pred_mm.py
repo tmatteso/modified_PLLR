@@ -603,11 +603,10 @@ def results_lineplot(group_data, title, figname,
     else:
         plt.xlabel('Distance from WT, Number of Variants', fontsize=30)
     plt.ylabel('Correlation', fontsize=30)
-    if all_assays:
-        plt.legend(title='Features and Alpha', fontsize=24)
-    else:
-        plt.legend(title='Features and Alpha', fontsize=24)
-        sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20)
+    plt.legend(title='Features and Alpha', fontsize=24)
+    sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
     print(figname)
     plt.savefig(figname, bbox_inches='tight') #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
     plt.close()
