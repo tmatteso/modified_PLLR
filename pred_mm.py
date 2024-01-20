@@ -604,6 +604,9 @@ def results_lineplot(group_data, title, figname,
     plt.ylabel('Correlation', fontsize=30)
     plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
+    legend = plt.legend(title='Features and Alpha', fontsize=12)
+    legend.get_title().set_fontsize('12')  # Set the font size of the legend title
+    sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
     if all_assays:
         # Get current x-axis limits
         x_start, x_end = plt.xlim()
@@ -611,10 +614,6 @@ def results_lineplot(group_data, title, figname,
         # Set new x-axis limits and x-ticks
         plt.xlim(x_start - 1, x_end + 1)  # Adjust as needed
         #plt.xticks(np.arange(x_start, x_end, step=0.1))  # Adjust the step as needed
-    
-    legend = plt.legend(title='Features and Alpha', fontsize=12)
-    legend.get_title().set_fontsize('12')  # Set the font size of the legend title
-    sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
 
     print(figname)
     plt.savefig(figname, bbox_inches='tight') #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
