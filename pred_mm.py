@@ -534,22 +534,22 @@ def results_lineplot(group_data, title, figname,
         # one hot without embeddings
         "sum_DMS": "blue",
         "one_hot": "darkblue",
-        "one_hot+sum_LLR": "cyan",
+        "one_hot+sum_LLR": "purple",
         'PLLR+sum_LLR': "magenta",
         # ESM layer or ESM layer + sum LLR
         "layer_21": "green",
         "layer_33": "yellow",
         "layer_21+sum_LLR": "lime",
         "layer_33+sum_LLR": "darkorange",
-        "21+33+LLR": "purple",
+        "21+33+LLR": "cyan",
         # wambo combos
         "oh+21+33+LLR": "brown",
         "oh+21+33+LLR+PLLR": "black",
 
     }
     # define the order for the legend
-    color_order = ["sum_DMS", "one_hot", "sum_LLR", "PLLR", "one_hot+sum_LLR", "PLLR+sum_LLR", 
-                   "layer_21", "layer_33", "layer_21+sum_LLR", "layer_33+sum_LLR", "21+33+LLR", 
+    color_order = ["sum_DMS", "one_hot", "sum_LLR", "PLLR", "PLLR+sum_LLR", "one_hot+sum_LLR", 
+                   "layer_21","layer_21+sum_LLR", "layer_33", "layer_33+sum_LLR", "21+33+LLR", 
                    "oh+21+33+LLR", "oh+21+33+LLR+PLLR"]
     # rename the color_mapping and order to accomodate for the redux
     if redux:
