@@ -693,7 +693,6 @@ def plot_all_results(results_path):
                             f'All Assays, All Features',
                             f"SM_pred_all_features_all_assays_redux.png",
                             redux=True, all_assays=True)
-    raise Error
     # do this but only for one assay in question:
     # we wil do this for 3 assays in question (all the ones that get 14 dist from WT)
     desired_assays = [
@@ -714,6 +713,7 @@ def plot_all_results(results_path):
                             f'Assay: {assay}, All Features',
                             f"SM_pred_all_features_{assay}_redux.png",
                             redux=True, all_assays=False)
+    raise Error
     # now we make one for each distance from wildtype
     grouped = all_assays.groupby(['dist_from_WT'])
     #print(grouped)
