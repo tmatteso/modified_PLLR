@@ -584,7 +584,7 @@ def results_lineplot(group_data, title, figname,
         # create the combo of dist_form_WT and eval_size
         #group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']},{row['full_eval_size']},{row['full_assay_size']}", axis=1)
         group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['full_eval_size']}", axis=1)
-        plt.figure(figsize=(30, 10))
+        plt.figure(figsize=(24, 10))
 
     else:
         # create the combo of dist_form_WT and eval_size
@@ -608,7 +608,7 @@ def results_lineplot(group_data, title, figname,
     plt.ylabel('Correlation', fontsize=30)
     plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
-    legend = plt.legend(title='Features and Alpha', fontsize=12)
+    legend = plt.legend(title='Features and Alpha', fontsize=15)
     legend.get_title().set_fontsize('12')  # Set the font size of the legend title
     sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
     if all_assays:
