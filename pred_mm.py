@@ -523,7 +523,9 @@ def results_bargraph(group_data, title, figname):
     plt.close()
 
 # I want another graph: one where for each feature type, we get a line plot of how the correlation changes with distance from WT
-def results_lineplot(group_data, title, figname, redux=False, all_assays=False):
+def results_lineplot(group_data, title, figname, 
+                     redux=False, 
+                     all_assays=False):
     # make a specific high contrast grouped color pallette
     color_mapping = {
         # unsupervised
@@ -559,8 +561,18 @@ def results_lineplot(group_data, title, figname, redux=False, all_assays=False):
     if all_assays:
         # sum the eval size for each dist from wt,
         group_data["full_eval_size"] = group_data.groupby(["dist_from_WT", "features"])["eval_size"].transform("sum")
+
+        # Round to 1 significant figure
+        group_data["full_eval_size"] = np.around(group_data["full_eval_size"], 
+                                                 -np.floor(np.log10(group_data["full_eval_size"])).astype(int))
+
+        # Convert to scientific notation
+        group_data["full_eval_size"] = ["{:.0e}".format(num) for num in group_data["full_eval_size"]]
+
         # sum the number of assays for each dist from wt
         group_data["full_assay_size"] = group_data.groupby("dist_from_WT")["assay"].transform("nunique")
+
+        
         # create the combo of dist_form_WT and eval_size
         group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['full_eval_size']}, {row['full_assay_size']}", axis=1)
         plt.figure(figsize=(30, 8))
@@ -642,14 +654,14 @@ def plot_all_results(results_path):
     #         print(f"SM_pred_{alpha[0]}_all_assays.png")
 
     # graph only those with dist from WT < 15
-    results_lineplot(all_assays[(all_assays.dist_from_WT < 15) & (all_assays['features'].str.contains('redux'))],
+    results_lineplot(all_assays[(all_assays.dist_from_WT < 15) & ~(all_assays['features'].str.contains('redux'))],
                             f'All Assays, All Features',
                             f"SM_pred_all_features_all_assays.png",
                             redux=False, all_assays=True)
     # now redux only
     results_lineplot(all_assays[(all_assays.dist_from_WT < 15) & (all_assays['features'].str.contains('redux'))],
                             f'All Assays, All Features',
-                            f"SM_pred_all_features_all_assays.png",
+                            f"SM_pred_all_features_all_assays_redux.png",
                             redux=True, all_assays=True)
     # do this but only for one assay in question:
     # we wil do this for 3 assays in question (all the ones that get 14 dist from WT)
