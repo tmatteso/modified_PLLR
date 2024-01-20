@@ -578,7 +578,7 @@ def results_lineplot(group_data, title, figname,
 
         
         # create the combo of dist_form_WT and eval_size
-        group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['full_eval_size']}, {row['full_assay_size']}", axis=1)
+        group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']},{row['full_eval_size']},{row['full_assay_size']}", axis=1)
         plt.figure(figsize=(30, 8))
     else:
         # create the combo of dist_form_WT and eval_size
