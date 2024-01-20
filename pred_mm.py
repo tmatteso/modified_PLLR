@@ -606,8 +606,9 @@ def results_lineplot(group_data, title, figname,
     plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
     
-    sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
-    plt.legend(title='Features and Alpha', fontsize=20)
+    legend = plt.legend(title='Features and Alpha', fontsize=20)
+    legend.get_title().set_fontsize('20')  # Set the font size of the legend title
+    # sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
 
     print(figname)
     plt.savefig(figname, bbox_inches='tight') #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
