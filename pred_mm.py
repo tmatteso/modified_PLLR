@@ -586,7 +586,7 @@ def results_lineplot(group_data, title, figname,
         # sum the number of assays for each dist from wt
         group_data["full_assay_size"] = group_data.groupby("dist_from_WT")["assay"].transform("nunique")
         print("all data", group_data)
-        print('group_data["full_eval_size"]', group_data["full_eval_size"] )
+        print('group_data["full_eval_size"]', group_data[["dist_from_WT", "full_eval_size"]] )
         # create the combo of dist_form_WT and eval_size
         #group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']},{row['full_eval_size']},{row['full_assay_size']}", axis=1)
         group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['full_eval_size']}", axis=1)
