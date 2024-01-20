@@ -608,7 +608,10 @@ def results_lineplot(group_data, title, figname,
     # else:
     plt.xlabel('Distance from WT, Number of Variants', fontsize=30)
     plt.ylabel('Correlation', fontsize=30)
-    plt.xticks(fontsize=12)
+    plt.xticks(np.arange(len(group_data['X-axis'].unique())), 
+               group_data['X-axis'].unique(), 
+               rotation='vertical',
+               fontsize=12)
     plt.yticks(fontsize=12)
     legend = plt.legend(title='Features and Alpha', fontsize=12)
     legend.get_title().set_fontsize('15')  # Set the font size of the legend title
