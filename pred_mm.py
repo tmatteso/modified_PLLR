@@ -579,7 +579,7 @@ def results_lineplot(group_data, title, figname,
         
         # create the combo of dist_form_WT and eval_size
         group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']},{row['full_eval_size']},{row['full_assay_size']}", axis=1)
-        plt.figure(figsize=(30, 8))
+        plt.figure(figsize=(30, 10))
     else:
         # create the combo of dist_form_WT and eval_size
         group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['eval_size']}", axis=1)
@@ -603,9 +603,11 @@ def results_lineplot(group_data, title, figname,
     else:
         plt.xlabel('Distance from WT, Number of Variants', fontsize=30)
     plt.ylabel('Correlation', fontsize=30)
-    plt.legend(title='Features and Alpha', fontsize=24)
-
-    sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
+    if all_assays:
+        plt.legend(title='Features and Alpha', fontsize=30)
+    else:
+        plt.legend(title='Features and Alpha', fontsize=24)
+        sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
     print(figname)
     plt.savefig(figname, bbox_inches='tight') #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
     plt.close()
