@@ -608,8 +608,9 @@ def results_lineplot(group_data, title, figname,
     # else:
     plt.xlabel('Distance from WT, Number of Variants', fontsize=30)
     plt.ylabel('Correlation', fontsize=30)
-    plt.xticks(np.arange(len(group_data['X-axis'].unique())), 
-               group_data['X-axis'].unique(), 
+    plt.xticks(
+            #    np.arange(len(group_data['X-axis'].unique())), 
+            #    group_data['X-axis'].unique(), 
                rotation='vertical',
                fontsize=12)
     plt.yticks(fontsize=12)
