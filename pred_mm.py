@@ -586,7 +586,7 @@ def results_lineplot(group_data, title, figname,
 
         # Set new x-axis limits and x-ticks
         plt.xlim(x_start - 0.5, x_end + 0.5)  # Adjust as needed
-        plt.xticks(np.arange(x_start, x_end, step=0.5))  # Adjust the step as needed
+        plt.xticks(np.arange(x_start, x_end, step=0.1))  # Adjust the step as needed
 
     else:
         # create the combo of dist_form_WT and eval_size
@@ -676,6 +676,7 @@ def plot_all_results(results_path):
                             f'All Assays, All Features',
                             f"SM_pred_all_features_all_assays_redux.png",
                             redux=True, all_assays=True)
+    raise Error
     # do this but only for one assay in question:
     # we wil do this for 3 assays in question (all the ones that get 14 dist from WT)
     desired_assays = [
