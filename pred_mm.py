@@ -563,7 +563,8 @@ def results_lineplot(group_data, title, figname,
         group_data["full_eval_size"] = group_data.groupby(["dist_from_WT", "features"])["eval_size"].transform("sum")
 
         # Round to 1 significant figure
-        print( np.around(-np.floor(np.log10(group_data["full_eval_size"].values)).astype(int)))
+        
+        print( np.around(group_data["full_eval_size"].values, -np.floor(np.log10(group_data["full_eval_size"].values)).astype(int)))
         raise Error
 
         # Convert to scientific notation
