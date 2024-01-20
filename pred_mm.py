@@ -581,12 +581,16 @@ def results_lineplot(group_data, title, figname,
         #group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']},{row['full_eval_size']},{row['full_assay_size']}", axis=1)
         group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['full_eval_size']}", axis=1)
         plt.figure(figsize=(30, 10))
+        # Get current x-axis limits
+        x_start, x_end = plt.xlim()
+
+        # Set new x-axis limits and x-ticks
+        plt.xlim(x_start - 0.5, x_end + 0.5)  # Adjust as needed
+        plt.xticks(np.arange(x_start, x_end, step=0.5))  # Adjust the step as needed
+
     else:
         # create the combo of dist_form_WT and eval_size
         group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['eval_size']}", axis=1)
-
-    print("group_data", group_data)
-
 
     
     ax = sns.lineplot(x ='X-axis', #x='dist_from_WT',
@@ -599,10 +603,10 @@ def results_lineplot(group_data, title, figname,
                  data=group_data)
     
     plt.title(title, fontsize=30) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
-    if all_assays:
-        plt.xlabel('Distance from WT, Number of Variants, Number of Assays', fontsize=30)
-    else:
-        plt.xlabel('Distance from WT, Number of Variants', fontsize=30)
+    # if all_assays:
+    #     plt.xlabel('Distance from WT, Number of Variants, Number of Assays', fontsize=30)
+    # else:
+    plt.xlabel('Distance from WT, Number of Variants', fontsize=30)
     plt.ylabel('Correlation', fontsize=30)
     plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
