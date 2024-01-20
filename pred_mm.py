@@ -609,8 +609,8 @@ def results_lineplot(group_data, title, figname,
         x_start, x_end = plt.xlim()
         print("x_start", x_start, "x_end", x_end)
         # Set new x-axis limits and x-ticks
-        plt.xlim(x_start - 0.5, x_end + 0.5)  # Adjust as needed
-        plt.xticks(np.arange(x_start, x_end, step=0.1))  # Adjust the step as needed
+        plt.xlim(x_start - 1, x_end + 1)  # Adjust as needed
+        #plt.xticks(np.arange(x_start, x_end, step=0.1))  # Adjust the step as needed
     
     legend = plt.legend(title='Features and Alpha', fontsize=12)
     legend.get_title().set_fontsize('12')  # Set the font size of the legend title
