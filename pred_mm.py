@@ -616,7 +616,7 @@ def results_lineplot(group_data, title, figname,
     plt.xticks(
             #    np.arange(len(group_data['X-axis'].unique())), 
             #    group_data['X-axis'].unique(), 
-               rotation='vertical',
+               rotation=45, #'vertical',
                fontsize=12)
     plt.yticks(fontsize=12)
     legend = plt.legend(title='Features and Alpha', fontsize=12)
