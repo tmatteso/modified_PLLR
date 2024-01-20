@@ -561,6 +561,12 @@ def results_lineplot(group_data, title, figname,
     # add some logic to make it work for all assays
     if all_assays: # I have two different twos right now
         # sum the eval size for each dist from wt,
+
+        # Create a mask for the specific feature
+        mask = [group_data['features'] == "sum_DMS"]
+
+        # Apply the mask and perform the groupby operation
+        group_data.loc[mask, 'full_eval_size'] = group_data.loc[mask].groupby('dist_from_WT')['eval_size'].transform('sum')
         group_data["full_eval_size"] = group_data.groupby(["dist_from_WT", "features"])["eval_size"].transform("sum")
 
         # # Round to 1 significant figure
