@@ -563,12 +563,11 @@ def results_lineplot(group_data, title, figname,
         # sum the eval size for each dist from wt,
 
         # Create a mask for the specific feature
-        mask = [group_data['features'] == "sum_DMS"]
+        mask = group_data['features'] == "sum_DMS"
 
         # Apply the mask and perform the groupby operation
         group_data.loc[mask, 'full_eval_size'] = group_data.loc[mask].groupby('dist_from_WT')['eval_size'].transform('sum')
         group_data["full_eval_size"] = group_data.groupby(["dist_from_WT", "features"])["eval_size"].transform("sum")
-
         # # Round to 1 significant figure
         # # Calculate the number of decimals for each element
         # decimals = -np.floor(np.log10(group_data["full_eval_size"].values)).astype(int)
