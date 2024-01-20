@@ -558,6 +558,7 @@ def results_lineplot(group_data, title, figname,
         # color_mapping = ({f"{key}_redux": value for key, value in color_mapping.items()})
 
     plt.figure(figsize=(20, 8))
+    print("all data", group_data)
     # add some logic to make it work for all assays
     if all_assays: # I have two different twos right now
         # sum the eval size for each dist from wt,
@@ -585,7 +586,7 @@ def results_lineplot(group_data, title, figname,
 
         # sum the number of assays for each dist from wt
         group_data["full_assay_size"] = group_data.groupby("dist_from_WT")["assay"].transform("nunique")
-        print("all data", group_data)
+        
         print('group_data["full_eval_size"]', group_data[["dist_from_WT", "full_eval_size"]] )
         # create the combo of dist_form_WT and eval_size
         #group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']},{row['full_eval_size']},{row['full_assay_size']}", axis=1)
