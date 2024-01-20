@@ -563,9 +563,12 @@ def results_lineplot(group_data, title, figname,
         group_data["full_eval_size"] = group_data.groupby(["dist_from_WT", "features"])["eval_size"].transform("sum")
 
         # Round to 1 significant figure
-        
-        print( np.around(group_data["full_eval_size"].values, -np.floor(np.log10(group_data["full_eval_size"].values)).astype(int)))
-        raise Error
+        # Calculate the number of decimals for each element
+        decimals = -np.floor(np.log10(group_data["full_eval_size"].values)).astype(int)
+
+        # Round each element individually
+        group_data["full_eval_size"] = [np.around(val, dec) for val, dec in zip(group_data["full_eval_size"].values, decimals)]
+
 
         # Convert to scientific notation
         group_data["full_eval_size"] = ["{:.0e}".format(num) for num in group_data["full_eval_size"]]
