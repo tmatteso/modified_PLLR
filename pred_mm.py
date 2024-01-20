@@ -553,12 +553,13 @@ def results_lineplot(group_data, title, figname,
                    "oh+21+33+LLR", "oh+21+33+LLR+PLLR"]
     # rename the color_mapping and order to accomodate for the redux
     if redux:
-        color_order = [f"{key}_redux" for key in color_order]
-        color_mapping = ({f"{key}_redux": value for key, value in color_mapping.items()})
+        group_data['features'] = group_data['features'].str.replace('_redux', '')
+        # color_order = [f"{key}_redux" for key in color_order]
+        # color_mapping = ({f"{key}_redux": value for key, value in color_mapping.items()})
 
     plt.figure(figsize=(20, 8))
     # add some logic to make it work for all assays
-    if all_assays:
+    if all_assays: # I have two different twos right now
         # sum the eval size for each dist from wt,
         group_data["full_eval_size"] = group_data.groupby(["dist_from_WT", "features"])["eval_size"].transform("sum")
 
@@ -608,8 +609,8 @@ def results_lineplot(group_data, title, figname,
     plt.ylabel('Correlation', fontsize=30)
     plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
-    legend = plt.legend(title='Features and Alpha', fontsize=15)
-    legend.get_title().set_fontsize('12')  # Set the font size of the legend title
+    legend = plt.legend(title='Features and Alpha', fontsize=12)
+    legend.get_title().set_fontsize('15')  # Set the font size of the legend title
     sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
     if all_assays:
         # Get current x-axis limits
