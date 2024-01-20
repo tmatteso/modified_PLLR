@@ -571,7 +571,7 @@ def results_lineplot(group_data, title, figname,
 
 
         # Convert to scientific notation
-        group_data["full_eval_size"] = ["{:.0e}".format(num) for num in group_data["full_eval_size"]]
+        group_data["full_eval_size"] = ["{:.0f}e{}".format(num) for num in group_data["full_eval_size"]]
 
         # sum the number of assays for each dist from wt
         group_data["full_assay_size"] = group_data.groupby("dist_from_WT")["assay"].transform("nunique")
