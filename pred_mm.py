@@ -755,7 +755,7 @@ def main(args):
             query_string =  f"{args.pg_sub_dir}/*.csv" #'../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
             intersect_set, full = read_in_PG(query_string)
             output_csv = "MM_Assay_splits_all.csv"
-            undesirables = {
+            undesirables = set(
                     "Q8WTC7_9CNID_Somermeyer_2022.csv",
                     "H3JQU7_ENTQU_Poelwijk_2019.csv",
                     "Q6WV13_9MAXI_Somermeyer_2022.csv", 
@@ -765,7 +765,7 @@ def main(args):
                     "CTHL3_BOVIN_Koch_2022.csv",  
                     "D7PM05_CLYGR_Somermeyer_2022.csv", 
                     "CAPSD_AAV2S_Sinai_2021.csv"
-            }
+            )
             intersect_set = intersect_set - undesirables
             print(intersect_set)
             raise Error
