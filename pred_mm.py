@@ -766,10 +766,10 @@ def main(args):
                 "D7PM05_CLYGR_Somermeyer_2022.csv", 
                 "CAPSD_AAV2S_Sinai_2021.csv"
             ])
-            print(len(intersect_set))
+            #print(len(intersect_set))
             intersect_set = intersect_set.difference(undesirables)
-            print(len(intersect_set))
-            raise Error
+            #print(len(intersect_set))
+            #raise Error
         else:
             # this should change the query string then
             #desired =  [args.only_assay] # force only one assay for now
