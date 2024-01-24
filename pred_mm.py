@@ -620,10 +620,10 @@ def results_lineplot(group_data, title, figname,
                  data=group_data)
     
     plt.title(title, fontsize=30) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
-    # if all_assays:
-    #     plt.xlabel('Distance from WT, Number of Variants, Number of Assays', fontsize=30)
-    # else:
-    plt.xlabel('Distance from WT, Number of Variants', fontsize=30)
+    if all_assays:
+        plt.xlabel('Distance from WT, Number of Variants, Number of Assays', fontsize=30)
+    else:
+        plt.xlabel('Distance from WT, Number of Variants', fontsize=30)
     plt.ylabel('Correlation', fontsize=30)
     plt.xticks(
             #    np.arange(len(group_data['X-axis'].unique())), 
