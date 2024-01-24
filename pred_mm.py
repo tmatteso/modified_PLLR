@@ -522,6 +522,13 @@ def results_bargraph(group_data, title, figname):
     plt.savefig(figname) #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
     plt.close()
 
+
+# today
+# For the large distance assays, add number of assays and number of summed unique sites.
+# change the graphs to be solid for esm embeddings, dotted for the ones that don't use esm embeddings. Discard whichever alpha you don't like.
+# Reduce the number of lines on the graph as you see fit. 
+
+
 # I want another graph: one where for each feature type, we get a line plot of how the correlation changes with distance from WT
 def results_lineplot(group_data, title, figname, 
                      redux=False, 
@@ -547,6 +554,9 @@ def results_lineplot(group_data, title, figname,
         "oh+21+33+LLR+PLLR": "black",
 
     }
+
+    group_data['embed_used'] = group_data['features'].apply(lambda x: '21' in x or '33' in x)
+
     # define the order for the legend
     color_order = ["sum_DMS", "one_hot", "sum_LLR", "PLLR", "PLLR+sum_LLR", "one_hot+sum_LLR", 
                    "layer_21","layer_21+sum_LLR", "layer_33", "layer_33+sum_LLR", "21+33+LLR", 
@@ -588,8 +598,8 @@ def results_lineplot(group_data, title, figname,
         # Sort the DataFrame by 'dist_from_WT' and 'full_eval_size'
         group_data = group_data.sort_values(['dist_from_WT', 'full_eval_size'])
         # create the combo of dist_form_WT and eval_size
-        #group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']},{row['full_eval_size']},{row['full_assay_size']}", axis=1)
-        group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['full_eval_size']}", axis=1)
+        group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']},{row['full_eval_size']},{row['full_assay_size']}", axis=1)
+        #group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['full_eval_size']}", axis=1)
         print('group_data["X-axis"]', group_data["X-axis"] )
 
 
@@ -600,7 +610,9 @@ def results_lineplot(group_data, title, figname,
     
     ax = sns.lineplot(x ='X-axis', #x='dist_from_WT',
                        y='correlation_score',
-                 hue = 'features', style = 'alpha',
+                 hue = 'features', 
+                 style = 'embed_used',
+                 #style = 'alpha',
                  palette=color_mapping,
                  hue_order=color_order,
                  errorbar=None,
