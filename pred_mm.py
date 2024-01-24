@@ -755,6 +755,9 @@ def main(args):
             query_string =  f"{args.pg_sub_dir}/*.csv" #'../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
             intersect_set, full = read_in_PG(query_string)
             output_csv = "MM_Assay_splits_all.csv"
+
+            print(intersect_set)
+            raise Error
         else:
             # this should change the query string then
             #desired =  [args.only_assay] # force only one assay for now
@@ -764,15 +767,23 @@ def main(args):
             #[
                     # "Q8WTC7_9CNID_Somermeyer_2022.csv",
                     # "H3JQU7_ENTQU_Poelwijk_2019.csv",
-                    # "Q6WV13_9MAXI_Somermeyer_2022.csv",
+                    # "Q6WV13_9MAXI_Somermeyer_2022.csv", 
                     # "GFP_AEQVI_Sarkisyan_2016.csv",
-                    #"PHOT_CHLRE_Chen_2023_multiples.csv"
-                    # "CBPA2_HUMAN_Rocklin_2023_1O6X.csv",
+                    #"PHOT_CHLRE_Chen_2023_multiples.csv", 
+                    # "CAPSD_AAV2S_Sinai_substitutions_2021.csv"
+                    # "CTHL3_BOVIN_Koch_2022.csv",  
+                    #     "D7PM05_CLYGR_Somermeyer_2022.csv", # running this and above rn
+                    # you can do this right now while everything else is running!
+
+                # don't run this "CAPSD_AAV2S_Sinai_2021.csv", but include in the set to subtract from intersect_set
+
+                # after this, simply run all other assays
+                 # "CBPA2_HUMAN_Rocklin_2023_1O6X.csv",
                 #  "RASK_HUMAN_Weng_2022_binding-RAF1.csv", 
                 #"RASK_HUMAN_Weng_2022_abundance.csv", 
                 #"AMFR_HUMAN_Rocklin_2023_4G3O.csv",
                 # "HIS7_YEAST_Pokusaeva_2019.csv" , 
-        #           "CAPSD_AAV2S_Sinai_substitutions_2021.csv"
+        #           
         #]
         LLR_string, WT_PLLR_string = args.llr_csv, args.wt_pllr_dir #"../WT_for_MM_assays.csv", "../WT_for_MM_assays_redux/*.pt"#WT_for_MM_assays_extra/*.pt"
         WT_dict, LLRS, WT_PLLRS = get_LLR_and_WT_PLLR(intersect_set, full, LLR_string, WT_PLLR_string)
