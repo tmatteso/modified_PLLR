@@ -498,11 +498,13 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
                             "one_hot+layer_21+layer_33+sum_LLR+PLLR"
                         ]
                         alpha_arr = ["N/A", "N/A", "N/A"] + 10*[0] + 10*[100]
+                        # now we get spearman with DMS_score - sum_DMS
+                        y = all_mm[key].DMS_score - all_mm[key].sum_DMS # was all_mm[key].DMS_score
                         # so this version uses only sm for train
-                        records = get_spearmans(all_mm[key].DMS_score, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, sm)
+                        records = get_spearmans(y, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, sm)
                         # now do the exact same, but sm + all previous mm for train: just need to change the sm arg
                         name_ls = [f"{name}_redux" for name in name_ls]
-                        records = get_spearmans(all_mm[key].DMS_score, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, 
+                        records = get_spearmans(y, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, 
                                                 pd.concat([sm] + [all_mm[k] for k in all_mm.keys() if k < key]))
                         
                         # now we need to collect the other ones
@@ -587,6 +589,9 @@ def results_lineplot(group_data, title, figname,
         #     return "{:.0f}e{}".format(num / 10**exponent, exponent)
 
         # group_data["full_eval_size"] = [custom_sci_notation(num) for num in group_data["full_eval_size"]]
+
+        # need to add "number of unique sites" column
+
 
         # sum the number of assays for each dist from wt
         group_data["full_assay_size"] = group_data.groupby("dist_from_WT")["assay"].transform("nunique")
