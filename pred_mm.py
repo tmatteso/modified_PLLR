@@ -758,7 +758,7 @@ def main(args):
         else:
             # this should change the query string then
             #desired =  [args.only_assay] # force only one assay for now
-            query_string =  f"{args.pg_sub_dir}/{args.only_assay}/*.csv" #'../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
+            query_string =  f"{args.pg_sub_dir}/{args.only_assay}" #'../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
             intersect_set, full = read_in_PG(query_string)
             output_csv = f"MM_Assay_splits_{args.only_assay}"
             #[
