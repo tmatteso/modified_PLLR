@@ -439,7 +439,7 @@ def get_spearmans(DMS_scores, pred_ls, estimator_ls, name_ls, assay, all_mm, key
 # now let's do this where we aggregate all previous dist from WT and use it in train.
 
 # if anything, it would be nice for this to be parallelized
-def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
+def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS, output_csv):
     heat_ls = ["DMS_score", "sum_LLR", "PLLR"]
     records = []
     # for each assay, subset the data 
@@ -512,7 +512,7 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
     #Convert the list of records into a DataFrame
     all_records = pd.DataFrame(records)
     print(all_records)
-    all_records.to_csv("MM_Assay_splits.csv")
+    all_records.to_csv(output_csv) #"MM_Assay_splits.csv")
 
 def results_bargraph(group_data, title, figname):
     plt.figure(figsize=(25, 6))
@@ -754,8 +754,11 @@ def main(args):
             # desired assays:
         if args.only_assay is None: # need some default here
             desired = intersect_set 
+            output_csv = "MM_Assay_splits_all.csv"
         else:
+            # this should change the queery string then
             desired =  [args.only_assay] # force only one assay for now
+            output_csv = f"MM_Assay_splits_{args.only_assay}"
             #[
                     # "Q8WTC7_9CNID_Somermeyer_2022.csv",
                     # "H3JQU7_ENTQU_Poelwijk_2019.csv",
@@ -771,7 +774,7 @@ def main(args):
         #]
         LLR_string, WT_PLLR_string = args.llr_csv, args.wt_pllr_dir #"../WT_for_MM_assays.csv", "../WT_for_MM_assays_redux/*.pt"#WT_for_MM_assays_extra/*.pt"
         WT_dict, LLRS, WT_PLLRS = get_LLR_and_WT_PLLR(intersect_set, full, LLR_string, WT_PLLR_string)
-        eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS)
+        eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS, output_csv)
         raise Error
     # results location is hardcoded at the moment
     if args.only_assay is None:
