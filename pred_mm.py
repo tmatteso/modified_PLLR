@@ -498,10 +498,8 @@ def eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS):
                             "one_hot+layer_21+layer_33+sum_LLR+PLLR"
                         ]
                         alpha_arr = ["N/A", "N/A", "N/A"] + 10*[0] + 10*[100]
-                        print(all_mm[key].columns)
-                        raise Error
-                        # now we get spearman with DMS_score - sum_DMS
-                        y = all_mm[key].DMS_score - all_mm[key].sum_DMS # was all_mm[key].DMS_score
+                        # now we get spearman with DMS_score - sum_DMS (pred_DMS_score)
+                        y = all_mm[key].DMS_score - all_mm[key].pred_DMS_score # was all_mm[key].DMS_score
                         # so this version uses only sm for train
                         records = get_spearmans(y, pred_ls, estimator_ls, name_ls, assay, all_mm, key, alpha_arr, records, sm)
                         # now do the exact same, but sm + all previous mm for train: just need to change the sm arg
