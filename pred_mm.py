@@ -753,7 +753,7 @@ def main(args):
         
             # desired assays:
         if args.only_assay is None: # need some default here
-            desired = "DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"#intersect_set 
+            desired = intersect_set 
         else:
             desired =  [args.only_assay] # force only one assay for now
             #[
