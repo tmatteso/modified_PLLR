@@ -748,16 +748,18 @@ def plot_all_results(results_path):
 
 def main(args):
     if not args.graphs_only:
-        query_string =  f"{args.pg_sub_dir}/*.csv" #'../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
-        intersect_set, full = read_in_PG(query_string)
+        
         
             # desired assays:
         if args.only_assay is None: # need some default here
-            desired = intersect_set 
+            query_string =  f"{args.pg_sub_dir}/*.csv" #'../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
+            intersect_set, full = read_in_PG(query_string)
             output_csv = "MM_Assay_splits_all.csv"
         else:
-            # this should change the queery string then
-            desired =  [args.only_assay] # force only one assay for now
+            # this should change the query string then
+            #desired =  [args.only_assay] # force only one assay for now
+            query_string =  f"{args.pg_sub_dir}/{args.only_assay}/*.csv" #'../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/*.csv'
+            intersect_set, full = read_in_PG(query_string)
             output_csv = f"MM_Assay_splits_{args.only_assay}"
             #[
                     # "Q8WTC7_9CNID_Somermeyer_2022.csv",
@@ -774,7 +776,7 @@ def main(args):
         #]
         LLR_string, WT_PLLR_string = args.llr_csv, args.wt_pllr_dir #"../WT_for_MM_assays.csv", "../WT_for_MM_assays_redux/*.pt"#WT_for_MM_assays_extra/*.pt"
         WT_dict, LLRS, WT_PLLRS = get_LLR_and_WT_PLLR(intersect_set, full, LLR_string, WT_PLLR_string)
-        eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS, output_csv)
+        eval_loop(intersect_set, WT_dict, intersect_set, full, LLRS, WT_PLLRS, output_csv)
         raise Error
     # results location is hardcoded at the moment
     if args.only_assay is None:
