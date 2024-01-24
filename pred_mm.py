@@ -774,7 +774,10 @@ def main(args):
         eval_loop(intersect_set, WT_dict, desired, full, LLRS, WT_PLLRS)
         raise Error
     # results location is hardcoded at the moment
-    plot_all_results("MM_Assay_splits.csv") #args.results_path)
+    if args.only_assay is None:
+        plot_all_results("MM_Assay_splits_all.csv") #args.results_path)
+    else:
+        plot_all_results(f"MM_Assay_splits_{args.only_assay}") 
 
 
 if __name__ == "__main__":
