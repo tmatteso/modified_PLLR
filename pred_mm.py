@@ -746,6 +746,26 @@ def plot_all_results(results_path):
                     f"SM_pred_{dist_from_WT[0]}_all_assays.png",
                         )                  
 
+
+# t4 -> a100 -> a10g -> h100 (each)
+# FP32 TFLOPs: 8 -> 20 -> 31 -> 67
+# just convert to BF16 and get 15x performance?? Definitely worth your time. this is easy
+# FP16 TFLOPs: 65 -> 312 -> 125 -> 2000
+# BF16 TFLOPs: N/A -> 312 -> 125 -> 2000
+# if int8 quantized, get 2x performance after that? -- doesn't seem to be worth time rn
+# INT8 TOPs: 130 -> 624 -> 250 -> 4000
+# INT4 is not a supported dtype in torch anyway
+# INT4 TOPS: 260 -> N/A -> 500 -> N/A
+# vRAM (GB): 16 -> 24 -> 80 -> 80
+# cost (8 per hr): 7.82 -> 16.29 -> 40.97 -> 98.32
+
+# you need to use better gpu memory profiling for your batch inference
+# pinn memory should be True for GPU and num_workers should be tuned to be > 0
+# pad the sequence length to be a multiple of 8 and make minibatch multiples of 8
+# so do bf 16 inference and do max autotune compilation.
+# play with batch size, seq ln should be fixed.
+# 100 million seqs in a day seems feasible on one node!
+
 def main(args):
     if not args.graphs_only:
         
@@ -801,9 +821,16 @@ def main(args):
         WT_dict, LLRS, WT_PLLRS = get_LLR_and_WT_PLLR(intersect_set, full, LLR_string, WT_PLLR_string)
         eval_loop(intersect_set, WT_dict, intersect_set, full, LLRS, WT_PLLRS, output_csv)
         raise Error
+    
+    aggregate = True
+    if args.only_assay is None and aggregate:
+        all_csv = glob.glob("MM_Assay_splits_*.csv")
+        pd.concat([pd.read_csv(df) for df in all_csv]).to_csv("MM_Assay_splits.csv")
+             
+
     # results location is hardcoded at the moment
     if args.only_assay is None:
-        plot_all_results("MM_Assay_splits_all.csv") #args.results_path)
+        plot_all_results("MM_Assay_splits.csv") #_all.csv") #args.results_path)
     else:
         plot_all_results(f"MM_Assay_splits_{args.only_assay}") 
 
