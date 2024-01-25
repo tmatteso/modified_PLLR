@@ -822,7 +822,7 @@ def main(args):
         eval_loop(intersect_set, WT_dict, intersect_set, full, LLRS, WT_PLLRS, output_csv)
         raise Error
     
-    aggregate = True
+    aggregate = False
     if args.only_assay is None and aggregate:
         all_csv = glob.glob("MM_Assay_splits_*.csv")
         pd.concat([pd.read_csv(df) for df in all_csv]).to_csv("MM_Assay_splits.csv")
@@ -830,7 +830,8 @@ def main(args):
 
     # results location is hardcoded at the moment
     if args.only_assay is None:
-        plot_all_results("MM_Assay_splits.csv") #_all.csv") #args.results_path)
+        plot_all_results("True_DMS_MM_Assay_splits.csv")
+                         #MM_Assay_splits.csv") #_all.csv") #args.results_path)
     else:
         plot_all_results(f"MM_Assay_splits_{args.only_assay}") 
 
