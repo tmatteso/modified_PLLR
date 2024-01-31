@@ -175,7 +175,7 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
     for assay in intersect_set: # spawn a process for each assay
         if assay in desired:
             sm = sm_full[sm_full.assay == assay]
-            print(sm)
+            #print(sm)
             s, _ = stats.spearmanr(sm.DMS_score, sm.LLR)
             records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
                         "dist_from_WT": 1, "correlation_score":s, "alpha": "N/A",})
