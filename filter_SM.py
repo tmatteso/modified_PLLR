@@ -46,7 +46,8 @@ def read_in_PG(query_string):
             pass 
     # then concatenate the dfs -- keep this for later to compare with clinvar mutations 
     all_gene_muts = pd.concat(ls_of_df)
-    return all_gene_muts
+    intersect_set = set(all_gene_muts.assay.unique())
+    return all_gene_muts, intersect_set
 
 
 def get_high_order_constituents(all_gene_muts):
