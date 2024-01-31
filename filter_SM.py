@@ -152,10 +152,9 @@ def make_scatterplot(x, y, xlabel, ylabel, assay):
 # if anything, it would be nice for this to be parallelized
 def eval_loop(intersect_set, desired, full, LLRS, output_csv):
     records = []
-    print(intersect_set)
     # need to get the full df
     sm_full = get_sm_LLR(full, LLRS)
-    print(sm_full.assay)
+    assert len(sm_full.assay.unique()) == len(intersect_set), "not all assays in sm_full"
     # for each assay, subset the data 
     for assay in intersect_set: # spawn a process for each assay
         if assay in desired:
@@ -164,6 +163,7 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             s, _ = stats.spearmanr(sm.DMS_score, sm.LLR)
             records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
                         "dist_from_WT": 1, "correlation_score":s, "alpha": "N/A",})
+            print(records)
             xlabel, ylabel = "DMS_score", "LLR"
             make_scatterplot(sm.DMS_score,sm.LLR, xlabel, ylabel, assay)
             raise Error
