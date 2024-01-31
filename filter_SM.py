@@ -122,8 +122,7 @@ def get_LLR(intersect_set, full, LLR_string, compute_LLR=True):
         assert len(num_WT) == 1, f"multiple WT in assay {assay}"
         WT_dict[assay] = num_WT[0]
     if compute_LLR:
-        print(str(LLR_string))
-        fasta_name = LLR_string.split("/")[-1].split(".")[0] + ".fasta"
+        fasta_name = str(LLR_string).split("/")[-1].split(".")[0] + ".fasta"
         write_wt_fasta(WT_dict, fasta_name)
         # Run the script from the command line
         script_path = '../esm-variants/esm_score_missense_mutations.py'
