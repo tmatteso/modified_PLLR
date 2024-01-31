@@ -6,7 +6,6 @@ import warnings
 warnings.filterwarnings('ignore')
 import torch
 import numpy as np
-import os
 from sklearn.linear_model import Ridge
 from scipy import stats
 from sklearn.preprocessing import StandardScaler
@@ -15,6 +14,8 @@ import seaborn as sns
 import argparse
 import pathlib
 from sklearn.metrics import r2_score
+import os
+import sys
 
 
 # Function to check if all split mutants for a given gene exist in df1
@@ -48,10 +49,6 @@ def read_in_PG(query_string):
     all_gene_muts = pd.concat(ls_of_df)
     intersect_set = set(all_gene_muts.assay.unique())
     return intersect_set, all_gene_muts
-
-
-# def write_wt_fasta(all_gene_muts):
-#     # get all 
 
 def get_high_order_constituents(all_gene_muts):
     # separate by single missense or multiple missense
@@ -107,7 +104,14 @@ def add_WT_col(all_sm): # df must have mutated_sequence and mutant cols
     all_sm['WT_sequence'] = all_sm.apply(lambda row: missense_to_WT(row['mutated_sequence'], row['mutant']), axis=1)
     return all_sm
 
-def get_LLR(intersect_set, full, LLR_string):
+
+def write_wt_fasta(WT_dict, output_file):
+    with open(output_file, 'w') as fasta_file:
+        for seq_id, sequence in WT_dict.items():
+            fasta_file.write(f'>{seq_id}\n')
+            fasta_file.write(f'{sequence}\n')
+
+def get_LLR(intersect_set, full, LLR_string, compute_LLR=True):
     # we need to get the correct WT seq each assay
     WT_dict = dict()
     # for each assay, subset the data 
@@ -117,9 +121,13 @@ def get_LLR(intersect_set, full, LLR_string):
         num_WT = add_WT_col(sm).WT_sequence.unique()
         assert len(num_WT) == 1, f"multiple WT in assay {assay}"
         WT_dict[assay] = num_WT[0]
-
-    print(WT_dict)
-    raise error
+    if compute_LLR:
+        fasta_name = LLR_string.split("/")[-1].split(".")[0] + ".fasta"
+        write_wt_fasta(WT_dict, fasta_name)
+        # Run the script from the command line
+        script_path = '../esm-variants/esm_score_missense_mutations.py'
+        os.system(f'python3 {script_path} --input-fasta-file {fasta_name} --output-csv-file {LLR_string}')
+        sys.exit()
     # import LLR  
     LLRS = pd.read_csv(LLR_string) #"WT_for_MM_assays.csv")
     LLRS = LLRS.rename(columns={"seq_id":"assay", "mut_name":"mutant", "esm_score":"LLR"}, inplace=False)
@@ -197,7 +205,7 @@ if __name__ == "__main__":
     
     parser.add_argument('--pg-sub-dir', default= "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/",
                         required=False, type=pathlib.Path, help='Path to Protein Gym Substitution Files.')
-    parser.add_argument('--llr-csv', default="../WT_for_MM_assays.csv", 
+    parser.add_argument('--llr-csv', default= "WT_for_SM_filter.csv", #"../WT_for_MM_assays.csv", 
                         required=False, type=pathlib.Path, help="LLR file location.",) 
     # make anoher llr csv with all the sm llrs
 
