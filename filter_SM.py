@@ -142,8 +142,8 @@ def get_sm_LLR(full, LLRS):
 
 
 # we will come back and color the dots by their presence in higher order mutations
-def make_scatterplot(x, y, xlabel, ylabel, assay):
-    plt.figure(figsize=(8, 8))
+def make_scatterplot(x, y, s, xlabel, ylabel, assay):
+    plt.figure(figsize=(7, 7))
     plt.scatter(x, y)
     plt.xlabel(xlabel, fontsize=20)
     plt.ylabel(ylabel, fontsize=20)
@@ -156,7 +156,7 @@ def make_scatterplot(x, y, xlabel, ylabel, assay):
     # Calculate and display R-squared value
     r_squared = r2_score(y, intercept + slope * x)
     plt.text(0.05, 0.95, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=15)
-    
+    plt.text(0.05, 0.85, f"Spearman's: {s:.2f}", transform=plt.gca().transAxes, fontsize=15)
     # cbar = plt.colorbar()
     # cbar.ax.tick_params(labelsize=20)
     # cbar.ax.set_ylabel(cname, fontsize=20)
@@ -166,6 +166,7 @@ def make_scatterplot(x, y, xlabel, ylabel, assay):
 
 # if anything, it would be nice for this to be parallelized
 def eval_loop(intersect_set, desired, full, LLRS, output_csv):
+    desired = ["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
     records = []
     # need to get the full df
     sm_full = get_sm_LLR(full, LLRS)
