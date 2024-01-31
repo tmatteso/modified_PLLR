@@ -153,6 +153,7 @@ def make_scatterplot(x, y, xlabel, ylabel, assay):
 def eval_loop(intersect_set, desired, full, LLRS, output_csv):
     records = []
     print(intersect_set)
+    print(sm_full.assay)
     # need to get the full df
     sm_full = get_sm_LLR(full, LLRS)
     # for each assay, subset the data 
