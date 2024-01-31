@@ -146,7 +146,7 @@ def make_scatterplot(x, y, xlabel, ylabel, assay):
     plt.scatter(x, y)
     plt.xlabel(xlabel, fontsize=20)
     plt.ylabel(ylabel, fontsize=20)
-    plt.title(f"{xlabel} vs. {ylabel}, assay: {assay}")
+    plt.title(f"{xlabel} vs. {ylabel}, assay: {assay}", fontsize=20)
     
     # Add regression line
     slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
@@ -154,12 +154,12 @@ def make_scatterplot(x, y, xlabel, ylabel, assay):
     
     # Calculate and display R-squared value
     r_squared = r2_score(y, intercept + slope * x)
-    plt.text(0.05, 0.95, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=12)
+    plt.text(0.05, 0.95, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=20)
     
     # cbar = plt.colorbar()
     # cbar.ax.tick_params(labelsize=20)
     # cbar.ax.set_ylabel(cname, fontsize=20)
-    plt.savefig(f"scatter_{xlabel}_{xlabel}_{assay}.png")
+    plt.savefig(f"scatter_{xlabel}_{ylabel}_{assay}.png")
     plt.show()
 
 
