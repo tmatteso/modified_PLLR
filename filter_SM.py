@@ -147,7 +147,7 @@ def make_scatterplot(x, y, s, xlabel, ylabel, assay):
     plt.scatter(x, y)
     plt.xlabel(xlabel, fontsize=20)
     plt.ylabel(ylabel, fontsize=20)
-    plt.title(f"{xlabel} vs. {ylabel}, assay: {assay}", fontsize=12)
+    plt.title(f"Assay: {assay}", fontsize=18)
     
     # Add regression line
     slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
