@@ -143,10 +143,10 @@ def get_sm_LLR(full, LLRS):
 
 # we will come back and color the dots by their presence in higher order mutations
 def make_scatterplot(x, y, xlabel, ylabel, assay):
-    plt.figure(figsize=(6, 6))
+    plt.figure(figsize=(8, 8))
     plt.scatter(x, y)
-    plt.xlabel(xlabel, fontsize=15)
-    plt.ylabel(ylabel, fontsize=15)
+    plt.xlabel(xlabel, fontsize=20)
+    plt.ylabel(ylabel, fontsize=20)
     plt.title(f"{xlabel} vs. {ylabel}, assay: {assay}", fontsize=15)
     
     # Add regression line
@@ -155,7 +155,7 @@ def make_scatterplot(x, y, xlabel, ylabel, assay):
     
     # Calculate and display R-squared value
     r_squared = r2_score(y, intercept + slope * x)
-    plt.text(0.05, 0.95, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=12)
+    plt.text(0.05, 0.95, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=15)
     
     # cbar = plt.colorbar()
     # cbar.ax.tick_params(labelsize=20)
