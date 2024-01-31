@@ -166,7 +166,7 @@ def make_scatterplot(x, y, s, xlabel, ylabel, assay):
 
 # if anything, it would be nice for this to be parallelized
 def eval_loop(intersect_set, desired, full, LLRS, output_csv):
-    desired = ["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
+    #desired = ["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
     records = []
     # need to get the full df
     sm_full = get_sm_LLR(full, LLRS)
