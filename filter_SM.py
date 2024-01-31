@@ -111,7 +111,7 @@ def write_wt_fasta(WT_dict, output_file):
             fasta_file.write(f'>{seq_id}\n')
             fasta_file.write(f'{sequence}\n')
 
-def get_LLR(intersect_set, full, LLR_string, compute_LLR=True):
+def get_LLR(intersect_set, full, LLR_string, compute_LLR=False):
     # we need to get the correct WT seq each assay
     WT_dict = dict()
     # for each assay, subset the data 
