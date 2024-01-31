@@ -183,7 +183,6 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             xlabel, ylabel = "DMS_score", "LLR"
             assay = assay.split(".")[0]
             make_scatterplot(sm.DMS_score,sm.LLR, s, xlabel, ylabel, assay)
-            raise Error
 
 
     #Convert the list of records into a DataFrame
