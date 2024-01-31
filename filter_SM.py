@@ -180,6 +180,7 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
                         "dist_from_WT": 1, "correlation_score":s, "alpha": "N/A",})
             print(assay, len(sm.index), s)
             xlabel, ylabel = "DMS_score", "LLR"
+            assay = assay.split(".")[0]
             make_scatterplot(sm.DMS_score,sm.LLR, xlabel, ylabel, assay)
             raise Error
 
