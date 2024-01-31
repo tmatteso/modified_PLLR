@@ -143,7 +143,7 @@ def get_sm_LLR(full, LLRS):
 
 # we will come back and color the dots by their presence in higher order mutations
 def make_scatterplot(x, y, xlabel, ylabel, assay):
-    plt.figure(figsize=(10, 10))
+    plt.figure(figsize=(6, 6))
     plt.scatter(x, y)
     plt.xlabel(xlabel, fontsize=15)
     plt.ylabel(ylabel, fontsize=15)
@@ -178,7 +178,7 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             s, _ = stats.spearmanr(sm.DMS_score, sm.LLR)
             records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
                         "dist_from_WT": 1, "correlation_score":s, "alpha": "N/A",})
-            print(records)
+            print(assay, len(sm.index), s)
             xlabel, ylabel = "DMS_score", "LLR"
             make_scatterplot(sm.DMS_score,sm.LLR, xlabel, ylabel, assay)
             raise Error
