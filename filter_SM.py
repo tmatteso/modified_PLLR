@@ -154,7 +154,7 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
     records = []
     # need to get the full df
     sm_full = get_sm_LLR(full, LLRS)
-    assert len(sm_full.assay.unique()) == len(intersect_set), "not all assays in sm_full"
+    assert len(sm_full.assay.unique()) == len(intersect_set), f"{len(sm_full.assay.unique())} != {len(intersect_set)}"
     # for each assay, subset the data 
     for assay in intersect_set: # spawn a process for each assay
         if assay in desired:
@@ -193,6 +193,8 @@ if __name__ == "__main__":
                         required=False, type=pathlib.Path, help='Path to Protein Gym Substitution Files.')
     parser.add_argument('--llr-csv', default="../WT_for_MM_assays.csv", 
                         required=False, type=pathlib.Path, help="LLR file location.",) 
+    # make anoher llr csv with all the sm llrs
+
     parser.add_argument('--graphs-only', action='store_true', # if graphs-only ignored in input, this var will be True
                         required=False, help="Skip the pipeline and make final graphs only",) 
     parser.add_argument('--only-assay',default=None,  # need to handle default here
