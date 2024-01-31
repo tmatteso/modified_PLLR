@@ -50,6 +50,9 @@ def read_in_PG(query_string):
     return intersect_set, all_gene_muts
 
 
+# def write_wt_fasta(all_gene_muts):
+#     # get all 
+
 def get_high_order_constituents(all_gene_muts):
     # separate by single missense or multiple missense
     all_sm = all_gene_muts[~all_gene_muts['mutant'].str.contains(":")]
@@ -114,6 +117,9 @@ def get_LLR(intersect_set, full, LLR_string):
         num_WT = add_WT_col(sm).WT_sequence.unique()
         assert len(num_WT) == 1, f"multiple WT in assay {assay}"
         WT_dict[assay] = num_WT[0]
+
+    print(WT_dict)
+    raise error
     # import LLR  
     LLRS = pd.read_csv(LLR_string) #"WT_for_MM_assays.csv")
     LLRS = LLRS.rename(columns={"seq_id":"assay", "mut_name":"mutant", "esm_score":"LLR"}, inplace=False)
