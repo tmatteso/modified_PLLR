@@ -198,8 +198,8 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
                 sm_in_mm = mm.mutant.str.split(":", expand=True)
                 sm_ls = []
                 for column in sm_in_mm.columns:
-                    print(sm_in_mm[column].unique())
-                #print(sm_ls)
+                    sm_ls += list(sm_in_mm[column].unique())
+                print(sm_ls)
                 raise error
             # then 
             #print(sm)
