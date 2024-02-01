@@ -199,7 +199,9 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
                 sm_ls = []
                 for column in sm_in_mm.columns:
                     sm_ls += list(sm_in_mm[column].unique())
-                print(sm_ls)
+                sm['higher_order'] = sm['mutant'].isin(sm_ls)
+                print(len(sm.mutant.unique()))
+                print(len(sm.higher_order.unique()))
                 raise error
             # then 
             #print(sm)
