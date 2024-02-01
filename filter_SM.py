@@ -162,6 +162,7 @@ def make_scatterplot(x, y, s, xlabel, ylabel, assay):
     # cbar.ax.set_ylabel(cname, fontsize=20)
     plt.savefig(f"scatter_{xlabel}_{ylabel}_{assay}.png")
     plt.show()
+    plt.close()
     return r_squared
 
 # do this for both r squared and spearman's
@@ -173,6 +174,7 @@ def simple_hist(values1, values2, xlabel1, xlabel2):
     plt.legend()
     plt.savefig(f"hist_all_assays.png")
     plt.show()
+    plt.close()
 
 
 # if anything, it would be nice for this to be parallelized
