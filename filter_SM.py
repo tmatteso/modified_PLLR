@@ -193,12 +193,13 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             sm = sm_full[sm_full.assay == assay]
             mm = mm_full[mm_full.assay == assay]
             if mm.index.size != 0:
+                print(assay)
                 # break up each mutation in mm into its constituent parts
                 sm_in_mm = mm.mutant.str.split(":", expand=True)
                 sm_ls = []
                 for column in sm_in_mm.columns:
-                    sm_ls += sm_in_mm[column].unique()
-                print(sm_ls)
+                    print(sm_in_mm[column].unique())
+                #print(sm_ls)
                 raise error
             # then 
             #print(sm)
