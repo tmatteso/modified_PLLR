@@ -140,6 +140,8 @@ def get_sm_LLR(full, LLRS):
     sm = (pd.merge(sm, LLRS, on=['assay', 'mutant',]))
     return sm
 
+# okay so now we need a new column in the df that notes if it appears in higher order mutations
+# then simply call scatter again with a different color
 
 # we will come back and color the dots by their presence in higher order mutations
 def make_scatterplot(x, y, s, xlabel, ylabel, assay):
@@ -179,6 +181,7 @@ def simple_hist(values1, values2, xlabel1, xlabel2):
 
 # if anything, it would be nice for this to be parallelized
 def eval_loop(intersect_set, desired, full, LLRS, output_csv):
+    mm_full = full[full['mutant'].str.contains(":")]
     #desired = ["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
     records = []
     # need to get the full df
@@ -188,6 +191,12 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
     for assay in intersect_set: # spawn a process for each assay
         if assay in desired:
             sm = sm_full[sm_full.assay == assay]
+            mm = mm_full[mm_full.assay == assay]
+            # break up each mutation in mm into its constituent parts
+            sm_in_mm = mm.mutant.str.split(":", expand=True)
+            print(sm_in_mm)
+            raise error
+            # then 
             #print(sm)
             s, _ = stats.spearmanr(sm.DMS_score, sm.LLR)
             print(assay, len(sm.index), s)
@@ -213,6 +222,7 @@ def main(args):
         if args.only_assay is None:
             query_string =  f"{args.pg_sub_dir}/*.csv"
             intersect_set, full = read_in_PG(query_string)
+            
             WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
             eval_loop(intersect_set, intersect_set, full, LLRS, output_csv)
 
