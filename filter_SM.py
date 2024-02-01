@@ -192,10 +192,11 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
         if assay in desired:
             sm = sm_full[sm_full.assay == assay]
             mm = mm_full[mm_full.assay == assay]
-            # break up each mutation in mm into its constituent parts
-            sm_in_mm = mm.mutant.str.split(":", expand=True)
-            print(sm_in_mm)
-            raise error
+            if mm.index.size != 0:
+                # break up each mutation in mm into its constituent parts
+                sm_in_mm = mm.mutant.str.split(":", expand=True)
+                print(sm_in_mm)
+                raise error
             # then 
             #print(sm)
             s, _ = stats.spearmanr(sm.DMS_score, sm.LLR)
