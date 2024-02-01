@@ -210,8 +210,9 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             s, _ = stats.spearmanr(sm.DMS_score, sm.LLR)
             print(assay, len(sm.index), s)
             xlabel, ylabel = "DMS_score", "LLR"
+            higher_order = sm[sm.higher_order == True].DMS_score
             assay = assay.split(".")[0]
-            r_squared = make_scatterplot(sm.DMS_score,sm.LLR, sm.higher_order, s, xlabel, ylabel, assay)
+            r_squared = make_scatterplot(sm.DMS_score,sm.LLR,higher_order , s, xlabel, ylabel, assay)
             
             records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
                 "dist_from_WT": 1, "correlation_score":s, "r_squared": r_squared,})
