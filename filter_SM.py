@@ -204,7 +204,7 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
                 for column in sm_in_mm.columns:
                     sm_ls += list(sm_in_mm[column].unique())
                 sm['higher_order'] = sm['mutant'].isin(sm_ls)
-                print(assay, len(sm.mutant.unique()), len(sm.higher_order.index))
+                print(assay, len(sm.mutant.unique()), len(sm[sm.higher_order == True].index))
             # then 
             #print(sm)
             s, _ = stats.spearmanr(sm.DMS_score, sm.LLR)
