@@ -144,9 +144,10 @@ def get_sm_LLR(full, LLRS):
 # then simply call scatter again with a different color
 
 # we will come back and color the dots by their presence in higher order mutations
-def make_scatterplot(x, y, s, xlabel, ylabel, assay):
+def make_scatterplot(x, y, higher_order, s, xlabel, ylabel, assay):
     plt.figure(figsize=(7, 7))
-    plt.scatter(x, y)
+    plt.scatter(x, y, color="blue", label="not in higher order")
+    plt.scatter(higher_order, y, color='in higher order')
     plt.xlabel(xlabel, fontsize=20)
     plt.ylabel(ylabel, fontsize=20)
     plt.title(f"Assay: {assay}", fontsize=18)
@@ -159,6 +160,7 @@ def make_scatterplot(x, y, s, xlabel, ylabel, assay):
     r_squared = r2_score(y, intercept + slope * x)
     plt.text(0.05, 0.95, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=15)
     plt.text(0.05, 0.90, f"Spearman's: {s:.2f}", transform=plt.gca().transAxes, fontsize=15)
+    plt.legend()
     # cbar = plt.colorbar()
     # cbar.ax.tick_params(labelsize=20)
     # cbar.ax.set_ylabel(cname, fontsize=20)
@@ -193,23 +195,21 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             sm = sm_full[sm_full.assay == assay]
             mm = mm_full[mm_full.assay == assay]
             if mm.index.size != 0:
-                print(assay)
                 # break up each mutation in mm into its constituent parts
                 sm_in_mm = mm.mutant.str.split(":", expand=True)
                 sm_ls = []
                 for column in sm_in_mm.columns:
                     sm_ls += list(sm_in_mm[column].unique())
                 sm['higher_order'] = sm['mutant'].isin(sm_ls)
-                print(len(sm.mutant.unique()))
-                print(len(sm.higher_order.index))
-                raise error
+                print(assay, len(sm.mutant.unique()), len(sm.higher_order.index))
             # then 
             #print(sm)
             s, _ = stats.spearmanr(sm.DMS_score, sm.LLR)
             print(assay, len(sm.index), s)
             xlabel, ylabel = "DMS_score", "LLR"
             assay = assay.split(".")[0]
-            r_squared = make_scatterplot(sm.DMS_score,sm.LLR, s, xlabel, ylabel, assay)
+            r_squared = make_scatterplot(sm.DMS_score,sm.LLR, sm.higher_order, s, xlabel, ylabel, assay)
+            
             records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
                 "dist_from_WT": 1, "correlation_score":s, "r_squared": r_squared,})
 
