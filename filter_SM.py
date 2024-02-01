@@ -144,10 +144,10 @@ def get_sm_LLR(full, LLRS):
 # then simply call scatter again with a different color
 
 # we will come back and color the dots by their presence in higher order mutations
-def make_scatterplot(x, y, higher_order, s, xlabel, ylabel, assay):
+def make_scatterplot(x, y, higher_order_x, higher_order_y, s, xlabel, ylabel, assay):
     plt.figure(figsize=(7, 7))
     plt.scatter(x, y, color="blue", label="not in higher order")
-    plt.scatter(higher_order, y, color="green", label='in higher order')
+    plt.scatter(higher_order_x, higher_order_y, color="green", label='in higher order')
     print(x)
     print(higher_order)
 
@@ -210,9 +210,11 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             s, _ = stats.spearmanr(sm.DMS_score, sm.LLR)
             print(assay, len(sm.index), s)
             xlabel, ylabel = "DMS_score", "LLR"
-            higher_order = sm[sm.higher_order == True].DMS_score
+            higher_order_x = sm[sm.higher_order == True].DMS_score
+            higher_order_y = sm[sm.higher_order == True].LLR
             assay = assay.split(".")[0]
-            r_squared = make_scatterplot(sm.DMS_score,sm.LLR,higher_order , s, xlabel, ylabel, assay)
+            r_squared = make_scatterplot(sm.DMS_score,sm.LLR,higher_order_x,higher_order_y
+                                         s, xlabel, ylabel, assay)
             
             records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
                 "dist_from_WT": 1, "correlation_score":s, "r_squared": r_squared,})
