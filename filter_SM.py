@@ -162,6 +162,17 @@ def make_scatterplot(x, y, s, xlabel, ylabel, assay):
     # cbar.ax.set_ylabel(cname, fontsize=20)
     plt.savefig(f"scatter_{xlabel}_{ylabel}_{assay}.png")
     plt.show()
+    return r_squared
+
+# do this for both r squared and spearman's
+def simple_hist(values1, values2, xlabel1, xlabel2):
+    plt.hist(values1, bins=10, color='blue', alpha=0.5, label=xlabel1)
+    plt.hist(values2, bins=10, color='red', alpha=0.5, label=xlabel2)
+    plt.ylabel('Frequency')
+    plt.title('Correlation Scores and R Squared Across all Assays')
+    plt.legend()
+    plt.savefig(f"hist_all_assays.png")
+    plt.show()
 
 
 # if anything, it would be nice for this to be parallelized
@@ -177,17 +188,20 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             sm = sm_full[sm_full.assay == assay]
             #print(sm)
             s, _ = stats.spearmanr(sm.DMS_score, sm.LLR)
-            records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
-                        "dist_from_WT": 1, "correlation_score":s, "alpha": "N/A",})
             print(assay, len(sm.index), s)
             xlabel, ylabel = "DMS_score", "LLR"
             assay = assay.split(".")[0]
-            make_scatterplot(sm.DMS_score,sm.LLR, s, xlabel, ylabel, assay)
+            r_squared = make_scatterplot(sm.DMS_score,sm.LLR, s, xlabel, ylabel, assay)
+            records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
+                "dist_from_WT": 1, "correlation_score":s, "r_squared": r_squared,})
 
 
     #Convert the list of records into a DataFrame
     all_records = pd.DataFrame(records)
-    print(all_records)
+    # make a histogram from the correlation scores in this df
+    # Make a histogram from the correlation scores
+    simple_hist(all_records.correlation_score, all_records.r_squared,
+                 "Spearman's", "R_squared")
     all_records.to_csv(output_csv) #"MM_Assay_splits.csv")
 
 def main(args):
