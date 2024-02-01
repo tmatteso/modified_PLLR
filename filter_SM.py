@@ -213,7 +213,7 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             higher_order_x = sm[sm.higher_order == True].DMS_score
             higher_order_y = sm[sm.higher_order == True].LLR
             assay = assay.split(".")[0]
-            r_squared = make_scatterplot(sm.DMS_score,sm.LLR,higher_order_x,higher_order_y
+            r_squared = make_scatterplot(sm.DMS_score,sm.LLR,higher_order_x,higher_order_y,
                                          s, xlabel, ylabel, assay)
             
             records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
