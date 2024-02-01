@@ -148,6 +148,9 @@ def make_scatterplot(x, y, higher_order, s, xlabel, ylabel, assay):
     plt.figure(figsize=(7, 7))
     plt.scatter(x, y, color="blue", label="not in higher order")
     plt.scatter(higher_order, y, color="red", label='in higher order')
+    print(x)
+    print(higher_order)
+
     plt.xlabel(xlabel, fontsize=20)
     plt.ylabel(ylabel, fontsize=20)
     plt.title(f"Assay: {assay}", fontsize=18)
@@ -158,8 +161,8 @@ def make_scatterplot(x, y, higher_order, s, xlabel, ylabel, assay):
     
     # Calculate and display R-squared value
     r_squared = r2_score(y, intercept + slope * x)
-    plt.text(0.05, 0.95, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=15)
-    plt.text(0.05, 0.90, f"Spearman's: {s:.2f}", transform=plt.gca().transAxes, fontsize=15)
+    plt.text(0.05, 0.80, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=15)
+    plt.text(0.05, 0.75, f"Spearman's: {s:.2f}", transform=plt.gca().transAxes, fontsize=15)
     plt.legend()
     # cbar = plt.colorbar()
     # cbar.ax.tick_params(labelsize=20)
