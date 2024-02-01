@@ -147,7 +147,7 @@ def get_sm_LLR(full, LLRS):
 def make_scatterplot(x, y, higher_order, s, xlabel, ylabel, assay):
     plt.figure(figsize=(7, 7))
     plt.scatter(x, y, color="blue", label="not in higher order")
-    plt.scatter(higher_order, y, color="red", label='in higher order')
+    plt.scatter(higher_order, y, color="green", label='in higher order')
     print(x)
     print(higher_order)
 
