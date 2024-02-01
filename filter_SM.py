@@ -148,8 +148,6 @@ def make_scatterplot(x, y, higher_order_x, higher_order_y, s, xlabel, ylabel, as
     plt.figure(figsize=(7, 7))
     plt.scatter(x, y, color="blue", label="not in higher order")
     plt.scatter(higher_order_x, higher_order_y, color="green", label='in higher order')
-    print(x)
-    print(higher_order)
 
     plt.xlabel(xlabel, fontsize=20)
     plt.ylabel(ylabel, fontsize=20)
