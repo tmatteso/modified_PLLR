@@ -144,10 +144,10 @@ def get_sm_LLR(full, LLRS):
 # then simply call scatter again with a different color
 
 # we will come back and color the dots by their presence in higher order mutations
-def make_scatterplot(x, y, higher_order_x, higher_order_y, s, xlabel, ylabel, assay):
+def make_scatterplot(x, y, higher_order_x, higher_order_y, snho, sho, xlabel, ylabel, assay):
     plt.figure(figsize=(7, 7))
     plt.scatter(x, y, color="blue", label="not in higher order")
-    plt.scatter(higher_order_x, higher_order_y, color="yellow", label='in higher order')
+    plt.scatter(higher_order_x, higher_order_y, color="orange", label='in higher order')
 
     plt.xlabel(xlabel, fontsize=20)
     plt.ylabel(ylabel, fontsize=20)
@@ -159,8 +159,11 @@ def make_scatterplot(x, y, higher_order_x, higher_order_y, s, xlabel, ylabel, as
     
     # Calculate and display R-squared value
     r_squared = r2_score(y, intercept + slope * x)
-    plt.text(0.05, 0.80, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=15)
-    plt.text(0.05, 0.75, f"Spearman's: {s:.2f}", transform=plt.gca().transAxes, fontsize=15)
+    #plt.text(0.05, 0.80, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=15)
+    plt.text(0.05, 0.85, f"no HO Spearman's: {snho:.2f}", transform=plt.gca().transAxes, fontsize=15)
+    plt.text(0.05, 0.80, f"HO Spearman's: {sho:.2f}", transform=plt.gca().transAxes, fontsize=15)
+    plt.text(0.05, 0.75, f"Variant Count: {len(x):.2f}", transform=plt.gca().transAxes, fontsize=15)
+    #plt.text(0.05, 0.70, f"Unique Sites: {sho:.2f}", transform=plt.gca().transAxes, fontsize=15)
     plt.legend()
     # cbar = plt.colorbar()
     # cbar.ax.tick_params(labelsize=20)
@@ -180,6 +183,11 @@ def simple_hist(values1, values2, xlabel1, xlabel2):
     plt.savefig(f"hist_all_assays.png")
     plt.show()
     plt.close()
+
+# differentiate the variants that are True DMS - Sum DMS, > or < such that 90% are discarded for each assay
+# this would only be for the large lineplots 
+# don't write that here
+
 
 
 # if anything, it would be nice for this to be parallelized
@@ -205,26 +213,30 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
                 print(assay, len(sm.mutant.unique()), len(sm[sm.higher_order == True].index))
             # then 
             #print(sm)
-            s, _ = stats.spearmanr(sm.DMS_score, sm.LLR)
-            print(assay, len(sm.index), s)
+            
+            print(assay, len(sm.index))
             xlabel, ylabel = "DMS_score", "LLR"
+            no_ho_x = sm[sm.higher_order == False].DMS_score
+            no_ho_y = sm[sm.higher_order == False].LLR
             higher_order_x = sm[sm.higher_order == True].DMS_score
             higher_order_y = sm[sm.higher_order == True].LLR
+            snho, _ = stats.spearmanr(no_ho_x, no_ho_y)
+            sho, _ = stats.spearmanr(higher_order_x, higher_order_y)
             assay = assay.split(".")[0]
             r_squared = make_scatterplot(sm.DMS_score,sm.LLR,higher_order_x,higher_order_y,
-                                         s, xlabel, ylabel, assay)
+                                         snho, sho, xlabel, ylabel, assay)
             
-            records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
-                "dist_from_WT": 1, "correlation_score":s, "r_squared": r_squared,})
+            # records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
+            #     "dist_from_WT": 1, "correlation_score":, s, "r_squared": r_squared,})
 
 
     #Convert the list of records into a DataFrame
-    all_records = pd.DataFrame(records)
+    # all_records = pd.DataFrame(records)
     # make a histogram from the correlation scores in this df
     # Make a histogram from the correlation scores
-    simple_hist(all_records.correlation_score, all_records.r_squared,
-                 "Spearman's", "R_squared")
-    all_records.to_csv(output_csv) #"MM_Assay_splits.csv")
+    # simple_hist(all_records.correlation_score, all_records.r_squared,
+    #              "Spearman's", "R_squared")
+    # all_records.to_csv(output_csv) #"MM_Assay_splits.csv")
 
 def main(args):
     output_csv = "SM_filter_Assay_splits.csv"
