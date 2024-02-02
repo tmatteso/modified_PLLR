@@ -144,7 +144,7 @@ def get_sm_LLR(full, LLRS):
 # then simply call scatter again with a different color
 
 # we will come back and color the dots by their presence in higher order mutations
-def make_scatterplot(x, y, higher_order_x, higher_order_y, snho, sho, xlabel, ylabel, assay):
+def make_scatterplot(x, y, higher_order_x, higher_order_y, snho, sho, xlabel, ylabel, assay,):
     plt.figure(figsize=(7, 7))
     plt.scatter(x, y, color="blue", label="not in higher order")
     plt.scatter(higher_order_x, higher_order_y, color="orange", label='in higher order')
@@ -161,7 +161,8 @@ def make_scatterplot(x, y, higher_order_x, higher_order_y, snho, sho, xlabel, yl
     r_squared = r2_score(y, intercept + slope * x)
     #plt.text(0.05, 0.80, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=15)
     plt.text(0.05, 0.85, f"no HO Spearman's: {snho:.2f}", transform=plt.gca().transAxes, fontsize=15)
-    plt.text(0.05, 0.80, f"HO Spearman's: {sho:.2f}", transform=plt.gca().transAxes, fontsize=15)
+    if len(higher_order_x) != 0:
+        plt.text(0.05, 0.80, f"HO Spearman's: {sho:.2f}", transform=plt.gca().transAxes, fontsize=15)
     plt.text(0.05, 0.75, f"Variant Count: {len(x)}", transform=plt.gca().transAxes, fontsize=15)
     #plt.text(0.05, 0.70, f"Unique Sites: {sho:.2f}", transform=plt.gca().transAxes, fontsize=15)
     plt.legend()
@@ -210,8 +211,10 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
                 for column in sm_in_mm.columns:
                     sm_ls += list(sm_in_mm[column].unique())
                 sm['higher_order'] = sm['mutant'].isin(sm_ls)
-                print(assay, len(sm.mutant.unique()), len(sm[sm.higher_order == True].index))
+            else:
+                sm['higher_order'] = False
             # then 
+            print(assay, len(sm.mutant.unique()), len(sm[sm.higher_order == True].index))
             #print(sm)
             
             print(assay, len(sm.index))
