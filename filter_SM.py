@@ -193,7 +193,7 @@ def simple_hist(values1, values2, xlabel1, xlabel2):
 # if anything, it would be nice for this to be parallelized
 def eval_loop(intersect_set, desired, full, LLRS, output_csv):
     mm_full = full[full['mutant'].str.contains(":")]
-    desired = ["SDA_BACSU_Rocklin_2023_1PV0.csv"] #["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
+    #desired = ["SDA_BACSU_Rocklin_2023_1PV0.csv"] #["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
     records = []
     # need to get the full df
     sm_full = get_sm_LLR(full, LLRS)
