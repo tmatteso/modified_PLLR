@@ -162,7 +162,7 @@ def make_scatterplot(x, y, higher_order_x, higher_order_y, snho, sho, xlabel, yl
     #plt.text(0.05, 0.80, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=15)
     plt.text(0.05, 0.85, f"no HO Spearman's: {snho:.2f}", transform=plt.gca().transAxes, fontsize=15)
     plt.text(0.05, 0.80, f"HO Spearman's: {sho:.2f}", transform=plt.gca().transAxes, fontsize=15)
-    plt.text(0.05, 0.75, f"Variant Count: {len(x):.2f}", transform=plt.gca().transAxes, fontsize=15)
+    plt.text(0.05, 0.75, f"Variant Count: {len(x)}", transform=plt.gca().transAxes, fontsize=15)
     #plt.text(0.05, 0.70, f"Unique Sites: {sho:.2f}", transform=plt.gca().transAxes, fontsize=15)
     plt.legend()
     # cbar = plt.colorbar()
