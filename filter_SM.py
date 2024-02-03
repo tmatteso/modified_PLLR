@@ -162,7 +162,7 @@ def make_scatterplot(x, y, higher_order_x, higher_order_y, snho, sho, xlabel, yl
     #plt.text(0.05, 0.80, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=15)
     #plt.text(1, 1, f"no HO Spearman's: {snho:.2f}", transform=plt.gca().transAxes, 
              #horizontalalignment='right', verticalalignment='top', fontsize=15)
-    plt.annotate(f"no HO Spearman's: {snho:.2f}"', xy=(1, 1), xycoords='axes fraction', xytext=(10, -10), textcoords='offset points', 
+    plt.annotate(f"no HO Spearman's: {snho:.2f}", xy=(1, 1), xycoords='axes fraction', xytext=(10, -10), textcoords='offset points', 
              horizontalalignment='right', verticalalignment='top')
     # if len(higher_order_x) != 0:
     #     plt.text(0.9, 0.9, f"HO Spearman's: {sho:.2f}", transform=plt.gca().transAxes, 
