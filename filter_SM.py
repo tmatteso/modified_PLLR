@@ -162,7 +162,7 @@ def make_scatterplot(x, y, higher_order_x, higher_order_y, snho, sho, xlabel, yl
     r_squared = r2_score(y, intercept + slope * x)
     # plt.figtext(0.02, 0.9, "bigggggggggggg", fontsize=14)
     #plt.text(0.05, 0.80, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=15)
-    plt.text(1.05, 1, f"no HO Spearman's: {snho:.2f}", transform=plt.gca().transAxes, 
+    plt.text(1.0, 1, f"no HO Spearman's: {snho:.2f}", transform=plt.gca().transAxes, 
              horizontalalignment='left', verticalalignment='top', fontsize=15)
     # plt.annotate(f"no HO Spearman's: {snho:.2f}", xy=(1, 1), xycoords='axes fraction', xytext=(10, -10), textcoords='offset points', 
     #          horizontalalignment='right', verticalalignment='top')
