@@ -160,10 +160,13 @@ def make_scatterplot(x, y, higher_order_x, higher_order_y, snho, sho, xlabel, yl
     # Calculate and display R-squared value
     r_squared = r2_score(y, intercept + slope * x)
     #plt.text(0.05, 0.80, f"R-squared: {r_squared:.2f}", transform=plt.gca().transAxes, fontsize=15)
-    plt.text(0.05, 0.85, f"no HO Spearman's: {snho:.2f}", transform=plt.gca().transAxes, fontsize=15)
+    plt.text(1, 1, f"no HO Spearman's: {snho:.2f}", transform=plt.gca().transAxes, 
+             horizontalalignment='right', verticalalignment='top', fontsize=15)
     if len(higher_order_x) != 0:
-        plt.text(0.05, 0.80, f"HO Spearman's: {sho:.2f}", transform=plt.gca().transAxes, fontsize=15)
-    plt.text(0.05, 0.75, f"Variant Count: {len(x)}", transform=plt.gca().transAxes, fontsize=15)
+        plt.text(0.9, 0.9, f"HO Spearman's: {sho:.2f}", transform=plt.gca().transAxes, 
+                 horizontalalignment='right', verticalalignment='top', fontsize=15)
+    plt.text(0.8, 0.8, f"Variant Count: {len(x)}", transform=plt.gca().transAxes, 
+             horizontalalignment='right', verticalalignment='top', fontsize=15)
     #plt.text(0.05, 0.70, f"Unique Sites: {sho:.2f}", transform=plt.gca().transAxes, fontsize=15)
     plt.legend()
     # cbar = plt.colorbar()
@@ -194,7 +197,7 @@ def simple_hist(values1, values2, xlabel1, xlabel2):
 # if anything, it would be nice for this to be parallelized
 def eval_loop(intersect_set, desired, full, LLRS, output_csv):
     mm_full = full[full['mutant'].str.contains(":")]
-    #desired = ["SDA_BACSU_Rocklin_2023_1PV0.csv"] #["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
+    desired = ["SDA_BACSU_Rocklin_2023_1PV0.csv"] #["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
     records = []
     # need to get the full df
     sm_full = get_sm_LLR(full, LLRS)
@@ -215,19 +218,19 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
                 sm['higher_order'] = False
             # then 
             print(assay, len(sm.mutant.unique()), len(sm[sm.higher_order == True].index))
+            if len(sm[sm.higher_order == True].index) > 50:
             #print(sm)
-            
-            print(assay, len(sm.index))
-            xlabel, ylabel = "DMS_score", "LLR"
-            no_ho_x = sm[sm.higher_order == False].DMS_score
-            no_ho_y = sm[sm.higher_order == False].LLR
-            higher_order_x = sm[sm.higher_order == True].DMS_score
-            higher_order_y = sm[sm.higher_order == True].LLR
-            snho, _ = stats.spearmanr(no_ho_x, no_ho_y)
-            sho, _ = stats.spearmanr(higher_order_x, higher_order_y)
-            assay = assay.split(".")[0]
-            r_squared = make_scatterplot(sm.DMS_score,sm.LLR,higher_order_x,higher_order_y,
-                                         snho, sho, xlabel, ylabel, assay)
+                print(assay, len(sm.index))
+                xlabel, ylabel = "DMS_score", "LLR"
+                no_ho_x = sm[sm.higher_order == False].DMS_score
+                no_ho_y = sm[sm.higher_order == False].LLR
+                higher_order_x = sm[sm.higher_order == True].DMS_score
+                higher_order_y = sm[sm.higher_order == True].LLR
+                snho, _ = stats.spearmanr(no_ho_x, no_ho_y)
+                sho, _ = stats.spearmanr(higher_order_x, higher_order_y)
+                assay = assay.split(".")[0]
+                r_squared = make_scatterplot(sm.DMS_score,sm.LLR,higher_order_x,higher_order_y,
+                                            snho, sho, xlabel, ylabel, assay)
             
             # records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
             #     "dist_from_WT": 1, "correlation_score":, s, "r_squared": r_squared,})
@@ -246,9 +249,8 @@ def main(args):
     if not args.graphs_only:
         # desired assays:
         if args.only_assay is None:
-            query_string =  f"{args.pg_sub_dir}/*.csv"
-            #"../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/SDA_BACSU_Rocklin_2023_1PV0.csv"
-            #
+            #query_string =  f"{args.pg_sub_dir}/*.csv"
+            query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/SDA_BACSU_Rocklin_2023_1PV0.csv"
             intersect_set, full = read_in_PG(query_string)
             
             WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
