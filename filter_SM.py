@@ -167,7 +167,9 @@ def make_scatterplot(x, y, higher_order_x, higher_order_y, snho, sho, xlabel, yl
     if len(higher_order_x) != 0:
         plt.text(1.01, 0.95, f"HO Spearman's: {sho:.2f}", transform=plt.gca().transAxes, 
                  horizontalalignment='left', verticalalignment='top', fontsize=15)
-    plt.text(1.01, 0.90, f"Variant Count: {len(x)}", transform=plt.gca().transAxes, 
+    plt.text(1.01, 0.90, f"no HO Variant Count: {len(x) - len(higher_order_x)}", transform=plt.gca().transAxes, 
+             horizontalalignment='left', verticalalignment='top', fontsize=15)
+    plt.text(1.01, 0.85, f"HO Variant Count: {len(higher_order_x)}", transform=plt.gca().transAxes, 
              horizontalalignment='left', verticalalignment='top', fontsize=15)
     #plt.text(0.05, 0.70, f"Unique Sites: {sho:.2f}", transform=plt.gca().transAxes, fontsize=15)
     plt.legend()
