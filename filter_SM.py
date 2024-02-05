@@ -146,7 +146,7 @@ def get_sm_LLR(full, LLRS):
 # we will come back and color the dots by their presence in higher order mutations
 def make_scatterplot(x, y, higher_order_x, higher_order_y, snho, sho, xlabel, ylabel, assay,):
     plt.figure(figsize=(9, 6))
-    plt.subplots_adjust(right=0.6)
+    plt.subplots_adjust(right=0.65)
     plt.scatter(x, y, color="blue", label="not in higher order")
     plt.scatter(higher_order_x, higher_order_y, color="orange", label='in higher order')
 
