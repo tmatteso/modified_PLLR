@@ -146,7 +146,7 @@ def get_sm_LLR(full, LLRS):
 # we will come back and color the dots by their presence in higher order mutations
 def make_scatterplot(x, y, higher_order_x, higher_order_y, snho, sho, xlabel, ylabel, assay,):
     plt.figure(figsize=(9, 6))
-    plt.subplots_adjust(right=0.7)
+    plt.subplots_adjust(right=0.6)
     plt.scatter(x, y, color="blue", label="not in higher order")
     plt.scatter(higher_order_x, higher_order_y, color="orange", label='in higher order')
 
@@ -177,7 +177,7 @@ def make_scatterplot(x, y, higher_order_x, higher_order_y, snho, sho, xlabel, yl
     # cbar.ax.tick_params(labelsize=20)
     # cbar.ax.set_ylabel(cname, fontsize=20)
     plt.savefig(f"scatter_{xlabel}_{ylabel}_{assay}.png")
-    plt.show()
+    #plt.show()
     plt.close()
     return r_squared
 
@@ -201,7 +201,8 @@ def simple_hist(values1, values2, xlabel1, xlabel2):
 # if anything, it would be nice for this to be parallelized
 def eval_loop(intersect_set, desired, full, LLRS, output_csv):
     mm_full = full[full['mutant'].str.contains(":")]
-    #desired = ["SDA_BACSU_Rocklin_2023_1PV0.csv"] #["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
+    desired = ["DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"]
+    #["SDA_BACSU_Rocklin_2023_1PV0.csv"] #["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
     records = []
     # need to get the full df
     sm_full = get_sm_LLR(full, LLRS)
@@ -253,8 +254,8 @@ def main(args):
     if not args.graphs_only:
         # desired assays:
         if args.only_assay is None:
-            query_string =  f"{args.pg_sub_dir}/*.csv"
-            #query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/SDA_BACSU_Rocklin_2023_1PV0.csv"
+            #query_string =  f"{args.pg_sub_dir}/*.csv"
+            query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"
             intersect_set, full = read_in_PG(query_string)
             
             WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
