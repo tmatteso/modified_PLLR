@@ -215,6 +215,8 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             if mm.index.size != 0:
                 # break up each mutation in mm into its constituent parts
                 sm_in_mm = mm.mutant.str.split(":", expand=True)
+                print(sm_in_mm)
+                raise Error
                 sm_ls = []
                 for column in sm_in_mm.columns:
                     sm_ls += list(sm_in_mm[column].unique())
