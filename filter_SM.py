@@ -349,8 +349,10 @@ def main(args):
             
             WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
             chad, okay = eval_loop(intersect_set, intersect_set, full, LLRS, output_csv)
-            # now get the lineplots for each assay and the mean plots for each group
-            results_lineplot(chad, "chadus", "chad.png")
+            for assay_df in chad:
+                # now get the lineplots for each assay and the mean plots for each group
+                results_lineplot(assay_df, "chadus", "chad.png")
+                raise Error
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
