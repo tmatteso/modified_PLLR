@@ -207,6 +207,7 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
     #["SDA_BACSU_Rocklin_2023_1PV0.csv"] #["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
     chad = []
     okay = []
+    records = []
     # need to get the full df
     sm_full = get_sm_LLR(full, LLRS)
     assert len(sm_full.assay.unique()) == len(intersect_set), f"{len(sm_full.assay.unique())} != {len(intersect_set)}"
@@ -243,13 +244,15 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
                 snho, _ = stats.spearmanr(no_ho_x, no_ho_y)
                 sho, _ = stats.spearmanr(higher_order_x, higher_order_y)
                 assay = assay.split(".")[0]
+                # the records df is necessary
+
                 # chad: spearman's 0.4 or greater in HO and 50% or more of total in HO
                 if (sho >= 0.4) and (len(higher_order_x)/len(sm.index) > 0.5):
-                    chad.append(mm)
+                    chad.append(assay)
                 # okay: spearman's 0.4 or greater and at least 100 in HO
                 # special okay: TCRG1_Mouse
                 if ((sho >= 0.4) and (len(higher_order_x) > 100)) or (assay == "TCRG1_MOUSE_Rocklin_2023_1E0L"):
-                    okay.append(mm)
+                    okay.append(assay)
                 r_squared = make_scatterplot(sm.DMS_score,sm.LLR,higher_order_x,higher_order_y,
                                             snho, sho, xlabel, ylabel, assay)
             
@@ -257,6 +260,7 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             #     "dist_from_WT": 1, "correlation_score":, s, "r_squared": r_squared,})
     print("chad", chad)
     print("okay", okay)
+    raise Error
     return chad, okay
     #Convert the list of records into a DataFrame
     # all_records = pd.DataFrame(records)
