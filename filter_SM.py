@@ -252,6 +252,8 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             # records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
             #     "dist_from_WT": 1, "correlation_score":, s, "r_squared": r_squared,})
     okay += ["TCRG1_MOUSE_Rocklin_2023_2M0Y.csv"]
+    print("chad", chad)
+    print("okay", okay)
     return chad, okay
     #Convert the list of records into a DataFrame
     # all_records = pd.DataFrame(records)
