@@ -201,9 +201,10 @@ def simple_hist(values1, values2, xlabel1, xlabel2):
 # if anything, it would be nice for this to be parallelized
 def eval_loop(intersect_set, desired, full, LLRS, output_csv):
     mm_full = full[full['mutant'].str.contains(":")]
-    #desired = ["DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"]
+    desired = ["DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"]
     #["SDA_BACSU_Rocklin_2023_1PV0.csv"] #["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
-    records = []
+    chad = []
+    okay = []
     # need to get the full df
     sm_full = get_sm_LLR(full, LLRS)
     assert len(sm_full.assay.unique()) == len(intersect_set), f"{len(sm_full.assay.unique())} != {len(intersect_set)}"
@@ -215,8 +216,6 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             if mm.index.size != 0:
                 # break up each mutation in mm into its constituent parts
                 sm_in_mm = mm.mutant.str.split(":", expand=True)
-                print(sm_in_mm)
-                raise Error
                 sm_ls = []
                 for column in sm_in_mm.columns:
                     sm_ls += list(sm_in_mm[column].unique())
@@ -224,9 +223,12 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             else:
                 sm['higher_order'] = False
             # then 
-            print(assay, len(sm.mutant.unique()), len(sm[sm.higher_order == True].index))
+            print(assay, len(sm.mutant.unique()), len(sm[sm.higher_order == True].index))       
+            # need a dist from WT column
+
             if len(sm[sm.higher_order == True].index) > 50:
-            #print(sm)
+                print(sm)
+                raise Error
                 print(assay, len(sm.index))
                 xlabel, ylabel = "DMS_score", "LLR"
                 no_ho_x = sm[sm.higher_order == False].DMS_score
@@ -236,13 +238,20 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
                 snho, _ = stats.spearmanr(no_ho_x, no_ho_y)
                 sho, _ = stats.spearmanr(higher_order_x, higher_order_y)
                 assay = assay.split(".")[0]
+                # chad: spearman's 0.4 or greater in HO and 50% or more of total in HO
+                if (sho >= 0.4) and (len(higher_order_x)/len(sm.index) > 0.5):
+                    chad.append(assay)
+                # okay: spearman's 0.4 or greater and at least 100 in HO
+                # special okay: TCRG1_Mouse
+                if (sho >= 0.4) and (len(higher_order_x) > 100):
+                    okay.append(assay)
                 r_squared = make_scatterplot(sm.DMS_score,sm.LLR,higher_order_x,higher_order_y,
                                             snho, sho, xlabel, ylabel, assay)
             
             # records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
             #     "dist_from_WT": 1, "correlation_score":, s, "r_squared": r_squared,})
-
-
+    okay += ["TCRG1_MOUSE_Rocklin_2023_2M0Y.csv"]
+    return chad, okay
     #Convert the list of records into a DataFrame
     # all_records = pd.DataFrame(records)
     # make a histogram from the correlation scores in this df
@@ -251,17 +260,94 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
     #              "Spearman's", "R_squared")
     # all_records.to_csv(output_csv) #"MM_Assay_splits.csv")
 
+
+
+# I want another graph: one where for each feature type, we get a line plot of how the correlation changes with distance from WT
+def results_lineplot(group_data, title, figname, 
+                     redux=False, 
+                     all_assays=False):
+
+
+    plt.figure(figsize=(20, 8))
+    print("all data", group_data)
+    # add some logic to make it work for all assays
+    if all_assays: # I have two different twos right now
+        # sum the eval size for each dist from wt,
+        group_data["full_eval_size"] = group_data.groupby("dist_from_WT")["eval_size"].transform("sum")
+
+
+        # sum the number of assays for each dist from wt
+        group_data["full_assay_size"] = group_data.groupby("dist_from_WT")["assay"].transform("nunique")
+        
+        # Convert the new columns to integers
+        group_data['dist_from_WT'] = group_data['dist_from_WT'].astype(int)
+        group_data['full_eval_size'] = group_data['full_eval_size'].astype(int)
+
+        # Sort the DataFrame by 'dist_from_WT' and 'full_eval_size'
+        group_data = group_data.sort_values(['dist_from_WT', 'full_eval_size'])
+        # create the combo of dist_form_WT and eval_size
+        group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']},{row['full_eval_size']},{row['full_assay_size']}", axis=1)
+        #group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['full_eval_size']}", axis=1)
+        print('group_data["X-axis"]', group_data["X-axis"] )
+
+
+    else:
+        # create the combo of dist_form_WT and eval_size
+        group_data["X-axis"] = group_data.apply(lambda row: f"{row['dist_from_WT']}, {row['eval_size']}", axis=1)
+
+    
+    ax = sns.lineplot(x ='X-axis', #x='dist_from_WT',
+                       y='correlation_score',
+                 hue = 'features', 
+                 style = 'embed_used',
+                 #style = 'alpha',
+                 palette=color_mapping,
+                 hue_order=color_order,
+                 errorbar=None,
+                #hue='alpha', 
+                 data=group_data)
+    
+    plt.title(title, fontsize=30) #f'Assay: {assay}, Distance from WT: {dist_from_WT}, Evaluation Size:{eval_size}')
+    if all_assays:
+        plt.xlabel('Distance from WT, Number of Variants, Number of Assays', fontsize=30)
+    else:
+        plt.xlabel('Distance from WT, Number of Variants', fontsize=30)
+    plt.ylabel('Correlation', fontsize=30)
+    plt.xticks(
+            #    np.arange(len(group_data['X-axis'].unique())), 
+            #    group_data['X-axis'].unique(), 
+               rotation=45, #'vertical',
+               fontsize=12)
+    plt.yticks(fontsize=12)
+    legend = plt.legend(title='Features and Alpha', fontsize=15)
+    legend.get_title().set_fontsize('15')  # Set the font size of the legend title
+    sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
+    if all_assays:
+        # Get current x-axis limits
+        x_start, x_end = plt.xlim()
+        print("x_start", x_start, "x_end", x_end)
+        # Set new x-axis limits and x-ticks
+        plt.xlim(x_start + 0.5, x_end - 0.5)  # Adjust as needed
+        x_start, x_end = plt.xlim()
+        print("x_start", x_start, "x_end", x_end)
+        #plt.xticks(np.arange(x_start, x_end, step=0.1))  # Adjust the step as needed
+
+    print(figname)
+    plt.savefig(figname, bbox_inches='tight') #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
+    plt.close()
+
 def main(args):
     output_csv = "SM_filter_Assay_splits.csv"
     if not args.graphs_only:
         # desired assays:
         if args.only_assay is None:
-            query_string =  f"{args.pg_sub_dir}/*.csv"
-            #query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"
+            #query_string =  f"{args.pg_sub_dir}/*.csv"
+            query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"
             intersect_set, full = read_in_PG(query_string)
             
             WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
-            eval_loop(intersect_set, intersect_set, full, LLRS, output_csv)
+            chad, okay = eval_loop(intersect_set, intersect_set, full, LLRS, output_csv)
+            # now get the lineplots for each assay and the mean plots for each group
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
