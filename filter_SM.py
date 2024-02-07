@@ -229,7 +229,7 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             if len(sm[sm.higher_order == True].index) > 50:
                 mm["dist_from_WT"] = mm['mutant'].str.count(':') + 1
                 print(mm)
-                raise Error
+                # store the mm for the chad and okay lists
                 print(assay, len(sm.index))
                 xlabel, ylabel = "DMS_score", "LLR"
                 no_ho_x = sm[sm.higher_order == False].DMS_score
@@ -241,11 +241,11 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
                 assay = assay.split(".")[0]
                 # chad: spearman's 0.4 or greater in HO and 50% or more of total in HO
                 if (sho >= 0.4) and (len(higher_order_x)/len(sm.index) > 0.5):
-                    chad.append(assay)
+                    chad.append(mm)
                 # okay: spearman's 0.4 or greater and at least 100 in HO
                 # special okay: TCRG1_Mouse
                 if (sho >= 0.4) and (len(higher_order_x) > 100):
-                    okay.append(assay)
+                    okay.append(mm)
                 r_squared = make_scatterplot(sm.DMS_score,sm.LLR,higher_order_x,higher_order_y,
                                             snho, sho, xlabel, ylabel, assay)
             
@@ -268,7 +268,7 @@ def results_lineplot(group_data, title, figname,
                      redux=False, 
                      all_assays=False):
 
-
+    print(group_data)
     plt.figure(figsize=(20, 8))
     print("all data", group_data)
     # add some logic to make it work for all assays
@@ -300,10 +300,10 @@ def results_lineplot(group_data, title, figname,
     ax = sns.lineplot(x ='X-axis', #x='dist_from_WT',
                        y='correlation_score',
                  hue = 'features', 
-                 style = 'embed_used',
+                 #style = 'embed_used',
                  #style = 'alpha',
-                 palette=color_mapping,
-                 hue_order=color_order,
+                #  palette=color_mapping,
+                #  hue_order=color_order,
                  errorbar=None,
                 #hue='alpha', 
                  data=group_data)
@@ -320,7 +320,7 @@ def results_lineplot(group_data, title, figname,
                rotation=45, #'vertical',
                fontsize=12)
     plt.yticks(fontsize=12)
-    legend = plt.legend(title='Features and Alpha', fontsize=15)
+    legend = plt.legend(title='Features', fontsize=15)
     legend.get_title().set_fontsize('15')  # Set the font size of the legend title
     sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
     if all_assays:
@@ -350,6 +350,7 @@ def main(args):
             WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
             chad, okay = eval_loop(intersect_set, intersect_set, full, LLRS, output_csv)
             # now get the lineplots for each assay and the mean plots for each group
+            results_lineplot(chad, "chadus", "chad.png")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
