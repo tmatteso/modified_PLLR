@@ -201,7 +201,8 @@ def simple_hist(values1, values2, xlabel1, xlabel2):
 # if anything, it would be nice for this to be parallelized
 def eval_loop(intersect_set, desired, full, LLRS, output_csv):
     mm_full = full[full['mutant'].str.contains(":")]
-    desired = ["DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"]
+    desired = ["CAPSD_AAV2S_Sinai_2021.csv"]
+    #["DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"]
     #["SDA_BACSU_Rocklin_2023_1PV0.csv"] #["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
     chad = []
     okay = []
@@ -344,7 +345,8 @@ def main(args):
         # desired assays:
         if args.only_assay is None:
             #query_string =  f"{args.pg_sub_dir}/*.csv"
-            query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"
+            #query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"
+            query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/CAPSD_AAV2S_Sinai_2021.csv
             intersect_set, full = read_in_PG(query_string)
             
             WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
