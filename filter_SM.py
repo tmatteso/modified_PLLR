@@ -245,14 +245,13 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
                     chad.append(mm)
                 # okay: spearman's 0.4 or greater and at least 100 in HO
                 # special okay: TCRG1_Mouse
-                if (sho >= 0.4) and (len(higher_order_x) > 100):
+                if ((sho >= 0.4) and (len(higher_order_x) > 100)) or (assay == "TCRG1_MOUSE_Rocklin_2023_1E0L"):
                     okay.append(mm)
                 r_squared = make_scatterplot(sm.DMS_score,sm.LLR,higher_order_x,higher_order_y,
                                             snho, sho, xlabel, ylabel, assay)
             
             # records.append({"assay": assay, "eval_size": len(sm.index), "features": "LLR", 
             #     "dist_from_WT": 1, "correlation_score":, s, "r_squared": r_squared,})
-    okay += ["TCRG1_MOUSE_Rocklin_2023_1E0L.csv"]
     print("chad", chad)
     print("okay", okay)
     return chad, okay
