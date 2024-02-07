@@ -229,6 +229,12 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             # need a dist from WT column
             if len(sm[sm.higher_order == True].index) > 50:
                 mm["dist_from_WT"] = mm['mutant'].str.count(':') + 1
+                # need to know the number of variants that have each dist_from_WT
+                # Group the data by 'dist_from_WT' and count the number of rows in each group
+                count_dist_from_WT = mm.groupby('dist_from_WT').size()
+
+                # Create a new column 'count_dist_from_WT' with the count for each unique 'dist_from_WT' entry
+                mm['eval_size'] = mm['dist_from_WT'].map(count_dist_from_WT)
                 print(mm)
                 # store the mm for the chad and okay lists
                 print(assay, len(sm.index))
