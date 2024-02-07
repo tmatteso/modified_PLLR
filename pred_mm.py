@@ -712,15 +712,40 @@ def plot_all_results(results_path):
                             redux=True, all_assays=True)
     # do this but only for one assay in question:
     # we wil do this for 3 assays in question (all the ones that get 14 dist from WT)
-    desired_assays = [
-    # "CAPSD_AAV2S_Sinai_substitutions_2021.csv",
-        "HIS7_YEAST_Pokusaeva_2019.csv", 
-        "PHOT_CHLRE_Chen_2023_multiples.csv",
-        "CTHL3_BOVIN_Koch_2022.csv",
-    #     "D7PM05_CLYGR_Somermeyer_2022.csv",
-    #     "GFP_AEQVI_Sarkisyan_2016.csv",
-        "H3JQU7_ENTQU_Poelwijk_2019.csv"
-    ]
+    desired_assays =  ['RASK_HUMAN_Weng_2022_binding-RAF1', 
+                       'VILI_CHICK_Rocklin_2023_1YU5', 
+                       'GRB2_HUMAN_Faure_2021', 
+                        'DNJA1_HUMAN_Rocklin_2023_2LO1', 
+                        'OBSCN_HUMAN_Rocklin_2023_1V1C', 
+                        'TCRG1_MOUSE_Rocklin_2023_1E0L', 
+                        'MYO3_YEAST_Rocklin_2023_2BTT', 
+                        'RASK_HUMAN_Weng_2022_binding-PIK3CG',  # "okay" split
+                        'YNZC_BACSU_Rocklin_2023_2JVD', 
+                        'SPTN1_CHICK_Rocklin_2023_1TUD', 
+                        'DOCK1_MOUSE_Rocklin_2023_2M0Y', 
+                        'RASK_HUMAN_Weng_2022_binding-DARPin_K55', 
+                        'UBE4B_HUMAN_Rocklin_2023_3L1X', 
+                        'PABP_YEAST_Melamed_2013', 
+                        'YAP1_HUMAN_Araya_2012', 
+                        'RASK_HUMAN_Weng_2022_binding-RALGDS', 
+                        'SR43C_ARATH_Rocklin_2023_2N88', 
+                        'EPHB2_HUMAN_Rocklin_2023_1F0M', 
+                        'SDA_BACSU_Rocklin_2023_1PV0']
+    all_assays_filtered = all_assays[all_assays['assay'].isin(desired_assays)]
+    results_lineplot(all_assays_filtered,
+                    f'All Assays, All Features in Okay Split',
+                    f"SM_pred_all_features_all_assays_okay.png",
+                    redux=False, all_assays=True)
+    
+    # [
+    # # "CAPSD_AAV2S_Sinai_substitutions_2021.csv",
+    #     "HIS7_YEAST_Pokusaeva_2019.csv", 
+    #     "PHOT_CHLRE_Chen_2023_multiples.csv",
+    #     "CTHL3_BOVIN_Koch_2022.csv",
+    # #     "D7PM05_CLYGR_Somermeyer_2022.csv",
+    # #     "GFP_AEQVI_Sarkisyan_2016.csv",
+    #     "H3JQU7_ENTQU_Poelwijk_2019.csv"
+    # ]
     for assay in desired_assays:
         results_lineplot(all_assays[(all_assays.assay == assay)],
                             f'Assay: {assay}, All Features',
