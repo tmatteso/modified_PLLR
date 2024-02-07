@@ -268,9 +268,8 @@ def results_lineplot(group_data, title, figname,
                      redux=False, 
                      all_assays=False):
 
-    print(group_data)
+    print("inside lineplot", group_data)
     plt.figure(figsize=(20, 8))
-    print("all data", group_data)
     # add some logic to make it work for all assays
     if all_assays: # I have two different twos right now
         # sum the eval size for each dist from wt,
