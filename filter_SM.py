@@ -201,7 +201,8 @@ def simple_hist(values1, values2, xlabel1, xlabel2):
 # if anything, it would be nice for this to be parallelized
 def eval_loop(intersect_set, desired, full, LLRS, output_csv):
     mm_full = full[full['mutant'].str.contains(":")]
-    desired = ["CAPSD_AAV2S_Sinai_2021.csv"]
+    desired = ["TCRG1_MOUSE_Rocklin_2023_2M0Y.csv"]
+    #["CAPSD_AAV2S_Sinai_2021.csv"]
     #["DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"]
     #["SDA_BACSU_Rocklin_2023_1PV0.csv"] #["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
     chad = []
@@ -345,14 +346,15 @@ def main(args):
         if args.only_assay is None:
             #query_string =  f"{args.pg_sub_dir}/*.csv"
             #query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"
-            query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/CAPSD_AAV2S_Sinai_2021.csv"
+            #query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/CAPSD_AAV2S_Sinai_2021.csv"
+            query_string = "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/TCRG1_MOUSE_Rocklin_2023_2M0Y.csv"
             intersect_set, full = read_in_PG(query_string)
             
             WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
             chad, okay = eval_loop(intersect_set, intersect_set, full, LLRS, output_csv)
-            for assay_df in chad:
+            for assay_df in okay:
                 # now get the lineplots for each assay and the mean plots for each group
-                results_lineplot(assay_df, "chadus", "chad.png")
+                results_lineplot(assay_df, "okay", "okay.png")
                 raise Error
 
 if __name__ == "__main__":
