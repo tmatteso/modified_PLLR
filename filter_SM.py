@@ -346,7 +346,7 @@ def main(args):
         if args.only_assay is None:
             #query_string =  f"{args.pg_sub_dir}/*.csv"
             #query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"
-            query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/CAPSD_AAV2S_Sinai_2021.csv
+            query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/CAPSD_AAV2S_Sinai_2021.csv"
             intersect_set, full = read_in_PG(query_string)
             
             WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
