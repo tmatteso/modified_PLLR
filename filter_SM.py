@@ -235,7 +235,7 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
                 # Create a new column 'count_dist_from_WT' with the count for each unique 'dist_from_WT' entry
                 mm['eval_size'] = mm['dist_from_WT'].map(count_dist_from_WT)
                 # store the mm for the chad and okay lists
-                print(assay, len(sm.index))
+                
                 xlabel, ylabel = "DMS_score", "LLR"
                 no_ho_x = sm[sm.higher_order == False].DMS_score
                 no_ho_y = sm[sm.higher_order == False].LLR
@@ -244,7 +244,7 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
                 snho, _ = stats.spearmanr(no_ho_x, no_ho_y)
                 sho, _ = stats.spearmanr(higher_order_x, higher_order_y)
                 assay = assay.split(".")[0]
-                # the records df is necessary
+                print(assay, len(sm.index), snho, len(higher_order_x), sho)
 
                 # chad: spearman's 0.4 or greater in HO and 50% or more of total in HO
                 if (sho >= 0.4) and (len(higher_order_x)/len(sm.index) > 0.5):
