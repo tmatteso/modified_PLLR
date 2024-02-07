@@ -227,7 +227,7 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             print(assay, len(sm.mutant.unique()), len(sm[sm.higher_order == True].index))       
             # need a dist from WT column
             if len(sm[sm.higher_order == True].index) > 50:
-                mm["dist_from_WT"] = mm['mutant'].str.count(':').sum() +1
+                mm["dist_from_WT"] = mm['mutant'].str.count(':') + 1
                 print(mm)
                 raise Error
                 print(assay, len(sm.index))
