@@ -201,9 +201,8 @@ def simple_hist(values1, values2, xlabel1, xlabel2):
 # if anything, it would be nice for this to be parallelized
 def eval_loop(intersect_set, desired, full, LLRS, output_csv):
     mm_full = full[full['mutant'].str.contains(":")]
-    desired = ["CAPSD_AAV2S_Sinai_2021.csv"]
-    #["TCRG1_MOUSE_Rocklin_2023_1E0L.csv"]
-    #
+    desired = ["TCRG1_MOUSE_Rocklin_2023_1E0L.csv"]
+    #["CAPSD_AAV2S_Sinai_2021.csv"]
     #["DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"]
     #["SDA_BACSU_Rocklin_2023_1PV0.csv"] #["RASK_HUMAN_Weng_2022_binding-RAF1.csv"]
     chad = []
@@ -230,10 +229,8 @@ def eval_loop(intersect_set, desired, full, LLRS, output_csv):
             # need a dist from WT column
             if len(sm[sm.higher_order == True].index) > 50:
                 mm["dist_from_WT"] = mm['mutant'].str.count(':') + 1
-                # need to know the number of variants that have each dist_from_WT
                 # Group the data by 'dist_from_WT' and count the number of rows in each group
                 count_dist_from_WT = mm.groupby('dist_from_WT').size()
-
                 # Create a new column 'count_dist_from_WT' with the count for each unique 'dist_from_WT' entry
                 mm['eval_size'] = mm['dist_from_WT'].map(count_dist_from_WT)
                 # store the mm for the chad and okay lists
@@ -351,8 +348,8 @@ def main(args):
         if args.only_assay is None:
             #query_string =  f"{args.pg_sub_dir}/*.csv"
             #query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/DOCK1_MOUSE_Rocklin_2023_2M0Y.csv"
-            query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/CAPSD_AAV2S_Sinai_2021.csv"
-            #query_string = "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/TCRG1_MOUSE_Rocklin_2023_1E0L.csv"
+            #query_string =  "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/CAPSD_AAV2S_Sinai_2021.csv"
+            query_string = "../ESM_variant_sweep/Protein_Gym/ProteinGym_substitutions/TCRG1_MOUSE_Rocklin_2023_1E0L.csv"
             intersect_set, full = read_in_PG(query_string)
             
             WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
