@@ -731,6 +731,7 @@ def plot_all_results(results_path):
                         'SR43C_ARATH_Rocklin_2023_2N88', 
                         'EPHB2_HUMAN_Rocklin_2023_1F0M', 
                         'SDA_BACSU_Rocklin_2023_1PV0']
+    print(all_assays_filtered.assay.unique())
     all_assays_filtered = all_assays[all_assays['assay'].isin(desired_assays)]
     print("filtered", all_assays_filtered.assay)
     raise error
