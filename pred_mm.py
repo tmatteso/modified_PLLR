@@ -732,7 +732,7 @@ def plot_all_results(results_path):
                         'EPHB2_HUMAN_Rocklin_2023_1F0M', 
                         'SDA_BACSU_Rocklin_2023_1PV0']
     all_assays_filtered = all_assays[all_assays['assay'].isin(desired_assays)]
-    print(all_assays_filtered.assay.unique())
+    print("filtered", all_assays_filtered.assay)
     raise error
     results_lineplot(all_assays_filtered,
                     f'All Assays, All Features in Okay Split',
