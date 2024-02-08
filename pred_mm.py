@@ -639,15 +639,15 @@ def results_lineplot(group_data, title, figname,
     legend = plt.legend(title='Features and Alpha', fontsize=15)
     legend.get_title().set_fontsize('15')  # Set the font size of the legend title
     sns.move_legend(ax, "upper left", bbox_to_anchor=(1, 1))
-    if all_assays:
-        # Get current x-axis limits
-        x_start, x_end = plt.xlim()
-        print("x_start", x_start, "x_end", x_end)
-        # Set new x-axis limits and x-ticks
-        plt.xlim(x_start + 0.5, x_end - 0.5)  # Adjust as needed
-        x_start, x_end = plt.xlim()
-        print("x_start", x_start, "x_end", x_end)
-        #plt.xticks(np.arange(x_start, x_end, step=0.1))  # Adjust the step as needed
+    # if all_assays:
+    #     # Get current x-axis limits
+    #     x_start, x_end = plt.xlim()
+    #     print("x_start", x_start, "x_end", x_end)
+    #     # Set new x-axis limits and x-ticks
+    #     plt.xlim(x_start + 0.5, x_end - 0.5)  # Adjust as needed
+    #     x_start, x_end = plt.xlim()
+    #     print("x_start", x_start, "x_end", x_end)
+    #     #plt.xticks(np.arange(x_start, x_end, step=0.1))  # Adjust the step as needed
 
     print(figname)
     plt.savefig(figname, bbox_inches='tight') #f"SM_pred_{assay}_{dist_from_WT}.png")# show()
