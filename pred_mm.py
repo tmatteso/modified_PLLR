@@ -751,12 +751,12 @@ def plot_all_results(results_path):
     for assay in desired_assays:
         results_lineplot(all_assays[(all_assays.assay == assay)],
                             f'Assay: {assay}, All Features',
-                            f"SM_pred_all_features_{assay}.png",
+                            f"SM_pred_all_features_{assay}_okay.png",
                             redux=False, all_assays=False)
-        results_lineplot(all_assays[(all_assays.assay == assay) & (all_assays['features'].str.contains('redux'))],
-                            f'Assay: {assay}, All Features',
-                            f"SM_pred_all_features_{assay}_redux.png",
-                            redux=True, all_assays=False)
+        # results_lineplot(all_assays[(all_assays.assay == assay) & (all_assays['features'].str.contains('redux'))],
+        #                     f'Assay: {assay}, All Features',
+        #                     f"SM_pred_all_features_{assay}_redux.png",
+        #                     redux=True, all_assays=False)
     raise Error
     # now we make one for each distance from wildtype
     grouped = all_assays.groupby(['dist_from_WT'])
