@@ -712,25 +712,26 @@ def plot_all_results(results_path):
     #                         redux=True, all_assays=True)
     # do this but only for one assay in question:
     # we wil do this for 3 assays in question (all the ones that get 14 dist from WT)
-    desired_assays =  ['RASK_HUMAN_Weng_2022_binding-RAF1.csv', 
-                       'VILI_CHICK_Rocklin_2023_1YU5.csv', 
-                       'GRB2_HUMAN_Faure_2021.csv', 
-                        'DNJA1_HUMAN_Rocklin_2023_2LO1.csv', 
-                        'OBSCN_HUMAN_Rocklin_2023_1V1C.csv', 
-                        'TCRG1_MOUSE_Rocklin_2023_1E0L.csv', 
-                        'MYO3_YEAST_Rocklin_2023_2BTT.csv', 
-                        'RASK_HUMAN_Weng_2022_binding-PIK3CG.csv',  # "okay" split
-                        'YNZC_BACSU_Rocklin_2023_2JVD.csv', 
-                        'SPTN1_CHICK_Rocklin_2023_1TUD.csv', 
-                        'DOCK1_MOUSE_Rocklin_2023_2M0Y.csv', 
-                        'RASK_HUMAN_Weng_2022_binding-DARPin_K55.csv', 
-                        'UBE4B_HUMAN_Rocklin_2023_3L1X.csv', 
-                        'PABP_YEAST_Melamed_2013.csv', 
-                        'YAP1_HUMAN_Araya_2012.csv', 
-                        'RASK_HUMAN_Weng_2022_binding-RALGDS.csv', 
-                        'SR43C_ARATH_Rocklin_2023_2N88.csv', 
-                        'EPHB2_HUMAN_Rocklin_2023_1F0M.csv', 
-                        'SDA_BACSU_Rocklin_2023_1PV0.csv']
+    desired_assays =  ['RASK_HUMAN_Weng_2022_binding-RAF1', 'GRB2_HUMAN_Faure_2021', 'RASK_HUMAN_Weng_2022_binding-PIK3CG', 'RASK_HUMAN_Weng_2022_binding-DARPin_K55', 'PABP_YEAST_Melamed_2013', 'SPG1_STRSG_Wu_2016', 'YAP1_HUMAN_Araya_2012', 'RASK_HUMAN_Weng_2022_binding-RALGDS']
+    # ['RASK_HUMAN_Weng_2022_binding-RAF1.csv', 
+    #                    'VILI_CHICK_Rocklin_2023_1YU5.csv', 
+    #                    'GRB2_HUMAN_Faure_2021.csv', 
+    #                     'DNJA1_HUMAN_Rocklin_2023_2LO1.csv', 
+    #                     'OBSCN_HUMAN_Rocklin_2023_1V1C.csv', 
+    #                     'TCRG1_MOUSE_Rocklin_2023_1E0L.csv', 
+    #                     'MYO3_YEAST_Rocklin_2023_2BTT.csv', 
+    #                     'RASK_HUMAN_Weng_2022_binding-PIK3CG.csv',  # "okay" split
+    #                     'YNZC_BACSU_Rocklin_2023_2JVD.csv', 
+    #                     'SPTN1_CHICK_Rocklin_2023_1TUD.csv', 
+    #                     'DOCK1_MOUSE_Rocklin_2023_2M0Y.csv', 
+    #                     'RASK_HUMAN_Weng_2022_binding-DARPin_K55.csv', 
+    #                     'UBE4B_HUMAN_Rocklin_2023_3L1X.csv', 
+    #                     'PABP_YEAST_Melamed_2013.csv', 
+    #                     'YAP1_HUMAN_Araya_2012.csv', 
+    #                     'RASK_HUMAN_Weng_2022_binding-RALGDS.csv', 
+    #                     'SR43C_ARATH_Rocklin_2023_2N88.csv', 
+    #                     'EPHB2_HUMAN_Rocklin_2023_1F0M.csv', 
+    #                     'SDA_BACSU_Rocklin_2023_1PV0.csv']
     
     all_assays_filtered = all_assays[all_assays['assay'].isin(desired_assays)]
     print(len(desired_assays), len(all_assays_filtered.assay.unique()))
