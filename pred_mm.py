@@ -743,11 +743,14 @@ def plot_all_results(results_path):
     all_assays_filtered = all_assays[all_assays['assay'].isin(desired_assays)]
     print(len(desired_assays), len(all_assays_filtered.assay.unique()))
     print(all_assays_filtered.dist_from_WT.unique())
-    results_lineplot(all_assays_filtered,
+    results_lineplot(all_assays_filtered[~(all_assays_filtered['features'].str.contains('redux'))],
                     f'All Assays, All Features in Chad Split',
                     f"SM_pred_all_features_all_assays_chad.png",
                     redux=False, all_assays=True)
-    
+    results_lineplot(all_assays_filtered[ (all_assays_filtered['features'].str.contains('redux'))],
+                            f'All Assays, All Features',
+                            f"SM_pred_all_features_all_assays_chad_redux.png",
+                            redux=True, all_assays=True)
     # [
     # # "CAPSD_AAV2S_Sinai_substitutions_2021.csv",
     #     "HIS7_YEAST_Pokusaeva_2019.csv", 
@@ -762,10 +765,10 @@ def plot_all_results(results_path):
                             f'Assay: {assay}, All Features',
                             f"SM_pred_all_features_{assay}_chad.png",
                             redux=False, all_assays=False)
-        # results_lineplot(all_assays[(all_assays.assay == assay) & (all_assays['features'].str.contains('redux'))],
-        #                     f'Assay: {assay}, All Features',
-        #                     f"SM_pred_all_features_{assay}_redux.png",
-        #                     redux=True, all_assays=False)
+        results_lineplot(all_assays[(all_assays.assay == assay) & (all_assays['features'].str.contains('redux'))],
+                            f'Assay: {assay}, All Features',
+                            f"SM_pred_all_features_{assay}_chad_redux.png",
+                            redux=True, all_assays=False)
     raise Error
     # now we make one for each distance from wildtype
     grouped = all_assays.groupby(['dist_from_WT'])
