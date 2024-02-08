@@ -734,6 +734,8 @@ def plot_all_results(results_path):
     
     all_assays_filtered = all_assays[all_assays['assay'].isin(desired_assays)]
     print(len(desired_assays), len(all_assays_filtered.assay.unique()))
+    print(all_assays_filtered.dist_from_WT.unique())
+    raise Error
     results_lineplot(all_assays_filtered,
                     f'All Assays, All Features in Okay Split',
                     f"SM_pred_all_features_all_assays_okay.png",
