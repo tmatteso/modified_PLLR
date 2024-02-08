@@ -743,10 +743,9 @@ def plot_all_results(results_path):
     all_assays_filtered = all_assays[all_assays['assay'].isin(desired_assays)]
     print(len(desired_assays), len(all_assays_filtered.assay.unique()))
     print(all_assays_filtered.dist_from_WT.unique())
-    raise Error
     results_lineplot(all_assays_filtered,
-                    f'All Assays, All Features in Okay Split',
-                    f"SM_pred_all_features_all_assays_okay.png",
+                    f'All Assays, All Features in Chad Split',
+                    f"SM_pred_all_features_all_assays_chad.png",
                     redux=False, all_assays=True)
     
     # [
@@ -761,7 +760,7 @@ def plot_all_results(results_path):
     for assay in desired_assays:
         results_lineplot(all_assays[(all_assays.assay == assay)],
                             f'Assay: {assay}, All Features',
-                            f"SM_pred_all_features_{assay}_okay.png",
+                            f"SM_pred_all_features_{assay}_chad.png",
                             redux=False, all_assays=False)
         # results_lineplot(all_assays[(all_assays.assay == assay) & (all_assays['features'].str.contains('redux'))],
         #                     f'Assay: {assay}, All Features',
