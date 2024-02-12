@@ -137,6 +137,10 @@ def get_sm_LLR(full, LLRS):
     sm = (pd.merge(sm, LLRS, on=['assay', 'mutant',]))
     return sm
 
+def get_llr_score_sum(row, dms_scores):
+    return sum(dms_scores.get((row['assay'], mutant), 0) for mutant in row['mutant'].split(":"))
+
+
 def main(args):
     query_string =  f"{args.pg_sub_dir}/*.csv"
 
@@ -146,6 +150,10 @@ def main(args):
     WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
 
     mm_full = full[full['mutant'].str.contains(":")]
+    # Create a dictionary with (gene, mutant) as keys and DMS_score as values for fast lookup from df1
+    dms_scores = LLRS.set_index(['assay', 'mutant'])['sum_LLR'].to_dict()
+    # Apply the function to each row in df2
+    mm_full["sum_LLR"] = mm_full.apply(lambda row: get_llr_score_sum(row, dms_scores), axis=1)
 
     chad = []
     okay = []
@@ -158,6 +166,7 @@ def main(args):
         sm = sm_full[sm_full.assay == assay]
         mm = mm_full[mm_full.assay == assay]
         if mm.index.size != 0:
+            
             # break up each mutation in mm into its constituent parts
             sm_in_mm = mm.mutant.str.split(":", expand=True)
             sm_ls = []
@@ -172,8 +181,8 @@ def main(args):
             count_dist_from_WT = mm.groupby('dist_from_WT').size()
             # Create a new column 'count_dist_from_WT' with the count for each unique 'dist_from_WT' entry
             mm['eval_size'] = mm['dist_from_WT'].map(count_dist_from_WT)
-            print(sm.columns)
-            print(mm.columns)
+            print(sm)
+            print(mm)
             raise Error
 
 
