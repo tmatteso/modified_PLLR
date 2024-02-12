@@ -154,36 +154,18 @@ def main(args):
     dms_scores = LLRS.set_index(['assay', 'mutant'])['sum_LLR'].to_dict()
     # Apply the function to each row in df2
     mm_full["sum_LLR"] = mm_full.apply(lambda row: get_llr_score_sum(row, dms_scores), axis=1)
-
-    chad = []
-    okay = []
-    records = []
+    mm_full["dist_from_WT"] = mm_full['mutant'].str.count(':') + 1
+    # Group the data by 'dist_from_WT' and count the number of rows in each group
+    count_dist_from_WT = mm_full.groupby('dist_from_WT').size()
+    # Create a new column 'count_dist_from_WT' with the count for each unique 'dist_from_WT' entry
+    mm_full['eval_size'] = mm_full['dist_from_WT'].map(count_dist_from_WT)
+    # now we subset only the dm
+    mm_full = mm_full[mm_full.dist_from_WT == 2]
     # need to get the full df
     sm_full = get_sm_LLR(full, LLRS)
-    assert len(sm_full.assay.unique()) == len(intersect_set), f"{len(sm_full.assay.unique())} != {len(intersect_set)}"
-    # for each assay, subset the data 
-    for assay in intersect_set:
-        sm = sm_full[sm_full.assay == assay]
-        mm = mm_full[mm_full.assay == assay]
-        if mm.index.size != 0:
-            
-            # break up each mutation in mm into its constituent parts
-            sm_in_mm = mm.mutant.str.split(":", expand=True)
-            sm_ls = []
-            for column in sm_in_mm.columns:
-                sm_ls += list(sm_in_mm[column].unique())
-            sm['higher_order'] = sm['mutant'].isin(sm_ls)
+    print(mm_full)
+    raise Error
 
-            # then 
-            print(assay, len(sm.mutant.unique()), len(sm[sm.higher_order == True].index))  
-            mm["dist_from_WT"] = mm['mutant'].str.count(':') + 1
-            # Group the data by 'dist_from_WT' and count the number of rows in each group
-            count_dist_from_WT = mm.groupby('dist_from_WT').size()
-            # Create a new column 'count_dist_from_WT' with the count for each unique 'dist_from_WT' entry
-            mm['eval_size'] = mm['dist_from_WT'].map(count_dist_from_WT)
-            print(sm)
-            print(mm)
-            raise Error
 
 
 if __name__ == "__main__":
