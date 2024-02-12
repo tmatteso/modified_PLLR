@@ -139,7 +139,7 @@ def get_sm_LLR(full, LLRS):
 
 def main(args):
     query_string =  f"{args.pg_sub_dir}/*.csv"
-    
+
     intersect_set, full = read_in_PG(query_string)
 
     WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
@@ -163,18 +163,17 @@ def main(args):
             for column in sm_in_mm.columns:
                 sm_ls += list(sm_in_mm[column].unique())
             sm['higher_order'] = sm['mutant'].isin(sm_ls)
-        else:
-            sm['higher_order'] = False
-        # then 
-        print(assay, len(sm.mutant.unique()), len(sm[sm.higher_order == True].index))  
-        mm["dist_from_WT"] = mm['mutant'].str.count(':') + 1
-        # Group the data by 'dist_from_WT' and count the number of rows in each group
-        count_dist_from_WT = mm.groupby('dist_from_WT').size()
-        # Create a new column 'count_dist_from_WT' with the count for each unique 'dist_from_WT' entry
-        mm['eval_size'] = mm['dist_from_WT'].map(count_dist_from_WT)
-        print(sm)
-        print(mm)
-        raise Error
+
+            # then 
+            print(assay, len(sm.mutant.unique()), len(sm[sm.higher_order == True].index))  
+            mm["dist_from_WT"] = mm['mutant'].str.count(':') + 1
+            # Group the data by 'dist_from_WT' and count the number of rows in each group
+            count_dist_from_WT = mm.groupby('dist_from_WT').size()
+            # Create a new column 'count_dist_from_WT' with the count for each unique 'dist_from_WT' entry
+            mm['eval_size'] = mm['dist_from_WT'].map(count_dist_from_WT)
+            print(sm)
+            print(mm)
+            raise Error
 
 
 if __name__ == "__main__":
