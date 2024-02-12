@@ -141,6 +141,7 @@ def main(args):
     query_string =  f"{args.pg_sub_dir}/*.csv"
 
     intersect_set, full = read_in_PG(query_string)
+    intersect_set, full = get_high_order_constituents(full)
 
     WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
 
