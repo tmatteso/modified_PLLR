@@ -127,7 +127,7 @@ def get_LLR(intersect_set, full, LLR_string, compute_LLR=False):
         sys.exit()
     # import LLR  
     LLRS = pd.read_csv(LLR_string) #"WT_for_MM_assays.csv")
-    LLRS = LLRS.rename(columns={"seq_id":"assay", "mut_name":"mutant", "esm_score":"LLR"}, inplace=False)
+    LLRS = LLRS.rename(columns={"seq_id":"assay", "mut_name":"mutant", "esm_score":"sum_LLR"}, inplace=False)
     return WT_dict, LLRS
 
 def get_sm_LLR(full, LLRS):
