@@ -171,8 +171,8 @@ def main(args):
             count_dist_from_WT = mm.groupby('dist_from_WT').size()
             # Create a new column 'count_dist_from_WT' with the count for each unique 'dist_from_WT' entry
             mm['eval_size'] = mm['dist_from_WT'].map(count_dist_from_WT)
-            print(sm)
-            print(mm)
+            print(sm.columns)
+            print(mm.columns)
             raise Error
 
 
