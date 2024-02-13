@@ -172,8 +172,10 @@ def main(args):
             t, _  = stats.spearmanr(mm.DMS_score, mm.sum_LLR)
             u, _  = stats.spearmanr(sm.DMS_score, sm.sum_LLR)
             save_stuff.append(s)
-            print(f"{assay} Spearman Correlation: DMS vs. SM LLR: {u:.2f}, DMS vs. pred_DMS: {s:.2f}, DMS vs. sum_LLR: {t:.2f}")
-            print(f"Number of Single Missense Variants: {len(sm.index)}, Number of Double Missense Variants: {len(mm.index)}")
+            if s < 0.6:
+                print(f"{assay} Spearman Correlation: DMS vs. SM LLR: {u:.2f}, DMS vs. pred_DMS: {s:.2f}, DMS vs. sum_LLR: {t:.2f}")
+                print(f"Number of Single Missense Variants: {len(sm.index)}, Number of Double Missense Variants: {len(mm.index)}")
+    raise Error
     # now I want to add the columns of sm_full to mm_full
     # so I can use the sns barplot
     #sns.barplot(mm_full, x="island", y="body_mass_g", hue="sex")
