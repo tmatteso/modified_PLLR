@@ -150,8 +150,7 @@ def main(args):
     WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
 
     mm_full = full[full['mutant'].str.contains(":")]
-    # now we subset only the dm
-    mm_full = mm_full[mm_full.dist_from_WT == 2]
+    
     # need to get the full df
     sm_full = get_sm_LLR(full, LLRS)
     for assay in intersect_set:
@@ -162,6 +161,8 @@ def main(args):
         # Apply the function to each row in df2
         mm["sum_LLR"] = mm.apply(lambda row: get_llr_score_sum(row, dms_scores), axis=1)
         mm["dist_from_WT"] = mm['mutant'].str.count(':') + 1
+        # now we subset only the dm
+        mm = mm[mm.dist_from_WT == 2]
         # Group the data by 'dist_from_WT' and count the number of rows in each group
         count_dist_from_WT = mm.groupby('dist_from_WT').size()
         # Create a new column 'count_dist_from_WT' with the count for each unique 'dist_from_WT' entry
