@@ -167,12 +167,15 @@ def main(args):
         count_dist_from_WT = mm.groupby('dist_from_WT').size()
         # Create a new column 'count_dist_from_WT' with the count for each unique 'dist_from_WT' entry
         mm['eval_size'] = mm['dist_from_WT'].map(count_dist_from_WT)
-        print(mm)
+        #print(mm)
         if mm.index.size != 0:
             # try one graph with sum LLR and one with sum DMS
             s, _  = stats.spearmanr(mm.DMS_score, mm.pred_DMS_score)
             t, _  = stats.spearmanr(mm.DMS_score, mm.sum_LLR)
-            print(f"{assay} Spearman Correlation DMS vs. pred_DMS: {s:.2f}, DMS vs. sum_LLR: {t:.2f}")
+            u, _  = stats.spearmanr(sm.DMS_score, sm.sum_LLR)
+            print(f"{assay} Spearman Correlation: DMS vs. SM LLR: {u:.f}, DMS vs. pred_DMS: {s:.2f}, DMS vs. sum_LLR: {t:.2f}")
+            print(sm)
+            raise Error
     # now I want to add the columns of sm_full to mm_full
     # so I can use the sns barplot
     #sns.barplot(mm_full, x="island", y="body_mass_g", hue="sex")
