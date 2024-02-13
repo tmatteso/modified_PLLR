@@ -148,7 +148,8 @@ def main(args):
     intersect_set, full = get_high_order_constituents(full)
 
     WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
-
+    # Create a dictionary with (gene, mutant) as keys and DMS_score as values for fast lookup from df1
+    dms_scores = LLRS.set_index(['assay', 'mutant'])['sum_LLR'].to_dict()
     mm_full = full[full['mutant'].str.contains(":")]
     
     # need to get the full df
@@ -156,8 +157,7 @@ def main(args):
     for assay in intersect_set:
         sm = sm_full[sm_full.assay == assay]
         mm = mm_full[mm_full.assay == assay]
-        # Create a dictionary with (gene, mutant) as keys and DMS_score as values for fast lookup from df1
-        dms_scores = LLRS.set_index(['assay', 'mutant'])['sum_LLR'].to_dict()
+        
         # Apply the function to each row in df2
         mm["sum_LLR"] = mm.apply(lambda row: get_llr_score_sum(row, dms_scores), axis=1)
         mm["dist_from_WT"] = mm['mutant'].str.count(':') + 1
@@ -170,8 +170,8 @@ def main(args):
         print(mm)
         if mm.index.size != 0:
             # try one graph with sum LLR and one with sum DMS
-            s, _  = stats.spearmanr(mm_full.DMS_score, mm_full.pred_DMS_score)
-            t, _  = stats.spearmanr(mm_full.DMS_score, mm_full.sum_LLR)
+            s, _  = stats.spearmanr(mm.DMS_score, mm.pred_DMS_score)
+            t, _  = stats.spearmanr(mm.DMS_score, mm.sum_LLR)
             print(f"{assay} Spearman Correlation DMS vs. pred_DMS: {s:.2f}, DMS vs. sum_LLR: {t:.2f}")
     # now I want to add the columns of sm_full to mm_full
     # so I can use the sns barplot
