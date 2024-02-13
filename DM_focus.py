@@ -163,10 +163,7 @@ def main(args):
         mm["dist_from_WT"] = mm['mutant'].str.count(':') + 1
         # now we subset only the dm
         mm = mm[mm.dist_from_WT == 2]
-        # Group the data by 'dist_from_WT' and count the number of rows in each group
-        count_dist_from_WT = mm.groupby('dist_from_WT').size()
-        # Create a new column 'count_dist_from_WT' with the count for each unique 'dist_from_WT' entry
-        mm['eval_size'] = mm['dist_from_WT'].map(count_dist_from_WT)
+
         #print(mm)
         if mm.index.size != 0:
             # try one graph with sum LLR and one with sum DMS
@@ -174,8 +171,7 @@ def main(args):
             t, _  = stats.spearmanr(mm.DMS_score, mm.sum_LLR)
             u, _  = stats.spearmanr(sm.DMS_score, sm.sum_LLR)
             print(f"{assay} Spearman Correlation: DMS vs. SM LLR: {u:.2f}, DMS vs. pred_DMS: {s:.2f}, DMS vs. sum_LLR: {t:.2f}")
-            print(sm)
-            raise Error
+            print(f"Number of Single Missense Variants: {len(sm.index)}, Number of Double Missense Variants: {len(mm.index)}")
     # now I want to add the columns of sm_full to mm_full
     # so I can use the sns barplot
     #sns.barplot(mm_full, x="island", y="body_mass_g", hue="sex")
