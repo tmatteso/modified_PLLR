@@ -152,6 +152,7 @@ def main(args):
     dms_scores = LLRS.set_index(['assay', 'mutant'])['sum_LLR'].to_dict()
     mm_full = full[full['mutant'].str.contains(":")]
     
+    save_stuff = []
     # need to get the full df
     sm_full = get_sm_LLR(full, LLRS)
     for assay in intersect_set:
@@ -170,12 +171,19 @@ def main(args):
             s, _  = stats.spearmanr(mm.DMS_score, mm.pred_DMS_score)
             t, _  = stats.spearmanr(mm.DMS_score, mm.sum_LLR)
             u, _  = stats.spearmanr(sm.DMS_score, sm.sum_LLR)
+            save_stuff.append(s)
             print(f"{assay} Spearman Correlation: DMS vs. SM LLR: {u:.2f}, DMS vs. pred_DMS: {s:.2f}, DMS vs. sum_LLR: {t:.2f}")
             print(f"Number of Single Missense Variants: {len(sm.index)}, Number of Double Missense Variants: {len(mm.index)}")
     # now I want to add the columns of sm_full to mm_full
     # so I can use the sns barplot
     #sns.barplot(mm_full, x="island", y="body_mass_g", hue="sex")
     #print(mm_full)
+
+    plt.hist(save_stuff, bins='auto')  # 'auto' automatically determines the number of bins
+    plt.title('Histogram of DMS vs. sum_DMS for all DM assays')
+    plt.xlabel('Value')
+    plt.ylabel('Frequency')
+    plt.savefig("DM_sum_DMS_hist.png")
     raise Error
 
 
