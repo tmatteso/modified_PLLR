@@ -150,15 +150,6 @@ def main(args):
     WT_dict, LLRS = get_LLR(intersect_set, full, args.llr_csv)
 
     mm_full = full[full['mutant'].str.contains(":")]
-    # Create a dictionary with (gene, mutant) as keys and DMS_score as values for fast lookup from df1
-    dms_scores = LLRS.set_index(['assay', 'mutant'])['sum_LLR'].to_dict()
-    # Apply the function to each row in df2
-    mm_full["sum_LLR"] = mm_full.apply(lambda row: get_llr_score_sum(row, dms_scores), axis=1)
-    mm_full["dist_from_WT"] = mm_full['mutant'].str.count(':') + 1
-    # Group the data by 'dist_from_WT' and count the number of rows in each group
-    count_dist_from_WT = mm_full.groupby('dist_from_WT').size()
-    # Create a new column 'count_dist_from_WT' with the count for each unique 'dist_from_WT' entry
-    mm_full['eval_size'] = mm_full['dist_from_WT'].map(count_dist_from_WT)
     # now we subset only the dm
     mm_full = mm_full[mm_full.dist_from_WT == 2]
     # need to get the full df
@@ -166,6 +157,16 @@ def main(args):
     for assay in intersect_set:
         sm = sm_full[sm_full.assay == assay]
         mm = mm_full[mm_full.assay == assay]
+        # Create a dictionary with (gene, mutant) as keys and DMS_score as values for fast lookup from df1
+        dms_scores = LLRS.set_index(['assay', 'mutant'])['sum_LLR'].to_dict()
+        # Apply the function to each row in df2
+        mm["sum_LLR"] = mm.apply(lambda row: get_llr_score_sum(row, dms_scores), axis=1)
+        mm["dist_from_WT"] = mm['mutant'].str.count(':') + 1
+        # Group the data by 'dist_from_WT' and count the number of rows in each group
+        count_dist_from_WT = mm.groupby('dist_from_WT').size()
+        # Create a new column 'count_dist_from_WT' with the count for each unique 'dist_from_WT' entry
+        mm['eval_size'] = mm['dist_from_WT'].map(count_dist_from_WT)
+        print(mm)
         if mm.index.size != 0:
             # try one graph with sum LLR and one with sum DMS
             s, _  = stats.spearmanr(mm_full.DMS_score, mm_full.pred_DMS_score)
