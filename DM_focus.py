@@ -163,7 +163,18 @@ def main(args):
     mm_full = mm_full[mm_full.dist_from_WT == 2]
     # need to get the full df
     sm_full = get_sm_LLR(full, LLRS)
-    print(mm_full)
+    for assay in intersect_set:
+        sm = sm_full[sm_full.assay == assay]
+        mm = mm_full[mm_full.assay == assay]
+        if mm.index.size != 0:
+            # try one graph with sum LLR and one with sum DMS
+            s, _  = stats.spearmanr(mm_full.DMS_score, mm_full.pred_DMS_score)
+            t, _  = stats.spearmanr(mm_full.DMS_score, mm_full.sum_LLR)
+            print(f"{assay} Spearman Correlation DMS vs. pred_DMS: {s:.2f}, DMS vs. sum_LLR: {t:.2f}")
+    # now I want to add the columns of sm_full to mm_full
+    # so I can use the sns barplot
+    #sns.barplot(mm_full, x="island", y="body_mass_g", hue="sex")
+    #print(mm_full)
     raise Error
 
 
